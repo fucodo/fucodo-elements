@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <link rel="stylesheet" href="static/style.css">
+    <title>Image Crop</title>
+</head>
+<body>
+<main>
+    <form>
+        <image-crop-lol>
+            <input type="file" accept="image/png, image/jpeg, image/tiff" name="picture">
+        </image-crop-lol>
+        <button id="foo">Submit</button>
+    </form>
+    <div id="result"></div>
+</main>
+<script>
+  const form = document.querySelector('form');
+  const submit = document.getElementById('foo');
+
+  submit.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    let data = new FormData(form, submit);
+
+    console.log(data);
+
+    for (const value of data.entries()) {
+      if (value[0] !== 'picture') {
+        continue;
+      }
+
+      const img = document.createElement('img');
+      img.src = URL.createObjectURL(value[1]);
+
+      const result = document.getElementById("result");
+
+      result.innerHTML = '';
+      result.appendChild(img);
+    }
+  });
+</script>
+<script src="static/index.js" type="module"></script>
+</body>
+</html>
