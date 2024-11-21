@@ -1,91 +1,124 @@
-import { LitElement, html} from 'lit';
+import {LitElement, html, css} from 'lit';
 import ImageCropElement from "@github/image-crop-element";
 
 export class ImageCrop extends LitElement {
   static get properties() {
     return {
-      x: { type: Number },
-      y: { this: Number },
-      width: { type: Number },
-      height: { type: Number },
+      x: {type: Number},
+      y: {this: Number},
+      width: {type: Number},
+      height: {type: Number},
     };
   }
 
-  createRenderRoot() {
-    return this;
+  constructor() {
+    super();
+
+    // TODO remove
+
+    this.x = 0;
+    this.y = 0;
+    this.width = 1024;
+    this.height = 1024;
+  }
+
+  static get styles() {
+    return css`
+        .dialog {
+            width: 500px;
+        }
+
+        .dialog__content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .dialog__actions {
+            display: flex;
+            gap: 0.5rem;
+            width: 100%;
+            justify-content: flex-end;
+            align-items: center;
+        }
+    `;
   }
 
   render() {
     return html`
-        <slot></slot>
-        <dialog id="foo">
-            <div style="display: block; height: 500px; width: 500px; background-color: white">
+        <slot @change="${this.handleChange}"></slot>
+        
+        <dialog class="dialog">
+            <div class="dialog__content">
                 <image-crop></image-crop>
-                <button id="bar">Close</button>
-                <button id="baz">Confirm</button>
+                <div class="dialog__actions">
+                    <button @click="${this.handleClose}">Close</button>
+                    <button @click="${this.handleConfirm}">Confirm</button>
+                </div>
             </div>
         </dialog>
     `;
   }
 
-  connectedCallback() {
-    super.connectedCallback();
+  handleChange(event) {
+    const dialog = this.renderRoot.querySelector('dialog');
+    const imageCrop = this.renderRoot.querySelector('image-crop');
 
-    const input = this.renderRoot.querySelector('input');
-    // const dialog = this.renderRoot.querySelector('#foo');
-
-    if (!input) {
+    if (event.target.files === 0) {
       return;
     }
 
-    input.addEventListener('change', (event) => {
-      if (input.files.length !== 1) {
-        return;
+    imageCrop.src = URL.createObjectURL(event.target.files[0]);
 
-        // TODO remove all files except last
-      }
+    dialog.showModal();
+  }
 
+  handleClose(event) {
+    event.preventDefault();
 
-      this.querySelector('image-crop').src = URL.createObjectURL(input.files[0]);
+    this.renderRoot.querySelector('dialog')?.close();
+  }
 
-      this.renderRoot.querySelector('#bar').addEventListener('click', () => {
-        this.renderRoot.querySelector('dialog')?.close();
-      });
+  handleConfirm(event) {
+    event.preventDefault();
 
-      this.renderRoot.querySelector('#baz').addEventListener('click', (event) => {
-        event.preventDefault();
+    this.cropImage();
 
-        // const dataTransfer = new DataTransfer();
-        // dataTransfer.items.add(file);
-        // document.getElementById('upload2').files = dataTransfer.files;
+    this.renderRoot.querySelector('dialog').close();
+  }
 
-        let base = new Image();
-        base.src = this.querySelector('image-crop').src;
+  cropImage() {
+    const input = this.renderRoot.querySelector('slot').assignedElements()[0];
 
-        // const canvas = this.renderRoot.querySelector('canvas');
-        const canvas = document.createElement('canvas');
+    console.log(input.files);
 
-        canvas.height = 500;
-        canvas.width = 500;
+    const canvas = document.createElement('canvas');
 
-        const ctx = canvas.getContext('2d');
+    let base = new Image();
 
-        ctx.drawImage(base, this.x, this.y, this.width, this.height, 0, 0, 500, 500);
+    base.src = this.renderRoot.querySelector('image-crop').src;
 
-        canvas.toBlob(function(blob) {
-          const file = new File([blob], 'foo.png', {type: 'image/png'}); // TODO verify available formats
+    canvas.height = 500;
+    canvas.width = 500;
 
-          const dataTransfer = new DataTransfer();
-          dataTransfer.items.add(file);
-          document.querySelector('input').files = dataTransfer.files; // not possible -> security
-        })
+    const ctx = canvas.getContext('2d');
 
+    ctx.drawImage(base, this.x, this.y, this.width, this.height, 0, 0, 500, 500);
 
-        this.renderRoot.querySelector('dialog')?.close();
-      });
+    canvas.toBlob(function (blob) {
+      const file = new File([blob], 'foo.png', {type: 'image/png'});
 
-      this.renderRoot.querySelector('dialog')?.showModal();
-    });
+      const transfer = new DataTransfer();
+
+      transfer.items.add(file);
+      input.files = transfer.files;
+    })
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
 
     document.addEventListener('image-crop-change', (event) => {
       this.x = event.detail.x;
@@ -96,4 +129,4 @@ export class ImageCrop extends LitElement {
   }
 }
 
-customElements.define('image-crop-lol', ImageCrop);
+customElements.define('image-crop-dialog', ImageCrop);
