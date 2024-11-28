@@ -21,7 +21,7 @@
   "homepage": "https://github.com/fucodo/fucodo.imagecrop#readme",
   "description": "",
   "dependencies": {
-    "@github/image-crop-element": "^5.0.0",
+    "croppie": "^2.6.5",
     "lit": "^3.2.1"
   },
   "devDependencies": {

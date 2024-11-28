@@ -1,29 +1,12 @@
 import {LitElement, html, css} from 'lit';
-import ImageCropElement from "@github/image-crop-element";
+
+import Croppie from'croppie/croppie.js';
+import {croppieStyles} from "./croppie-styles";
 
 export class ImageCrop extends LitElement {
-  static get properties() {
-    return {
-      x: {type: Number},
-      y: {this: Number},
-      width: {type: Number},
-      height: {type: Number},
-    };
-  }
-
-  constructor() {
-    super();
-
-    // TODO remove
-
-    this.x = 0;
-    this.y = 0;
-    this.width = 1024;
-    this.height = 1024;
-  }
-
-  static get styles() {
-    return css`
+  static styles = [
+    croppieStyles,
+    css`
         .dialog {
             width: 500px;
         }
@@ -35,7 +18,12 @@ export class ImageCrop extends LitElement {
             align-items: center;
             gap: 1rem;
         }
-        
+
+        .dialog__body {
+            width: 500px;
+            height: 500px;
+        }
+
         .dialog__actions {
             display: flex;
             gap: 0.5rem;
@@ -43,8 +31,12 @@ export class ImageCrop extends LitElement {
             justify-content: flex-end;
             align-items: center;
         }
-    `;
-  }
+        
+        .cr-slider-wrap {
+            visibility: hidden;
+        }
+    `,
+  ];
 
   render() {
     return html`
@@ -52,7 +44,7 @@ export class ImageCrop extends LitElement {
         
         <dialog class="dialog">
             <div class="dialog__content">
-                <image-crop></image-crop>
+                <div class="dialog__body"></div>
                 <div class="dialog__actions">
                     <button @click="${this.handleClose}">Close</button>
                     <button @click="${this.handleConfirm}">Confirm</button>
@@ -62,17 +54,31 @@ export class ImageCrop extends LitElement {
     `;
   }
 
+  firstUpdated() {
+    this._croppie = new Croppie(this.renderRoot.querySelector('.dialog__body'), {
+      viewport: {
+        width: 300,
+        height: 400,
+        type: 'square',
+        showZoomer: false,
+      }
+    })
+  }
+
   handleChange(event) {
     const dialog = this.renderRoot.querySelector('dialog');
-    const imageCrop = this.renderRoot.querySelector('image-crop');
 
     if (event.target.files === 0) {
       return;
     }
 
-    imageCrop.src = URL.createObjectURL(event.target.files[0]);
+    this._file = event.target.files[0]
 
     dialog.showModal();
+
+    this._croppie.bind({
+      url: URL.createObjectURL(this._file),
+    });
   }
 
   handleClose(event) {
@@ -84,47 +90,18 @@ export class ImageCrop extends LitElement {
   handleConfirm(event) {
     event.preventDefault();
 
-    this.cropImage();
+    this._croppie.result('blob').then((blob) => {
+      const name = this._file.name ? this._file.name.split('.').slice(0, -1).join('.') : 'image';
 
-    this.renderRoot.querySelector('dialog').close();
-  }
-
-  cropImage() {
-    const input = this.renderRoot.querySelector('slot').assignedElements()[0];
-
-    console.log(input.files);
-
-    const canvas = document.createElement('canvas');
-
-    let base = new Image();
-
-    base.src = this.renderRoot.querySelector('image-crop').src;
-
-    canvas.height = 500;
-    canvas.width = 500;
-
-    const ctx = canvas.getContext('2d');
-
-    ctx.drawImage(base, this.x, this.y, this.width, this.height, 0, 0, 500, 500);
-
-    canvas.toBlob(function (blob) {
-      const file = new File([blob], 'foo.png', {type: 'image/png'});
+      const file = new File([blob], name +'.png', {type: 'image/png'});
+      const input = this.renderRoot.querySelector('slot').assignedElements()[0];
 
       const transfer = new DataTransfer();
 
       transfer.items.add(file);
       input.files = transfer.files;
-    })
-  }
 
-  connectedCallback() {
-    super.connectedCallback();
-
-    document.addEventListener('image-crop-change', (event) => {
-      this.x = event.detail.x;
-      this.y = event.detail.y;
-      this.width = event.detail.width;
-      this.height = event.detail.height;
+      this.renderRoot.querySelector('dialog').close();
     });
   }
 }
