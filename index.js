@@ -4,6 +4,20 @@ import Croppie from'croppie/croppie.js';
 import {croppieStyles} from "./croppie-styles";
 
 export class ImageCrop extends LitElement {
+  static get properties() {
+    return {
+      width: {type: Number, attribute: true},
+      height: {type: Number, attribute: true},
+    }
+  }
+
+  constructor() {
+    super();
+
+    this.width = 400;
+    this.height = 400;
+  }
+
   static styles = [
     croppieStyles,
     css`
@@ -57,8 +71,8 @@ export class ImageCrop extends LitElement {
   firstUpdated() {
     this._croppie = new Croppie(this.renderRoot.querySelector('.dialog__body'), {
       viewport: {
-        width: 300,
-        height: 400,
+        width: this.width,
+        height: this.height,
         type: 'square',
         showZoomer: false,
       }
