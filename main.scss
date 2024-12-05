@@ -42,6 +42,6 @@ image-crop-dialog::part(confirm) {
     background-color: colors.$green-500;
 }
 
-image-crop-dialog::part(close) {
+image-crop-dialog::part(cancel) {
     background-color: colors.$red-500;
 }

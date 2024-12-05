@@ -60,7 +60,7 @@ export class ImageCrop extends LitElement {
             <div class="dialog__content">
                 <div class="dialog__body"></div>
                 <div class="dialog__actions">
-                    <button @click="${this.handleClose}" part="button close">Close</button>
+                    <button @click="${this.handleCancel}" part="button cancel">Cancel</button>
                     <button @click="${this.handleConfirm}" part="button confirm">Confirm</button>
                 </div>
             </div>
@@ -97,8 +97,12 @@ export class ImageCrop extends LitElement {
     });
   }
 
-  handleClose(event) {
+  handleCancel(event) {
     event.preventDefault();
+
+    this.renderRoot.querySelector('slot').assignedElements().forEach((input) => {
+      input.value = '';
+    });
 
     this.renderRoot.querySelector('dialog')?.close();
   }
