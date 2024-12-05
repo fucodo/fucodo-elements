@@ -69,10 +69,12 @@ export class ImageCrop extends LitElement {
   }
 
   firstUpdated() {
+    const scale = 400 / Math.max(this.width, this.height);
+
     this._croppie = new Croppie(this.renderRoot.querySelector('.dialog__body'), {
       viewport: {
-        width: this.width,
-        height: this.height,
+        width: this.width * scale,
+        height: this.height * scale,
         type: 'square',
         showZoomer: false,
       }
@@ -104,19 +106,55 @@ export class ImageCrop extends LitElement {
   handleConfirm(event) {
     event.preventDefault();
 
-    this._croppie.result('blob').then((blob) => {
-      const name = this._file.name ? this._file.name.split('.').slice(0, -1).join('.') : 'image';
+    const options = {
+      type: 'rawcanvas',
+      size: 'original',
+      format: 'png',
+      quality: 1,
+      circle: false,
+    }
 
-      const file = new File([blob], name +'.png', {type: 'image/png'});
-      const input = this.renderRoot.querySelector('slot').assignedElements()[0];
+    this._croppie.result(options).then((canvas) => {
+      if (canvas.width > this.width || canvas.height > this.height) {
+        this.rescaleCanvas(canvas);
+      }
 
-      const transfer = new DataTransfer();
+      // reject lower resolution crops here
 
-      transfer.items.add(file);
-      input.files = transfer.files;
+      canvas.toBlob((blob) => {
+        const name = this._file.name ? this._file.name.split('.').slice(0, -1).join('.') : 'image';
 
-      this.renderRoot.querySelector('dialog').close();
+        const file = new File([blob], name +'.png', {type: 'image/png'});
+        const input = this.renderRoot.querySelector('slot').assignedElements()[0];
+
+        const transfer = new DataTransfer();
+
+        transfer.items.add(file);
+        input.files = transfer.files;
+
+        this.renderRoot.querySelector('dialog').close();
+      });
     });
+  }
+
+  rescaleCanvas(srcCanvas) {
+    let srcContext = srcCanvas.getContext('2d');
+
+    // there probably is way to avoid a temporary canvas using scale()
+    // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/scale
+
+    let canvas = document.createElement('canvas');
+    let context = canvas.getContext('2d');
+
+    canvas.width = this.width;
+    canvas.height = this.height;
+
+    context.drawImage(srcCanvas, 0, 0, this.width, this.height);
+
+    srcCanvas.width = this.width;
+    srcCanvas.height = this.height;
+
+    srcContext.drawImage(canvas, 0, 0);
   }
 }
 
