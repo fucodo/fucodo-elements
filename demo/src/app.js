@@ -1,6 +1,6 @@
 import './main.scss';
 
-import './image-crop-dialog.js';
+import '../node_modules/image-crop-dialog/index.min.js';
 
 const form = document.querySelector('form');
 const submit = document.getElementById('foo');

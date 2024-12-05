@@ -1,0 +1,23 @@
+{
+  "name": "fucodo.imagecrop.demo",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node build.js",
+    "server": "http-server build"
+  },
+  "author": "Jonas Knobloch",
+  "license": "MIT",
+  "description": "",
+  "dependencies": {
+    "@picocss/pico": "^2.0.6",
+    "http-server": "^14.1.1",
+    "image-crop-dialog": "file:../dist"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "esbuild-sass-plugin": "^3.3.1"
+  }
+}

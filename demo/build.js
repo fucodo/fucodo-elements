@@ -4,17 +4,17 @@ import {sassPlugin} from 'esbuild-sass-plugin';
 import fs from 'fs';
 
 try {
-  fs.mkdirSync('static');
+  fs.mkdirSync('build');
 } catch (err) {
   //
 }
 
-fs.copyFileSync('index.html', 'static/index.html');
+fs.copyFileSync('src/index.html', 'build/index.html');
 
 await esbuild.build({
-  entryPoints: ['app.js'],
+  entryPoints: ['src/app.js'],
   plugins: [sassPlugin()],
   bundle: true,
   minify: true,
-  outfile: 'static/app.js',
+  outfile: 'build/app.js',
 });

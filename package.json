@@ -5,8 +5,7 @@
   "main": "image-crop-dialog.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node build.js",
-    "server": "http-server static"
+    "build": "esbuild src/image-crop-dialog.js --bundle --minify --sourcemap --outfile=dist/index.min.js"
   },
   "repository": {
     "type": "git",
@@ -24,9 +23,6 @@
     "lit": "^3.2.1"
   },
   "devDependencies": {
-    "@picocss/pico": "^2.0.6",
-    "esbuild": "^0.24.0",
-    "esbuild-sass-plugin": "^3.3.1",
-    "http-server": "^14.1.1"
+    "esbuild": "^0.24.0"
   }
 }
