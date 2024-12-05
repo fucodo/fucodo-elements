@@ -7,7 +7,8 @@
     "build": "npm run build:css && npm run build:js && cp index.html static/index.html",
     "build:js": "esbuild index.js --bundle --minify --outfile=static/index.js",
     "build:css": "esbuild style.css --bundle --minify --outfile=static/style.css",
-    "server": "http-server static"
+    "server": "http-server static",
+    "dev": "esbuild index.js --bundle --outfile=static/index.js --watch"
   },
   "repository": {
     "type": "git",
