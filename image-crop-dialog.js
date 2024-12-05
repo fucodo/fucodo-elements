@@ -56,12 +56,12 @@ export class ImageCrop extends LitElement {
     return html`
         <slot @change="${this.handleChange}"></slot>
         
-        <dialog class="dialog">
+        <dialog class="dialog" part="dialog">
             <div class="dialog__content">
                 <div class="dialog__body"></div>
                 <div class="dialog__actions">
-                    <button @click="${this.handleClose}">Close</button>
-                    <button @click="${this.handleConfirm}">Confirm</button>
+                    <button @click="${this.handleClose}" part="button close">Close</button>
+                    <button @click="${this.handleConfirm}" part="button confirm">Confirm</button>
                 </div>
             </div>
         </dialog>

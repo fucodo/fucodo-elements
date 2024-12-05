@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="app.css">
     <title>Image Crop</title>
 </head>
 <body>
@@ -17,32 +17,6 @@
     </form>
     <div id="result"></div>
 </main>
-<script>
-  const form = document.querySelector('form');
-  const submit = document.getElementById('foo');
-
-  submit.addEventListener('click', (event) => {
-    event.preventDefault();
-
-    let data = new FormData(form, submit);
-
-    console.log(data);
-
-    for (const value of data.entries()) {
-      if (value[0] !== 'picture') {
-        continue;
-      }
-
-      const img = document.createElement('img');
-      img.src = URL.createObjectURL(value[1]);
-
-      const result = document.getElementById("result");
-
-      result.innerHTML = '';
-      result.appendChild(img);
-    }
-  });
-</script>
-<script src="index.js" type="module"></script>
+<script src="app.js"></script>
 </body>
 </html>

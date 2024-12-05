@@ -1,0 +1,47 @@
+@use 'node_modules/@picocss/pico/css/pico.css';
+@use 'node_modules/@picocss/pico/scss/colors';
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 100vh;
+    min-height: 100vh;
+    gap: 3rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#result {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+image-crop-dialog::part(dialog) {
+    padding: 20px;
+    border: 0;
+    -webkit-backdrop-filter: blur(0.375re);
+    backdrop-filter: blur(0.375re);
+    background-color: rgba(232, 234, 237, 1);
+    color: #373c44;
+}
+
+image-crop-dialog::part(button) {
+    @extend button;
+}
+
+image-crop-dialog::part(confirm) {
+    background-color: colors.$green-500;
+}
+
+image-crop-dialog::part(close) {
+    background-color: colors.$red-500;
+}

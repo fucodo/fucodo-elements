@@ -1,14 +1,12 @@
 {
   "name": "fucodo.imagecrop",
+  "type": "module",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "image-crop-dialog.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build:css && npm run build:js && cp index.html static/index.html",
-    "build:js": "esbuild index.js --bundle --minify --outfile=static/index.js",
-    "build:css": "esbuild style.css --bundle --minify --outfile=static/style.css",
-    "server": "http-server static",
-    "dev": "esbuild index.js --bundle --outfile=static/index.js --watch"
+    "build": "node build.js",
+    "server": "http-server static"
   },
   "repository": {
     "type": "git",
@@ -28,6 +26,7 @@
   "devDependencies": {
     "@picocss/pico": "^2.0.6",
     "esbuild": "^0.24.0",
+    "esbuild-sass-plugin": "^3.3.1",
     "http-server": "^14.1.1"
   }
 }
