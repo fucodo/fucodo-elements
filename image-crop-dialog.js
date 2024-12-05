@@ -60,8 +60,8 @@ export class ImageCrop extends LitElement {
             <div class="dialog__content">
                 <div class="dialog__body"></div>
                 <div class="dialog__actions">
-                    <button @click="${this.handleCancel}" part="button cancel">Cancel</button>
-                    <button @click="${this.handleConfirm}" part="button confirm">Confirm</button>
+                    <button @click="${this.handleCancel}" part="button cancel"><slot name="label-cancel">Cancel</slot></button>
+                    <button @click="${this.handleConfirm}" part="button confirm"><slot name="label-confirm">Confirm</slot></button>
                 </div>
             </div>
         </dialog>
