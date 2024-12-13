@@ -4,6 +4,8 @@ import { Editor } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline';
 
+import {Markdown} from "tiptap-markdown";
+
 class MyEditor extends LitElement {
   render() {
     return html`
@@ -29,6 +31,7 @@ class MyEditor extends LitElement {
       extensions: [
         StarterKit,
         Underline,
+        Markdown,
       ],
       content: '<p>Hello World!</p>',
     })
@@ -54,6 +57,10 @@ class MyEditor extends LitElement {
 
   handleStrike() {
     this.editor.chain().focus().toggleStrike().run();
+  }
+
+  getMarkdown() {
+    return this.editor.storage.markdown.getMarkdown();
   }
 }
 

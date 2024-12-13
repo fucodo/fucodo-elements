@@ -10,7 +10,18 @@
 <body>
 <main>
     <fucodo-editor></fucodo-editor>
+    <button id="save">Save</button>
+    <code id="output"></code>
 </main>
 <script src="static/index.js" type="module"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('save').addEventListener('click', () => {
+        const editor = document.querySelector('fucodo-editor');
+
+        document.getElementById('output').innerText = editor.getMarkdown();
+      });
+    });
+</script>
 </body>
 </html>
