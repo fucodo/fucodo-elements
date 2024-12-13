@@ -22,6 +22,8 @@
   "description": "",
   "dependencies": {
     "@tiptap/core": "^2.10.3",
+    "@tiptap/extension-task-item": "^2.10.3",
+    "@tiptap/extension-task-list": "^2.10.3",
     "@tiptap/extension-underline": "^2.10.3",
     "@tiptap/starter-kit": "^2.10.3",
     "lit": "^3.2.1",
