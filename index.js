@@ -17,6 +17,31 @@ class MyEditor extends LitElement {
         
         .toolbar {
             margin: 20px 0;
+            border: 1px solid white;
+            display: flex;
+            border-radius: 14px;
+            height: 24px;
+            justify-content: start;
+            align-items: center;
+            padding: 0 4px;
+            width: min-content;
+        }
+        
+        .button {
+            background: none;
+            color: white;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 24px;
+            height: 24px;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .icon {
+            filter: invert(1);
         }
 
         .tiptap :first-child {
@@ -67,10 +92,10 @@ class MyEditor extends LitElement {
   render() {
     return html`
         <div class="toolbar">
-            <button @click="${this.handleBold}">Bold</button>
-            <button @click="${this.handleItalic}">Italic</button>
-            <button @click="${this.handleUnderline}">Underline</button>
-            <button @click="${this.handleStrike}">Strike</button>
+            <button class="button" @click="${this.handleBold}"><img class="icon" src="type-bold.svg" alt="bold"></button>
+            <button class="button" @click="${this.handleItalic}"><img class="icon" src="type-italic.svg" alt="italic"></button>
+            <button class="button" @click="${this.handleUnderline}"><img class="icon" src="type-underline.svg" alt="underline"></button>
+            <button class="button" @click="${this.handleStrike}"><img class="icon" src="type-strikethrough.svg" alt="strike"></button>
         </div>
         <span id="editor"></span
     `;
