@@ -108,10 +108,10 @@ class MyEditor extends LitElement {
             height: auto;
             margin: 1.5rem 0;
             max-width: 100%;
+        }
 
-            &.ProseMirror-selectednode {
-                outline: 3px solid rgb(106, 0, 245);
-            }
+        .tiptap img.ProseMirror-selectednode {
+            outline: 3px solid #6a00f5;
         }
 
         .tiptap pre {
