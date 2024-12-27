@@ -91,9 +91,9 @@ class MyEditor extends LitElement {
   render() {
     return html`
         <div class="toolbar">
-            <button class="button" @click="${this.handleBold}"><img class="icon" src="type-bold.svg" alt="bold"></button>
-            <button class="button" @click="${this.handleItalic}"><img class="icon" src="type-italic.svg" alt="italic"></button>
-            <button class="button" @click="${this.handleStrike}"><img class="icon" src="type-strikethrough.svg" alt="strike"></button>
+            <button class="button" @click="${() => {this.editor.chain().focus().toggleBold().run()}}"><img class="icon" src="type-bold.svg" alt="bold"></button>
+            <button class="button" @click="${() => {this.editor.chain().focus().toggleItalic().run()}}"><img class="icon" src="type-italic.svg" alt="italic"></button>
+            <button class="button" @click="${() => {this.editor.chain().focus().toggleStrike().run()}}"><img class="icon" src="type-strikethrough.svg" alt="strike"></button>
             <button class="button" @click="${() => {this.editor.chain().focus().toggleBulletList().run()}}"><img class="icon" src="list-ul.svg" alt="list unordered"></button>
             <button class="button" @click="${() => {this.editor.chain().focus().toggleOrderedList().run()}}"><img class="icon" src="list-ol.svg" alt="list ordered"></button>
             <button class="button" @click="${() => {this.editor.chain().focus().toggleTaskList().run()}}"><img class="icon" src="list-check.svg" alt="list tasks"></button>
@@ -125,18 +125,6 @@ class MyEditor extends LitElement {
     super.disconnectedCallback();
 
     this.editor.destroy();
-  }
-
-  handleBold() {
-    this.editor.chain().focus().toggleBold().run();
-  }
-
-  handleItalic() {
-    this.editor.chain().focus().toggleItalic().run();
-  }
-
-  handleStrike() {
-    this.editor.chain().focus().toggleStrike().run();
   }
 
   getMarkdown() {
