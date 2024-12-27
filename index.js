@@ -40,6 +40,10 @@ class MyEditor extends LitElement {
             margin: 0;
             padding: 0;
         }
+
+        .button:disabled {
+            opacity: 0.5;
+        }
         
         .icon {
             filter: invert(1);
@@ -123,9 +127,25 @@ class MyEditor extends LitElement {
             <button class="button" @click="${() => {this.editor.chain().focus().toggleTaskList().run()}}"><img class="icon" src="list-check.svg" alt="list tasks"></button>
             <label class="button"><img class="icon" src="card-image.svg" alt="image upload"><input type="file" accept="image/*" @change="${this.handleImageUpload}"></label>
             <button class="button" @click="${() => {this.editor.chain().focus().toggleBlockquote().run()}}"><img class="icon" src="quote.svg" alt="quote"></button>
+            <button class="button" @click="${() => {this.editor.chain().focus().undo().run()}}" ?disabled="${!this._canUndo}"><img class="icon" src="arrow-counterclockwise.svg" alt="undo"></button>
+            <button class="button" @click="${() => {this.editor.chain().focus().redo().run()}}" ?disabled="${!this._canRedo}"><img class="icon" src="arrow-clockwise.svg" alt="redo"></button>
         </div>
         <span id="editor"></span>
     `;
+  }
+
+  static get properties() {
+    return {
+      _canUndo: {state: true},
+      _canRedo: {state: true},
+    };
+  }
+
+  constructor() {
+    super();
+
+    this._canUndo = false;
+    this._canRedo = false;
   }
 
   connectedCallback() {
@@ -157,6 +177,10 @@ class MyEditor extends LitElement {
         Markdown,
       ],
       content: content,
+      onUpdate: () => {
+        this._canUndo = this.editor.can().undo();
+        this._canRedo = this.editor.can().redo();
+      }
     })
   }
 
