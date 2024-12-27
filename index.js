@@ -4,6 +4,7 @@ import { Editor } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
 import {TaskList} from '@tiptap/extension-task-list';
 import {TaskItem} from '@tiptap/extension-task-item';
+import {Image} from '@tiptap/extension-image';
 
 import {Markdown} from "tiptap-markdown";
 
@@ -41,6 +42,14 @@ class MyEditor extends LitElement {
         
         .icon {
             filter: invert(1);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .tiptap img {
+            max-width: 600px;
         }
 
         .tiptap :first-child {
@@ -98,6 +107,7 @@ class MyEditor extends LitElement {
             <button class="button" @click="${() => {this.editor.chain().focus().toggleBulletList().run()}}"><img class="icon" src="list-ul.svg" alt="list unordered"></button>
             <button class="button" @click="${() => {this.editor.chain().focus().toggleOrderedList().run()}}"><img class="icon" src="list-ol.svg" alt="list ordered"></button>
             <button class="button" @click="${() => {this.editor.chain().focus().toggleTaskList().run()}}"><img class="icon" src="list-check.svg" alt="list tasks"></button>
+            <label class="button"><img class="icon" src="card-image.svg" alt="image upload"><input type="file" accept="image/*" @change="${this.handleImageUpload}"></label>
         </div>
         <span id="editor"></span>
     `;
@@ -126,6 +136,9 @@ class MyEditor extends LitElement {
         StarterKit,
         TaskList,
         TaskItem,
+        Image.configure({
+          allowBase64: true,
+        }),
         Markdown,
       ],
       content: content,
@@ -136,6 +149,18 @@ class MyEditor extends LitElement {
     super.disconnectedCallback();
 
     this.editor.destroy();
+  }
+
+  handleImageUpload(event) {
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      this.editor.chain().focus().setImage({src: event.target.result}).run();
+    }
+
+    if (event.target.files.length > 0) {
+      reader.readAsDataURL(event.target.files[0]);
+    }
   }
 
   getMarkdown() {
