@@ -6,6 +6,7 @@ import {TaskList} from '@tiptap/extension-task-list';
 import {TaskItem} from '@tiptap/extension-task-item';
 import {Image} from '@tiptap/extension-image';
 import {CodeBlock} from '@tiptap/extension-code-block';
+import {Link} from '@tiptap/extension-link';
 
 import {Markdown} from "tiptap-markdown";
 
@@ -129,6 +130,14 @@ class MyEditor extends LitElement {
             font-size: 0.8rem;
             padding: 0;
         }
+
+        .tiptap a {
+            color: #6a00f5;
+            cursor: pointer;
+        }
+        .tiptap a:hover {
+            color: #5800cc;
+        }
     `;
   }
 
@@ -147,6 +156,7 @@ class MyEditor extends LitElement {
             <button class="button" @click="${() => {this.editor.chain().focus().undo().run()}}" ?disabled="${!this._canUndo}"><img class="icon" src="arrow-counterclockwise.svg" alt="undo"></button>
             <button class="button" @click="${() => {this.editor.chain().focus().redo().run()}}" ?disabled="${!this._canRedo}"><img class="icon" src="arrow-clockwise.svg" alt="redo"></button>
             <button class="button" @click="${() => {this.editor.chain().focus().toggleCodeBlock().run()}}"><img class="icon" src="code.svg" alt="code block"></button>
+            <button class="button" @click="${this.handleSetLink}"><img class="icon" src="link-45deg.svg" alt="link"></button>
         </div>
         <span id="editor"></span>
     `;
@@ -194,6 +204,7 @@ class MyEditor extends LitElement {
         }),
         Markdown,
         CodeBlock,
+        Link,
       ],
       content: content,
       onUpdate: () => {
@@ -219,6 +230,23 @@ class MyEditor extends LitElement {
     if (event.target.files.length > 0) {
       reader.readAsDataURL(event.target.files[0]);
     }
+  }
+
+  handleSetLink() {
+    const previousUrl = this.editor.getAttributes('link').href;
+    const url = window.prompt('URL', previousUrl);
+
+    if (url === null) {
+      return
+    }
+
+    if (url === '') {
+      this.editor.chain().focus().extendMarkRange('link').unsetLink().run();
+
+      return
+    }
+
+    this.editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
   }
 
   getMarkdown() {
