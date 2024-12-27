@@ -2,7 +2,6 @@ import {LitElement, html, css} from 'lit';
 
 import { Editor } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
-import Underline from '@tiptap/extension-underline';
 import {TaskList} from '@tiptap/extension-task-list';
 import {TaskItem} from '@tiptap/extension-task-item';
 
@@ -94,7 +93,6 @@ class MyEditor extends LitElement {
         <div class="toolbar">
             <button class="button" @click="${this.handleBold}"><img class="icon" src="type-bold.svg" alt="bold"></button>
             <button class="button" @click="${this.handleItalic}"><img class="icon" src="type-italic.svg" alt="italic"></button>
-            <button class="button" @click="${this.handleUnderline}"><img class="icon" src="type-underline.svg" alt="underline"></button>
             <button class="button" @click="${this.handleStrike}"><img class="icon" src="type-strikethrough.svg" alt="strike"></button>
             <button class="button" @click="${() => {this.editor.chain().focus().toggleBulletList().run()}}"><img class="icon" src="list-ul.svg" alt="list unordered"></button>
             <button class="button" @click="${() => {this.editor.chain().focus().toggleOrderedList().run()}}"><img class="icon" src="list-ol.svg" alt="list ordered"></button>
@@ -115,7 +113,6 @@ class MyEditor extends LitElement {
       element: this.shadowRoot.querySelector('#editor'),
       extensions: [
         StarterKit,
-        Underline,
         TaskList,
         TaskItem,
         Markdown,
@@ -136,10 +133,6 @@ class MyEditor extends LitElement {
 
   handleItalic() {
     this.editor.chain().focus().toggleItalic().run();
-  }
-
-  handleUnderline() {
-    this.editor.chain().focus().toggleUnderline().run();
   }
 
   handleStrike() {
