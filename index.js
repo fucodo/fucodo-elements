@@ -13,6 +13,7 @@ class MyEditor extends LitElement {
     return css`
         :host {
             min-width: 600px;
+            max-width: 600px;
         }
         
         .toolbar {
@@ -46,10 +47,6 @@ class MyEditor extends LitElement {
 
         input[type="file"] {
             display: none;
-        }
-
-        .tiptap img {
-            max-width: 600px;
         }
 
         .tiptap :first-child {
@@ -99,6 +96,17 @@ class MyEditor extends LitElement {
             border-left: 3px solid rgba(61, 37, 20, 0.12);
             margin: 1.5rem 0;
             padding-left: 1rem;
+        }
+
+        .tiptap img {
+            display: block;
+            height: auto;
+            margin: 1.5rem 0;
+            max-width: 100%;
+
+            &.ProseMirror-selectednode {
+                outline: 3px solid rgb(106, 0, 245);
+            }
         }
     `;
   }
