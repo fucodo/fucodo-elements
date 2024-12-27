@@ -90,6 +90,7 @@ class MyEditor extends LitElement {
 
   render() {
     return html`
+        <slot></slot>
         <div class="toolbar">
             <button class="button" @click="${() => {this.editor.chain().focus().toggleBold().run()}}"><img class="icon" src="type-bold.svg" alt="bold"></button>
             <button class="button" @click="${() => {this.editor.chain().focus().toggleItalic().run()}}"><img class="icon" src="type-italic.svg" alt="italic"></button>
@@ -98,7 +99,7 @@ class MyEditor extends LitElement {
             <button class="button" @click="${() => {this.editor.chain().focus().toggleOrderedList().run()}}"><img class="icon" src="list-ol.svg" alt="list ordered"></button>
             <button class="button" @click="${() => {this.editor.chain().focus().toggleTaskList().run()}}"><img class="icon" src="list-check.svg" alt="list tasks"></button>
         </div>
-        <span id="editor"></span
+        <span id="editor"></span>
     `;
   }
 
@@ -109,6 +110,16 @@ class MyEditor extends LitElement {
   firstUpdated(_changedProperties) {
     super.firstUpdated(_changedProperties);
 
+    let content = '';
+
+    this.shadowRoot.querySelector('slot').assignedElements().forEach((element) => {
+      if (element.tagName.toLowerCase() === 'textarea') {
+        content = element.innerHTML.split('\n').map(line => line.trim()).join('\n');
+      }
+
+      element.remove();
+    });
+
     this.editor = new Editor({
       element: this.shadowRoot.querySelector('#editor'),
       extensions: [
@@ -117,7 +128,7 @@ class MyEditor extends LitElement {
         TaskItem,
         Markdown,
       ],
-      content: '<p>Hello World!</p>',
+      content: content,
     })
   }
 
