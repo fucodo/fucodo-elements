@@ -96,6 +96,9 @@ class MyEditor extends LitElement {
             <button class="button" @click="${this.handleItalic}"><img class="icon" src="type-italic.svg" alt="italic"></button>
             <button class="button" @click="${this.handleUnderline}"><img class="icon" src="type-underline.svg" alt="underline"></button>
             <button class="button" @click="${this.handleStrike}"><img class="icon" src="type-strikethrough.svg" alt="strike"></button>
+            <button class="button" @click="${() => {this.editor.chain().focus().toggleBulletList().run()}}"><img class="icon" src="list-ul.svg" alt="list unordered"></button>
+            <button class="button" @click="${() => {this.editor.chain().focus().toggleOrderedList().run()}}"><img class="icon" src="list-ol.svg" alt="list ordered"></button>
+            <button class="button" @click="${() => {this.editor.chain().focus().toggleTaskList().run()}}"><img class="icon" src="list-check.svg" alt="list tasks"></button>
         </div>
         <span id="editor"></span
     `;
