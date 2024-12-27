@@ -94,6 +94,12 @@ class MyEditor extends LitElement {
         .tiptap ul[data-type="taskList"] ul[data-type="taskList"] {
             margin: 0;
         }
+
+        .tiptap blockquote {
+            border-left: 3px solid rgba(61, 37, 20, 0.12);
+            margin: 1.5rem 0;
+            padding-left: 1rem;
+        }
     `;
   }
 
@@ -108,6 +114,7 @@ class MyEditor extends LitElement {
             <button class="button" @click="${() => {this.editor.chain().focus().toggleOrderedList().run()}}"><img class="icon" src="list-ol.svg" alt="list ordered"></button>
             <button class="button" @click="${() => {this.editor.chain().focus().toggleTaskList().run()}}"><img class="icon" src="list-check.svg" alt="list tasks"></button>
             <label class="button"><img class="icon" src="card-image.svg" alt="image upload"><input type="file" accept="image/*" @change="${this.handleImageUpload}"></label>
+            <button class="button" @click="${() => {this.editor.chain().focus().toggleBlockquote().run()}}"><img class="icon" src="quote.svg" alt="quote"></button>
         </div>
         <span id="editor"></span>
     `;
