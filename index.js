@@ -5,6 +5,7 @@ import StarterKit from '@tiptap/starter-kit'
 import {TaskList} from '@tiptap/extension-task-list';
 import {TaskItem} from '@tiptap/extension-task-item';
 import {Image} from '@tiptap/extension-image';
+import {CodeBlock} from '@tiptap/extension-code-block';
 
 import {Markdown} from "tiptap-markdown";
 
@@ -112,6 +113,22 @@ class MyEditor extends LitElement {
                 outline: 3px solid rgb(106, 0, 245);
             }
         }
+
+        .tiptap pre {
+            background: rgb(46, 43, 41);
+            border-radius: 0.5rem;
+            color: rgb(255, 255, 255);
+            font-family: 'JetBrainsMono', monospace;
+            margin: 1.5rem 0;
+            padding: 0.75rem 1rem;
+        }
+
+        .tiptap pre code {
+            background: none;
+            color: inherit;
+            font-size: 0.8rem;
+            padding: 0;
+        }
     `;
   }
 
@@ -129,6 +146,7 @@ class MyEditor extends LitElement {
             <button class="button" @click="${() => {this.editor.chain().focus().toggleBlockquote().run()}}"><img class="icon" src="quote.svg" alt="quote"></button>
             <button class="button" @click="${() => {this.editor.chain().focus().undo().run()}}" ?disabled="${!this._canUndo}"><img class="icon" src="arrow-counterclockwise.svg" alt="undo"></button>
             <button class="button" @click="${() => {this.editor.chain().focus().redo().run()}}" ?disabled="${!this._canRedo}"><img class="icon" src="arrow-clockwise.svg" alt="redo"></button>
+            <button class="button" @click="${() => {this.editor.chain().focus().toggleCodeBlock().run()}}"><img class="icon" src="code.svg" alt="code block"></button>
         </div>
         <span id="editor"></span>
     `;
@@ -175,6 +193,7 @@ class MyEditor extends LitElement {
           allowBase64: true,
         }),
         Markdown,
+        CodeBlock,
       ],
       content: content,
       onUpdate: () => {
