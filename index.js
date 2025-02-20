@@ -19,15 +19,13 @@ class MyEditor extends LitElement {
         }
         
         .toolbar {
-            margin: 20px 0;
-            border: 1px solid white;
             display: flex;
-            border-radius: 14px;
             height: 24px;
+            width: 100%;
+            padding: 10px;
             justify-content: start;
             align-items: center;
-            padding: 0 4px;
-            width: min-content;
+            gap: 4px;
         }
         
         .button {
@@ -49,6 +47,14 @@ class MyEditor extends LitElement {
         
         .icon {
             filter: invert(1);
+        }
+      
+        .editor {
+            padding: 10px 18px;
+        }
+      
+        .editor:focus {
+            outline: none;
         }
 
         input[type="file"] {
@@ -158,6 +164,7 @@ class MyEditor extends LitElement {
             <button class="button" @click="${() => {this.editor.chain().focus().toggleCodeBlock().run()}}"><img class="icon" src="code.svg" alt="code block"></button>
             <button class="button" @click="${this.handleSetLink}"><img class="icon" src="link-45deg.svg" alt="link"></button>
         </div>
+        <span class="divider"></span>
         <span id="editor"></span>
     `;
   }
@@ -210,7 +217,12 @@ class MyEditor extends LitElement {
       onUpdate: () => {
         this._canUndo = this.editor.can().undo();
         this._canRedo = this.editor.can().redo();
-      }
+      },
+      editorProps: {
+        attributes: {
+          class: 'editor',
+        },
+      },
     })
   }
 

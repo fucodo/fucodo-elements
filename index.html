@@ -6,17 +6,27 @@
     <meta name="color-scheme" content="light dark">
     <link rel="stylesheet" href="style.css">
     <title>Editor</title>
+    <style>
+        .custom {
+            border: 1px solid white;
+            border-radius: 5px;
+        }
+
+        .button {
+            margin: 10px;
+        }
+    </style>
 </head>
 <body>
 <main>
-    <fucodo-editor>
+    <fucodo-editor class="custom">
         <textarea>
             # Hello World!
             This is a simple markdown editor.
             - foo
             - bar
         </textarea></fucodo-editor>
-    <button id="save">Save</button>
+    <button id="save" class="button">Save</button>
     <code id="output"></code>
 </main>
 <script src="index.js" type="module"></script>
