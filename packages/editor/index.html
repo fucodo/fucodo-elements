@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <link rel="stylesheet" href="style.css">
+    <title>Editor</title>
+    <style>
+        .custom {
+            border: 1px solid white;
+            border-radius: 5px;
+        }
+
+        .button {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <fucodo-editor class="custom">
+        <textarea>
+            # Hello World!
+            This is a simple markdown editor.
+            - foo
+            - bar
+        </textarea></fucodo-editor>
+    <button id="save" class="button">Save</button>
+    <code id="output"></code>
+</main>
+<script src="index.js" type="module"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('save').addEventListener('click', () => {
+        const editor = document.querySelector('fucodo-editor');
+
+        document.getElementById('output').innerText = editor.getMarkdown();
+      });
+    });
+</script>
+</body>
+</html>
