@@ -1,0 +1,28 @@
+{
+  "name": "fucodo.imagecrop",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "image-crop-dialog.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "esbuild src/image-crop-dialog.js --bundle --minify --sourcemap --outfile=dist/index.min.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fucodo/fucodo.imagecrop.git"
+  },
+  "author": "Jonas Knobloch",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fucodo/fucodo.imagecrop/issues"
+  },
+  "homepage": "https://github.com/fucodo/fucodo.imagecrop#readme",
+  "description": "",
+  "dependencies": {
+    "croppie": "^2.6.5",
+    "lit": "^3.2.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}
