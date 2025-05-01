@@ -2,10 +2,27 @@
   "name": "fucodo-elements",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./copy-icons.sh && node build.js",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "author": "Jonas Knobloch",
   "license": "MIT",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@storybook/addon-essentials": "^8.6.12",
+    "@storybook/blocks": "^8.6.12",
+    "@storybook/test": "^8.6.12",
+    "@storybook/web-components": "^8.6.12",
+    "@storybook/web-components-vite": "^8.6.12",
+    "esbuild": "^0.25.3",
+    "lit": "^3.3.0",
+    "storybook": "^8.6.12"
+  }
 }

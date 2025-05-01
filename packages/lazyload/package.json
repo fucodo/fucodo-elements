@@ -3,11 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build:css && npm run build:js",
-    "build:js": "esbuild index.js --bundle --minify --outfile=static/index.js",
-    "build:css": "esbuild style.css --bundle --minify --outfile=static/style.css",
-    "server": "http-server"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -22,10 +18,5 @@
   "description": "",
   "dependencies": {
     "lit": "^3.2.1"
-  },
-  "devDependencies": {
-    "@picocss/pico": "^2.0.6",
-    "esbuild": "^0.24.0",
-    "http-server": "^14.1.1"
   }
 }

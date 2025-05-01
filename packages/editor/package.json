@@ -3,11 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run build:css && npm run build:js && cp index.html static/index.html && ./copy-icons.sh",
-    "build:js": "esbuild index.js --bundle --minify --outfile=static/index.js",
-    "build:css": "esbuild style.css --bundle --minify --outfile=static/style.css",
-    "server": "http-server static"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -31,9 +27,5 @@
     "bootstrap-icons": "^1.11.3",
     "lit": "^3.2.1",
     "tiptap-markdown": "^0.8.10"
-  },
-  "devDependencies": {
-    "esbuild": "^0.24.0",
-    "http-server": "^14.1.1"
   }
 }
