@@ -1,21 +1,15 @@
 
 
-/** @type { import('@storybook/web-components-vite').StorybookConfig } */
+/** @type { import('@storybook/html-webpack5').StorybookConfig } */
 const config = {
   "stories": [
-    "../stories/**/*.mdx",
-    "../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)"
+    "../stories/**/*.stories.js"
   ],
   "addons": [
-    {
-      "name": "@storybook/addon-essentials",
-      "options": {
-        "docs": false
-      }
-    }
+    "@storybook/addon-webpack5-compiler-swc"
   ],
   "framework": {
-    "name": "@storybook/web-components-vite",
+    "name": "@storybook/html-webpack5",
     "options": {}
   },
   "staticDirs": ["../stories/public", "../stories/icons"]

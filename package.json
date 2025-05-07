@@ -16,11 +16,9 @@
   "license": "MIT",
   "description": "",
   "devDependencies": {
-    "@storybook/addon-essentials": "^8.6.12",
-    "@storybook/blocks": "^8.6.12",
-    "@storybook/test": "^8.6.12",
-    "@storybook/web-components": "^8.6.12",
-    "@storybook/web-components-vite": "^8.6.12",
+    "@storybook/addon-webpack5-compiler-swc": "^3.0.0",
+    "@storybook/html": "^8.6.12",
+    "@storybook/html-webpack5": "^8.6.12",
     "esbuild": "^0.25.3",
     "lit": "^3.3.0",
     "storybook": "^8.6.12"
