@@ -16,6 +16,7 @@ class MyEditor extends LitElement {
         :host {
             min-width: 600px;
             max-width: 600px;
+            height: 400px;
         }
         
         .toolbar {
@@ -144,6 +145,22 @@ class MyEditor extends LitElement {
         .tiptap a:hover {
             color: #5800cc;
         }
+
+        .markdown-input {
+            display: block;
+            height: calc(100% - 44px);
+            padding: 10px 18px;
+            background-color: white;
+            color: black;
+            font-family: monospace;
+            font-size: 14px;
+            border: none;
+            resize: none;
+            outline: none;
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+        }
     `;
   }
 
@@ -163,16 +180,20 @@ class MyEditor extends LitElement {
             <button class="button" @click="${() => {this.editor.chain().focus().redo().run()}}" ?disabled="${!this._canRedo}"><img class="icon" src="arrow-clockwise.svg" alt="redo"></button>
             <button class="button" @click="${() => {this.editor.chain().focus().toggleCodeBlock().run()}}"><img class="icon" src="code.svg" alt="code block"></button>
             <button class="button" @click="${this.handleSetLink}"><img class="icon" src="link-45deg.svg" alt="link"></button>
+            <button class="button" @click="${this.toggleMode}">foo</button>
         </div>
         <span class="divider"></span>
-        <span id="editor"></span>
+        <span id="editor" style="${this._markdownMode ? 'display: none;' : ''}"></span>
+        ${this._markdownMode ? html`<textarea class="markdown-input" .value="${this._markdownText}" @input="${this.updateFromTextarea}"></textarea>` : null}
     `;
   }
 
   static get properties() {
     return {
-      _canUndo: {state: true},
-      _canRedo: {state: true},
+      _canUndo: { state: true },
+      _canRedo: { state: true },
+      _markdownMode: { state: true },
+      _markdownText: { state: true },
     };
   }
 
@@ -181,6 +202,8 @@ class MyEditor extends LitElement {
 
     this._canUndo = false;
     this._canRedo = false;
+    this._markdownMode = false;
+    this._markdownText = '';
   }
 
   connectedCallback() {
@@ -262,7 +285,24 @@ class MyEditor extends LitElement {
   }
 
   getMarkdown() {
+    if (this._markdownMode) {
+      this.editor.commands.setContent(this._markdownText);
+    }
+
     return this.editor.storage.markdown.getMarkdown();
+  }
+
+  toggleMode() {
+    if (!this._markdownMode) {
+      this._markdownText = this.getMarkdown();
+    } else {
+      this.editor.commands.setContent(this._markdownText);
+    }
+    this._markdownMode = !this._markdownMode;
+  }
+
+  updateFromTextarea(event) {
+    this._markdownText = event.target.value;
   }
 }
 
