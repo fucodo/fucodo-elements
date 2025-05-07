@@ -1,0 +1,14 @@
+main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 800px;
+    border-radius: 8px;
+    padding: 14px;
+    background-color: gray;
+    gap: 10px
+}
+
+button {
+    width: min-content;
+}

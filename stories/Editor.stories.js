@@ -5,7 +5,7 @@ export default {
 };
 
 export const Default = () => {
-  const wrapper = document.createElement('div');
+  const wrapper = document.createElement('main');
   wrapper.innerHTML = `
     <fucodo-editor class="custom">
       <textarea>
@@ -21,9 +21,6 @@ This is a simple markdown editor.
       .custom {
         border: 1px solid white;
         border-radius: 5px;
-      }
-      .button {
-        margin: 10px;
       }
     </style>
   `;

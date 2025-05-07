@@ -5,7 +5,7 @@ export default {
 };
 
 export const Default = () => {
-  const wrapper = document.createElement('div');
+  const wrapper = document.createElement('main');
 
   wrapper.innerHTML = `
     <lazy-load url="lazy.html">

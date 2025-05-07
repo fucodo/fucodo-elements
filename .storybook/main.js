@@ -12,6 +12,6 @@ const config = {
     "name": "@storybook/html-webpack5",
     "options": {}
   },
-  "staticDirs": ["../stories/public", "../stories/icons"]
+  "staticDirs": ["../stories/public", "../stories/icons", "../stories/static"]
 };
 export default config;
