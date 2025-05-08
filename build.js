@@ -17,7 +17,7 @@ for (const entry of entries) {
       await build({
         entryPoints: [entryFile],
         bundle: true,
-        minify: true,
+        minify: false,
         outdir: path.join(packagePath, 'dist'),
         platform: 'browser',
         loader: {
