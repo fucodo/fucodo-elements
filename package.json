@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./copy-icons.sh && node build.js",
+    "build": "node build.js",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },

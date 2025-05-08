@@ -20,6 +20,9 @@ for (const entry of entries) {
         minify: true,
         outdir: path.join(packagePath, 'dist'),
         platform: 'browser',
+        loader: {
+          '.svg': 'text'
+        }
       });
       console.log(`Built ${entry}`);
     } catch (err) {

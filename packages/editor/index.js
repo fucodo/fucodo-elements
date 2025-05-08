@@ -10,6 +10,8 @@ import {Link} from '@tiptap/extension-link';
 
 import {Markdown} from "tiptap-markdown";
 
+import * as icons from './icons'
+
 class MyEditor extends LitElement {
   static get styles() {
     return css`
@@ -168,19 +170,19 @@ class MyEditor extends LitElement {
     return html`
         <slot></slot>
         <div class="toolbar">
-            <button class="button" @click="${() => {this.editor.chain().focus().toggleBold().run()}}"><img class="icon" src="type-bold.svg" alt="bold"></button>
-            <button class="button" @click="${() => {this.editor.chain().focus().toggleItalic().run()}}"><img class="icon" src="type-italic.svg" alt="italic"></button>
-            <button class="button" @click="${() => {this.editor.chain().focus().toggleStrike().run()}}"><img class="icon" src="type-strikethrough.svg" alt="strike"></button>
-            <button class="button" @click="${() => {this.editor.chain().focus().toggleBulletList().run()}}"><img class="icon" src="list-ul.svg" alt="list unordered"></button>
-            <button class="button" @click="${() => {this.editor.chain().focus().toggleOrderedList().run()}}"><img class="icon" src="list-ol.svg" alt="list ordered"></button>
-            <button class="button" @click="${() => {this.editor.chain().focus().toggleTaskList().run()}}"><img class="icon" src="list-check.svg" alt="list tasks"></button>
-            <label class="button"><img class="icon" src="card-image.svg" alt="image upload"><input type="file" accept="image/*" @change="${this.handleImageUpload}"></label>
-            <button class="button" @click="${() => {this.editor.chain().focus().toggleBlockquote().run()}}"><img class="icon" src="quote.svg" alt="quote"></button>
-            <button class="button" @click="${() => {this.editor.chain().focus().undo().run()}}" ?disabled="${!this._canUndo}"><img class="icon" src="arrow-counterclockwise.svg" alt="undo"></button>
-            <button class="button" @click="${() => {this.editor.chain().focus().redo().run()}}" ?disabled="${!this._canRedo}"><img class="icon" src="arrow-clockwise.svg" alt="redo"></button>
-            <button class="button" @click="${() => {this.editor.chain().focus().toggleCodeBlock().run()}}"><img class="icon" src="code.svg" alt="code block"></button>
-            <button class="button" @click="${this.handleSetLink}"><img class="icon" src="link-45deg.svg" alt="link"></button>
-            <button class="button" @click="${this.toggleMode}">foo</button>
+            <button class="button" aria-label="bold" @click="${() => {this.editor.chain().focus().toggleBold().run()}}"><div class="icon" .innerHTML=${icons.boldIcon}></div></button>
+            <button class="button" aria-label="italic" @click="${() => {this.editor.chain().focus().toggleItalic().run()}}"><div class="icon" .innerHTML=${icons.italicIcon}></div></button>
+            <button class="button" aria-label="strike" @click="${() => {this.editor.chain().focus().toggleStrike().run()}}"><div class="icon" .innerHTML=${icons.strikeIcon}></div></button>
+            <button class="button" aria-label="list unordered" @click="${() => {this.editor.chain().focus().toggleBulletList().run()}}"><div class="icon" .innerHTML=${icons.bulletListIcon}></div></button>
+            <button class="button" aria-label="list ordered" @click="${() => {this.editor.chain().focus().toggleOrderedList().run()}}"><div class="icon" .innerHTML=${icons.orderedListIcon}></div></button>
+            <button class="button" aria-label="list tasks" @click="${() => {this.editor.chain().focus().toggleTaskList().run()}}"><div class="icon" .innerHTML=${icons.taskListIcon}></div></button>
+            <label class="button"><div class="icon" .innerHTML=${icons.imageIcon}></div><input type="file" accept="image/*"  aria-label="image upload" @change="${this.handleImageUpload}"></label>
+            <button class="button" aria-label="quote" @click="${() => {this.editor.chain().focus().toggleBlockquote().run()}}"><div class="icon" .innerHTML=${icons.quoteIcon}></div></button>
+            <button class="button" aria-label="undo" @click="${() => {this.editor.chain().focus().undo().run()}}" ?disabled="${!this._canUndo}"><div class="icon" .innerHTML=${icons.undoIcon}></div></button>
+            <button class="button" aria-label="redo" @click="${() => {this.editor.chain().focus().redo().run()}}" ?disabled="${!this._canRedo}"><div class="icon" .innerHTML=${icons.redoIcon}></div></button>
+            <button class="button" aria-label="code block" @click="${() => {this.editor.chain().focus().toggleCodeBlock().run()}}"><div class="icon" .innerHTML=${icons.codeIcon}></div></button>
+            <button class="button" aria-label="link" @click="${this.handleSetLink}"><div class="icon" .innerHTML=${icons.linkIcon}></div></button>
+            <button class="button" aria-label="markdown mode" @click="${this.toggleMode}"><div class="icon" .innerHTML=${icons.markdownIcon}></div></button>
         </div>
         <span class="divider"></span>
         <span id="editor" style="${this._markdownMode ? 'display: none;' : ''}"></span>
