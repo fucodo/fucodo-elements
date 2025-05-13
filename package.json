@@ -16,6 +16,7 @@
   "license": "MIT",
   "description": "",
   "devDependencies": {
+    "@storybook/addon-storysource": "^8.6.12",
     "@storybook/addon-webpack5-compiler-swc": "^3.0.0",
     "@storybook/html": "^8.6.12",
     "@storybook/html-webpack5": "^8.6.12",
