@@ -27894,10 +27894,6 @@ input[type=file] {
   max-width: 100%;
 }
 
-.tiptap img.ProseMirror-selectednode {
-  outline: 3px solid #6a00f5;
-}
-
 .tiptap pre {
   background: rgb(46, 43, 41);
   border-radius: 0.5rem;
@@ -27915,12 +27911,7 @@ input[type=file] {
 }
 
 .tiptap a {
-  color: #6a00f5;
   cursor: pointer;
-}
-
-.tiptap a:hover {
-  color: #5800cc;
 }
 
 .markdown-input {
