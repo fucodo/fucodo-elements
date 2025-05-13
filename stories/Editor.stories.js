@@ -19,7 +19,7 @@ This is a simple markdown editor.
     <code id="output"></code>
     <style>
       .custom {
-        border: 1px solid white;
+        border: 1px solid black;
         border-radius: 5px;
       }
     </style>
