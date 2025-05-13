@@ -1,4 +1,4 @@
-import {LitElement, html, css} from 'lit';
+import {LitElement, html, css, unsafeCSS} from 'lit';
 
 import { Editor } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
@@ -12,159 +12,10 @@ import {Markdown} from "tiptap-markdown";
 
 import * as icons from './icons'
 
+import style from './style.scss'
+
 class MyEditor extends LitElement {
-  static get styles() {
-    return css`
-        :host {
-            min-width: 600px;
-            max-width: 600px;
-            height: 400px;
-        }
-        
-        .toolbar {
-            display: flex;
-            height: 24px;
-            width: 100%;
-            padding: 10px;
-            justify-content: start;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .button {
-            background: none;
-            color: white;
-            border: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 24px;
-            height: 24px;
-            margin: 0;
-            padding: 0;
-        }
-
-        .button:disabled {
-            opacity: 0.5;
-        }
-        
-        .icon {
-            filter: invert(1);
-        }
-      
-        .editor {
-            padding: 10px 18px;
-        }
-      
-        .editor:focus {
-            outline: none;
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        .tiptap :first-child {
-            margin-top: 0;
-        }
-
-        .tiptap ul, .tiptap ol {
-            padding: 0 1rem;
-            margin: 1.25rem 1rem 1.25rem 0.4rem;
-        }
-
-        .tiptap ul li p, .tiptap ol li p {
-            margin-top: 0.25em;
-            margin-bottom: 0.25em;
-        }
-
-        .tiptap ul[data-type="taskList"] {
-            list-style: none;
-            margin-left: 0;
-            padding: 0;
-        }
-
-        .tiptap ul[data-type="taskList"] li {
-            align-items: flex-start;
-            display: flex;
-        }
-
-        .tiptap ul[data-type="taskList"] li > label {
-            flex: 0 0 auto;
-            margin-right: 0.5rem;
-            user-select: none;
-        }
-
-        .tiptap ul[data-type="taskList"] li > div {
-            flex: 1 1 auto;
-        }
-
-        .tiptap ul[data-type="taskList"] input[type="checkbox"] {
-            cursor: pointer;
-        }
-
-        .tiptap ul[data-type="taskList"] ul[data-type="taskList"] {
-            margin: 0;
-        }
-
-        .tiptap blockquote {
-            border-left: 3px solid rgba(61, 37, 20, 0.12);
-            margin: 1.5rem 0;
-            padding-left: 1rem;
-        }
-
-        .tiptap img {
-            display: block;
-            height: auto;
-            margin: 1.5rem 0;
-            max-width: 100%;
-        }
-
-        .tiptap img.ProseMirror-selectednode {
-            outline: 3px solid #6a00f5;
-        }
-
-        .tiptap pre {
-            background: rgb(46, 43, 41);
-            border-radius: 0.5rem;
-            color: rgb(255, 255, 255);
-            font-family: 'JetBrainsMono', monospace;
-            margin: 1.5rem 0;
-            padding: 0.75rem 1rem;
-        }
-
-        .tiptap pre code {
-            background: none;
-            color: inherit;
-            font-size: 0.8rem;
-            padding: 0;
-        }
-
-        .tiptap a {
-            color: #6a00f5;
-            cursor: pointer;
-        }
-        .tiptap a:hover {
-            color: #5800cc;
-        }
-
-        .markdown-input {
-            display: block;
-            height: calc(100% - 44px);
-            padding: 10px 18px;
-            background-color: white;
-            color: black;
-            font-family: monospace;
-            font-size: 14px;
-            border: none;
-            resize: none;
-            outline: none;
-            width: 100%;
-            box-sizing: border-box;
-            position: relative;
-        }
-    `;
-  }
+  static styles = css`${unsafeCSS(style)}`;
 
   render() {
     return html`
@@ -185,7 +36,7 @@ class MyEditor extends LitElement {
             <button class="button" aria-label="markdown mode" @click="${this.toggleMode}"><div class="icon" .innerHTML=${icons.markdownIcon}></div></button>
         </div>
         <span class="divider"></span>
-        <span id="editor" style="${this._markdownMode ? 'display: none;' : ''}"></span>
+        <div id="editor" style="${this._markdownMode ? 'display: none;' : ''}"></div>
         ${this._markdownMode ? html`<textarea class="markdown-input" .value="${this._markdownText}" @input="${this.updateFromTextarea}"></textarea>` : null}
     `;
   }

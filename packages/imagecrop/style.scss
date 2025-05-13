@@ -1,0 +1,28 @@
+.dialog {
+  width: 500px;
+}
+
+.dialog__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dialog__body {
+  width: 500px;
+  height: 500px;
+}
+
+.dialog__actions {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.cr-slider-wrap {
+  visibility: hidden;
+}

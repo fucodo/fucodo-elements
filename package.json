@@ -21,6 +21,7 @@
     "@storybook/html": "^8.6.12",
     "@storybook/html-webpack5": "^8.6.12",
     "esbuild": "^0.25.3",
+    "esbuild-sass-plugin": "^3.3.1",
     "lit": "^3.3.0",
     "storybook": "^8.6.12"
   }

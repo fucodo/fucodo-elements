@@ -1,7 +1,9 @@
-import {LitElement, html, css} from 'lit';
+import {LitElement, html, css, unsafeCSS} from 'lit';
 
-import Croppie from'croppie/croppie.js';
-import {croppieStyles} from "./croppie-styles";
+import Croppie from 'croppie/croppie.js';
+
+import croppieStyles from './croppie.scss';
+import style from './style.scss'
 
 export class ImageCrop extends LitElement {
   static get properties() {
@@ -18,39 +20,10 @@ export class ImageCrop extends LitElement {
     this.height = 400;
   }
 
-  static styles = [
-    croppieStyles,
-    css`
-        .dialog {
-            width: 500px;
-        }
-
-        .dialog__content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .dialog__body {
-            width: 500px;
-            height: 500px;
-        }
-
-        .dialog__actions {
-            display: flex;
-            gap: 0.5rem;
-            width: 100%;
-            justify-content: flex-end;
-            align-items: center;
-        }
-        
-        .cr-slider-wrap {
-            visibility: hidden;
-        }
-    `,
-  ];
+  static styles = css`
+    ${unsafeCSS(croppieStyles)}
+    ${unsafeCSS(style)}
+  `;
 
   render() {
     return html`

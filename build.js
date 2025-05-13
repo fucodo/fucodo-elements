@@ -1,4 +1,6 @@
 import { build } from 'esbuild';
+import { sassPlugin } from 'esbuild-sass-plugin'
+
 import { readdir, stat } from 'fs/promises';
 import path from 'path';
 
@@ -22,7 +24,8 @@ for (const entry of entries) {
         platform: 'browser',
         loader: {
           '.svg': 'text'
-        }
+        },
+        plugins: [sassPlugin({ type: 'css-text' })],
       });
       console.log(`Built ${entry}`);
     } catch (err) {

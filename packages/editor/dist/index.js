@@ -27783,160 +27783,160 @@ ${element.innerHTML}
   // node_modules/bootstrap-icons/icons/markdown.svg
   var markdown_default = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-markdown" viewBox="0 0 16 16">\n  <path d="M14 3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>\n  <path fill-rule="evenodd" d="M9.146 8.146a.5.5 0 0 1 .708 0L11.5 9.793l1.646-1.647a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 0-.708"/>\n  <path fill-rule="evenodd" d="M11.5 5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 1 .5-.5"/>\n  <path d="M3.56 11V7.01h.056l1.428 3.239h.774l1.42-3.24h.056V11h1.073V5.001h-1.2l-1.71 3.894h-.039l-1.71-3.894H2.5V11z"/>\n</svg>';
 
+  // packages/editor/style.scss
+  var style_default = `:host {
+  min-width: 600px;
+  max-width: 600px;
+  height: 400px;
+}
+
+.toolbar {
+  display: flex;
+  height: 24px;
+  width: 100%;
+  padding: 10px;
+  justify-content: start;
+  align-items: center;
+  gap: 4px;
+}
+
+.button {
+  background: none;
+  color: white;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  padding: 0;
+}
+
+.button:disabled {
+  opacity: 0.5;
+}
+
+.icon {
+  filter: invert(1);
+}
+
+.editor {
+  padding: 10px 18px;
+}
+
+.editor:focus {
+  outline: none;
+}
+
+input[type=file] {
+  display: none;
+}
+
+.tiptap :first-child {
+  margin-top: 0;
+}
+
+.tiptap ul, .tiptap ol {
+  padding: 0 1rem;
+  margin: 1.25rem 1rem 1.25rem 0.4rem;
+}
+
+.tiptap ul li p, .tiptap ol li p {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.tiptap ul[data-type=taskList] {
+  list-style: none;
+  margin-left: 0;
+  padding: 0;
+}
+
+.tiptap ul[data-type=taskList] li {
+  align-items: flex-start;
+  display: flex;
+}
+
+.tiptap ul[data-type=taskList] li > label {
+  flex: 0 0 auto;
+  margin-right: 0.5rem;
+  user-select: none;
+}
+
+.tiptap ul[data-type=taskList] li > div {
+  flex: 1 1 auto;
+}
+
+.tiptap ul[data-type=taskList] input[type=checkbox] {
+  cursor: pointer;
+}
+
+.tiptap ul[data-type=taskList] ul[data-type=taskList] {
+  margin: 0;
+}
+
+.tiptap blockquote {
+  border-left: 3px solid rgba(61, 37, 20, 0.12);
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+}
+
+.tiptap img {
+  display: block;
+  height: auto;
+  margin: 1.5rem 0;
+  max-width: 100%;
+}
+
+.tiptap img.ProseMirror-selectednode {
+  outline: 3px solid #6a00f5;
+}
+
+.tiptap pre {
+  background: rgb(46, 43, 41);
+  border-radius: 0.5rem;
+  color: rgb(255, 255, 255);
+  font-family: "JetBrainsMono", monospace;
+  margin: 1.5rem 0;
+  padding: 0.75rem 1rem;
+}
+
+.tiptap pre code {
+  background: none;
+  color: inherit;
+  font-size: 0.8rem;
+  padding: 0;
+}
+
+.tiptap a {
+  color: #6a00f5;
+  cursor: pointer;
+}
+
+.tiptap a:hover {
+  color: #5800cc;
+}
+
+.markdown-input {
+  display: block;
+  height: calc(100% - 44px);
+  padding: 10px 18px;
+  background-color: white;
+  color: black;
+  font-family: monospace;
+  font-size: 14px;
+  border: none;
+  resize: none;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+}`;
+
   // packages/editor/index.js
   var MyEditor = class extends i4 {
-    static get styles() {
-      return i`
-        :host {
-            min-width: 600px;
-            max-width: 600px;
-            height: 400px;
-        }
-        
-        .toolbar {
-            display: flex;
-            height: 24px;
-            width: 100%;
-            padding: 10px;
-            justify-content: start;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .button {
-            background: none;
-            color: white;
-            border: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 24px;
-            height: 24px;
-            margin: 0;
-            padding: 0;
-        }
-
-        .button:disabled {
-            opacity: 0.5;
-        }
-        
-        .icon {
-            filter: invert(1);
-        }
-      
-        .editor {
-            padding: 10px 18px;
-        }
-      
-        .editor:focus {
-            outline: none;
-        }
-
-        input[type="file"] {
-            display: none;
-        }
-
-        .tiptap :first-child {
-            margin-top: 0;
-        }
-
-        .tiptap ul, .tiptap ol {
-            padding: 0 1rem;
-            margin: 1.25rem 1rem 1.25rem 0.4rem;
-        }
-
-        .tiptap ul li p, .tiptap ol li p {
-            margin-top: 0.25em;
-            margin-bottom: 0.25em;
-        }
-
-        .tiptap ul[data-type="taskList"] {
-            list-style: none;
-            margin-left: 0;
-            padding: 0;
-        }
-
-        .tiptap ul[data-type="taskList"] li {
-            align-items: flex-start;
-            display: flex;
-        }
-
-        .tiptap ul[data-type="taskList"] li > label {
-            flex: 0 0 auto;
-            margin-right: 0.5rem;
-            user-select: none;
-        }
-
-        .tiptap ul[data-type="taskList"] li > div {
-            flex: 1 1 auto;
-        }
-
-        .tiptap ul[data-type="taskList"] input[type="checkbox"] {
-            cursor: pointer;
-        }
-
-        .tiptap ul[data-type="taskList"] ul[data-type="taskList"] {
-            margin: 0;
-        }
-
-        .tiptap blockquote {
-            border-left: 3px solid rgba(61, 37, 20, 0.12);
-            margin: 1.5rem 0;
-            padding-left: 1rem;
-        }
-
-        .tiptap img {
-            display: block;
-            height: auto;
-            margin: 1.5rem 0;
-            max-width: 100%;
-        }
-
-        .tiptap img.ProseMirror-selectednode {
-            outline: 3px solid #6a00f5;
-        }
-
-        .tiptap pre {
-            background: rgb(46, 43, 41);
-            border-radius: 0.5rem;
-            color: rgb(255, 255, 255);
-            font-family: 'JetBrainsMono', monospace;
-            margin: 1.5rem 0;
-            padding: 0.75rem 1rem;
-        }
-
-        .tiptap pre code {
-            background: none;
-            color: inherit;
-            font-size: 0.8rem;
-            padding: 0;
-        }
-
-        .tiptap a {
-            color: #6a00f5;
-            cursor: pointer;
-        }
-        .tiptap a:hover {
-            color: #5800cc;
-        }
-
-        .markdown-input {
-            display: block;
-            height: calc(100% - 44px);
-            padding: 10px 18px;
-            background-color: white;
-            color: black;
-            font-family: monospace;
-            font-size: 14px;
-            border: none;
-            resize: none;
-            outline: none;
-            width: 100%;
-            box-sizing: border-box;
-            position: relative;
-        }
-    `;
-    }
+    static styles = i`${r(style_default)}`;
     render() {
       return x`
         <slot></slot>
@@ -27976,7 +27976,7 @@ ${element.innerHTML}
             <button class="button" aria-label="markdown mode" @click="${this.toggleMode}"><div class="icon" .innerHTML=${markdown_default}></div></button>
         </div>
         <span class="divider"></span>
-        <span id="editor" style="${this._markdownMode ? "display: none;" : ""}"></span>
+        <div id="editor" style="${this._markdownMode ? "display: none;" : ""}"></div>
         ${this._markdownMode ? x`<textarea class="markdown-input" .value="${this._markdownText}" @input="${this.updateFromTextarea}"></textarea>` : null}
     `;
     }
