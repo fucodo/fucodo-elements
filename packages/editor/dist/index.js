@@ -27785,9 +27785,14 @@ ${element.innerHTML}
 
   // packages/editor/style.scss
   var style_default = `:host {
-  min-width: 600px;
-  max-width: 600px;
-  height: 400px;
+  width: 600px;
+  height: 200px;
+}
+
+#editor {
+  display: block;
+  height: calc(100% - 44px);
+  overflow-y: auto;
 }
 
 .toolbar {
