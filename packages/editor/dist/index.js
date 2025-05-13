@@ -27822,6 +27822,10 @@ ${element.innerHTML}
   opacity: 0.5;
 }
 
+#imageUpload:disabled + label {
+  opacity: 0.5;
+}
+
 .icon {
   filter: invert(1);
 }
@@ -27939,36 +27943,39 @@ input[type=file] {
         <div class="toolbar">
             <button class="button" aria-label="bold" @click="${() => {
         this.editor.chain().focus().toggleBold().run();
-      }}"><div class="icon" .innerHTML=${type_bold_default}></div></button>
+      }}" ?disabled="${this._markdownMode}"><div class="icon" .innerHTML=${type_bold_default}></div></button>
             <button class="button" aria-label="italic" @click="${() => {
         this.editor.chain().focus().toggleItalic().run();
-      }}"><div class="icon" .innerHTML=${type_italic_default}></div></button>
+      }}" ?disabled="${this._markdownMode}"><div class="icon" .innerHTML=${type_italic_default}></div></button>
             <button class="button" aria-label="strike" @click="${() => {
         this.editor.chain().focus().toggleStrike().run();
-      }}"><div class="icon" .innerHTML=${type_strikethrough_default}></div></button>
+      }}" ?disabled="${this._markdownMode}"><div class="icon" .innerHTML=${type_strikethrough_default}></div></button>
             <button class="button" aria-label="list unordered" @click="${() => {
         this.editor.chain().focus().toggleBulletList().run();
-      }}"><div class="icon" .innerHTML=${list_ul_default}></div></button>
+      }}" ?disabled="${this._markdownMode}"><div class="icon" .innerHTML=${list_ul_default}></div></button>
             <button class="button" aria-label="list ordered" @click="${() => {
         this.editor.chain().focus().toggleOrderedList().run();
-      }}"><div class="icon" .innerHTML=${list_ol_default}></div></button>
+      }}" ?disabled="${this._markdownMode}"><div class="icon" .innerHTML=${list_ol_default}></div></button>
             <button class="button" aria-label="list tasks" @click="${() => {
         this.editor.chain().focus().toggleTaskList().run();
-      }}"><div class="icon" .innerHTML=${list_check_default}></div></button>
-            <label class="button"><div class="icon" .innerHTML=${card_image_default}></div><input type="file" accept="image/*"  aria-label="image upload" @change="${this.handleImageUpload}"></label>
+      }}" ?disabled="${this._markdownMode}"><div class="icon" .innerHTML=${list_check_default}></div></button>
+            <span>
+                <input type="file" id="imageUpload" accept="image/*"  aria-label="image upload" @change="${this.handleImageUpload}" ?disabled="${this._markdownMode}">
+                <label for="imageUpload" class="button"><div class="icon" .innerHTML=${card_image_default}></div></label>
+            </span>
             <button class="button" aria-label="quote" @click="${() => {
         this.editor.chain().focus().toggleBlockquote().run();
-      }}"><div class="icon" .innerHTML=${quote_default}></div></button>
+      }}" ?disabled="${this._markdownMode}"><div class="icon" .innerHTML=${quote_default}></div></button>
             <button class="button" aria-label="undo" @click="${() => {
         this.editor.chain().focus().undo().run();
-      }}" ?disabled="${!this._canUndo}"><div class="icon" .innerHTML=${arrow_counterclockwise_default}></div></button>
+      }}" ?disabled="${!this._canUndo || this._markdownMode}"><div class="icon" .innerHTML=${arrow_counterclockwise_default}></div></button>
             <button class="button" aria-label="redo" @click="${() => {
         this.editor.chain().focus().redo().run();
-      }}" ?disabled="${!this._canRedo}"><div class="icon" .innerHTML=${arrow_clockwise_default}></div></button>
+      }}" ?disabled="${!this._canRedo || this._markdownMode}"><div class="icon" .innerHTML=${arrow_clockwise_default}></div></button>
             <button class="button" aria-label="code block" @click="${() => {
         this.editor.chain().focus().toggleCodeBlock().run();
-      }}"><div class="icon" .innerHTML=${code_default}></div></button>
-            <button class="button" aria-label="link" @click="${this.handleSetLink}"><div class="icon" .innerHTML=${link_45deg_default}></div></button>
+      }}" ?disabled="${this._markdownMode}"><div class="icon" .innerHTML=${code_default}></div></button>
+            <button class="button" aria-label="link" @click="${this.handleSetLink}" ?disabled="${this._markdownMode}"><div class="icon" .innerHTML=${link_45deg_default}></div></button>
             <button class="button" aria-label="markdown mode" @click="${this.toggleMode}"><div class="icon" .innerHTML=${markdown_default}></div></button>
         </div>
         <span class="divider"></span>

@@ -36,6 +36,10 @@
   opacity: 0.5;
 }
 
+#imageUpload:disabled+label {
+  opacity: 0.5;
+}
+
 .icon {
   filter: invert(1);
 }

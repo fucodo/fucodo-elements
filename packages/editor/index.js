@@ -21,18 +21,21 @@ class MyEditor extends LitElement {
     return html`
         <slot></slot>
         <div class="toolbar">
-            <button class="button" aria-label="bold" @click="${() => {this.editor.chain().focus().toggleBold().run()}}"><div class="icon" .innerHTML=${icons.boldIcon}></div></button>
-            <button class="button" aria-label="italic" @click="${() => {this.editor.chain().focus().toggleItalic().run()}}"><div class="icon" .innerHTML=${icons.italicIcon}></div></button>
-            <button class="button" aria-label="strike" @click="${() => {this.editor.chain().focus().toggleStrike().run()}}"><div class="icon" .innerHTML=${icons.strikeIcon}></div></button>
-            <button class="button" aria-label="list unordered" @click="${() => {this.editor.chain().focus().toggleBulletList().run()}}"><div class="icon" .innerHTML=${icons.bulletListIcon}></div></button>
-            <button class="button" aria-label="list ordered" @click="${() => {this.editor.chain().focus().toggleOrderedList().run()}}"><div class="icon" .innerHTML=${icons.orderedListIcon}></div></button>
-            <button class="button" aria-label="list tasks" @click="${() => {this.editor.chain().focus().toggleTaskList().run()}}"><div class="icon" .innerHTML=${icons.taskListIcon}></div></button>
-            <label class="button"><div class="icon" .innerHTML=${icons.imageIcon}></div><input type="file" accept="image/*"  aria-label="image upload" @change="${this.handleImageUpload}"></label>
-            <button class="button" aria-label="quote" @click="${() => {this.editor.chain().focus().toggleBlockquote().run()}}"><div class="icon" .innerHTML=${icons.quoteIcon}></div></button>
-            <button class="button" aria-label="undo" @click="${() => {this.editor.chain().focus().undo().run()}}" ?disabled="${!this._canUndo}"><div class="icon" .innerHTML=${icons.undoIcon}></div></button>
-            <button class="button" aria-label="redo" @click="${() => {this.editor.chain().focus().redo().run()}}" ?disabled="${!this._canRedo}"><div class="icon" .innerHTML=${icons.redoIcon}></div></button>
-            <button class="button" aria-label="code block" @click="${() => {this.editor.chain().focus().toggleCodeBlock().run()}}"><div class="icon" .innerHTML=${icons.codeIcon}></div></button>
-            <button class="button" aria-label="link" @click="${this.handleSetLink}"><div class="icon" .innerHTML=${icons.linkIcon}></div></button>
+            <button class="button" aria-label="bold" @click="${() => {this.editor.chain().focus().toggleBold().run()}}" ?disabled="${this._markdownMode}"><div class="icon" .innerHTML=${icons.boldIcon}></div></button>
+            <button class="button" aria-label="italic" @click="${() => {this.editor.chain().focus().toggleItalic().run()}}" ?disabled="${this._markdownMode}"><div class="icon" .innerHTML=${icons.italicIcon}></div></button>
+            <button class="button" aria-label="strike" @click="${() => {this.editor.chain().focus().toggleStrike().run()}}" ?disabled="${this._markdownMode}"><div class="icon" .innerHTML=${icons.strikeIcon}></div></button>
+            <button class="button" aria-label="list unordered" @click="${() => {this.editor.chain().focus().toggleBulletList().run()}}" ?disabled="${this._markdownMode}"><div class="icon" .innerHTML=${icons.bulletListIcon}></div></button>
+            <button class="button" aria-label="list ordered" @click="${() => {this.editor.chain().focus().toggleOrderedList().run()}}" ?disabled="${this._markdownMode}"><div class="icon" .innerHTML=${icons.orderedListIcon}></div></button>
+            <button class="button" aria-label="list tasks" @click="${() => {this.editor.chain().focus().toggleTaskList().run()}}" ?disabled="${this._markdownMode}"><div class="icon" .innerHTML=${icons.taskListIcon}></div></button>
+            <span>
+                <input type="file" id="imageUpload" accept="image/*"  aria-label="image upload" @change="${this.handleImageUpload}" ?disabled="${this._markdownMode}">
+                <label for="imageUpload" class="button"><div class="icon" .innerHTML=${icons.imageIcon}></div></label>
+            </span>
+            <button class="button" aria-label="quote" @click="${() => {this.editor.chain().focus().toggleBlockquote().run()}}" ?disabled="${this._markdownMode}"><div class="icon" .innerHTML=${icons.quoteIcon}></div></button>
+            <button class="button" aria-label="undo" @click="${() => {this.editor.chain().focus().undo().run()}}" ?disabled="${!this._canUndo || this._markdownMode}"><div class="icon" .innerHTML=${icons.undoIcon}></div></button>
+            <button class="button" aria-label="redo" @click="${() => {this.editor.chain().focus().redo().run()}}" ?disabled="${!this._canRedo || this._markdownMode}"><div class="icon" .innerHTML=${icons.redoIcon}></div></button>
+            <button class="button" aria-label="code block" @click="${() => {this.editor.chain().focus().toggleCodeBlock().run()}}" ?disabled="${this._markdownMode}"><div class="icon" .innerHTML=${icons.codeIcon}></div></button>
+            <button class="button" aria-label="link" @click="${this.handleSetLink}" ?disabled="${this._markdownMode}"><div class="icon" .innerHTML=${icons.linkIcon}></div></button>
             <button class="button" aria-label="markdown mode" @click="${this.toggleMode}"><div class="icon" .innerHTML=${icons.markdownIcon}></div></button>
         </div>
         <span class="divider"></span>
