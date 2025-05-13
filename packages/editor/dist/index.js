@@ -27997,6 +27997,7 @@ input[type=file] {
       this._canRedo = false;
       this._markdownMode = false;
       this._markdownText = "";
+      this._origin = null;
     }
     connectedCallback() {
       super.connectedCallback();
@@ -28008,7 +28009,8 @@ input[type=file] {
         if (element.tagName.toLowerCase() === "textarea") {
           content = element.innerHTML.split("\n").map((line) => line.trim()).join("\n");
         }
-        element.remove();
+        element.style.display = "none";
+        this._origin = element;
       });
       this.editor = new Editor({
         element: this.shadowRoot.querySelector("#editor"),
@@ -28027,6 +28029,7 @@ input[type=file] {
         onUpdate: () => {
           this._canUndo = this.editor.can().undo();
           this._canRedo = this.editor.can().redo();
+          this.updateOrigin();
         },
         editorProps: {
           attributes: {
@@ -28076,6 +28079,13 @@ input[type=file] {
     }
     updateFromTextarea(event) {
       this._markdownText = event.target.value;
+      this.updateOrigin();
+    }
+    updateOrigin() {
+      if (this._origin == null) {
+        return;
+      }
+      this._origin.value = this.getMarkdown();
     }
   };
   customElements.define("fucodo-editor", MyEditor);

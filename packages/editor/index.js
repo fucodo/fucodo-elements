@@ -60,6 +60,8 @@ class MyEditor extends LitElement {
     this._canRedo = false;
     this._markdownMode = false;
     this._markdownText = '';
+
+    this._origin = null;
   }
 
   connectedCallback() {
@@ -76,7 +78,9 @@ class MyEditor extends LitElement {
         content = element.innerHTML.split('\n').map(line => line.trim()).join('\n');
       }
 
-      element.remove();
+      element.style.display = 'none';
+
+      this._origin = element;
     });
 
     this.editor = new Editor({
@@ -96,6 +100,8 @@ class MyEditor extends LitElement {
       onUpdate: () => {
         this._canUndo = this.editor.can().undo();
         this._canRedo = this.editor.can().redo();
+
+        this.updateOrigin();
       },
       editorProps: {
         attributes: {
@@ -159,6 +165,16 @@ class MyEditor extends LitElement {
 
   updateFromTextarea(event) {
     this._markdownText = event.target.value;
+
+    this.updateOrigin();
+  }
+
+  updateOrigin() {
+    if (this._origin == null) {
+      return;
+    }
+
+    this._origin.value = this.getMarkdown();
   }
 }
 
