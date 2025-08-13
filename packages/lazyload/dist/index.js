@@ -24,7 +24,7 @@
   };
   var r = (t3) => new n("string" == typeof t3 ? t3 : t3 + "", void 0, s);
   var S = (s4, o5) => {
-    if (e) s4.adoptedStyleSheets = o5.map((t3) => t3 instanceof CSSStyleSheet ? t3 : t3.styleSheet);
+    if (e) s4.adoptedStyleSheets = o5.map(((t3) => t3 instanceof CSSStyleSheet ? t3 : t3.styleSheet));
     else for (const e4 of o5) {
       const o6 = document.createElement("style"), n4 = t.litNonce;
       void 0 !== n4 && o6.setAttribute("nonce", n4), o6.textContent = e4.cssText, s4.appendChild(o6);
@@ -141,7 +141,7 @@
       super(), this._$Ep = void 0, this.isUpdatePending = false, this.hasUpdated = false, this._$Em = null, this._$Ev();
     }
     _$Ev() {
-      this._$ES = new Promise((t3) => this.enableUpdating = t3), this._$AL = /* @__PURE__ */ new Map(), this._$E_(), this.requestUpdate(), this.constructor.l?.forEach((t3) => t3(this));
+      this._$ES = new Promise(((t3) => this.enableUpdating = t3)), this._$AL = /* @__PURE__ */ new Map(), this._$E_(), this.requestUpdate(), this.constructor.l?.forEach(((t3) => t3(this)));
     }
     addController(t3) {
       (this._$EO ??= /* @__PURE__ */ new Set()).add(t3), void 0 !== this.renderRoot && this.isConnected && t3.hostConnected?.();
@@ -159,12 +159,12 @@
       return S(t3, this.constructor.elementStyles), t3;
     }
     connectedCallback() {
-      this.renderRoot ??= this.createRenderRoot(), this.enableUpdating(true), this._$EO?.forEach((t3) => t3.hostConnected?.());
+      this.renderRoot ??= this.createRenderRoot(), this.enableUpdating(true), this._$EO?.forEach(((t3) => t3.hostConnected?.()));
     }
     enableUpdating(t3) {
     }
     disconnectedCallback() {
-      this._$EO?.forEach((t3) => t3.hostDisconnected?.());
+      this._$EO?.forEach(((t3) => t3.hostDisconnected?.()));
     }
     attributeChangedCallback(t3, s4, i5) {
       this._$AK(t3, i5);
@@ -180,7 +180,9 @@
       const i5 = this.constructor, e4 = i5._$Eh.get(t3);
       if (void 0 !== e4 && this._$Em !== e4) {
         const t4 = i5.getPropertyOptions(e4), h3 = "function" == typeof t4.converter ? { fromAttribute: t4.converter } : void 0 !== t4.converter?.fromAttribute ? t4.converter : u;
-        this._$Em = e4, this[e4] = h3.fromAttribute(s4, t4.type) ?? this._$Ej?.get(e4) ?? null, this._$Em = null;
+        this._$Em = e4;
+        const r4 = h3.fromAttribute(s4, t4.type);
+        this[e4] = r4 ?? this._$Ej?.get(e4) ?? r4, this._$Em = null;
       }
     }
     requestUpdate(t3, s4, i5) {
@@ -223,7 +225,7 @@
       let t3 = false;
       const s4 = this._$AL;
       try {
-        t3 = this.shouldUpdate(s4), t3 ? (this.willUpdate(s4), this._$EO?.forEach((t4) => t4.hostUpdate?.()), this.update(s4)) : this._$EM();
+        t3 = this.shouldUpdate(s4), t3 ? (this.willUpdate(s4), this._$EO?.forEach(((t4) => t4.hostUpdate?.())), this.update(s4)) : this._$EM();
       } catch (s5) {
         throw t3 = false, this._$EM(), s5;
       }
@@ -232,7 +234,7 @@
     willUpdate(t3) {
     }
     _$AE(t3) {
-      this._$EO?.forEach((t4) => t4.hostUpdated?.()), this.hasUpdated || (this.hasUpdated = true, this.firstUpdated(t3)), this.updated(t3);
+      this._$EO?.forEach(((t4) => t4.hostUpdated?.())), this.hasUpdated || (this.hasUpdated = true, this.firstUpdated(t3)), this.updated(t3);
     }
     _$EM() {
       this._$AL = /* @__PURE__ */ new Map(), this.isUpdatePending = false;
@@ -247,14 +249,14 @@
       return true;
     }
     update(t3) {
-      this._$Eq &&= this._$Eq.forEach((t4) => this._$ET(t4, this[t4])), this._$EM();
+      this._$Eq &&= this._$Eq.forEach(((t4) => this._$ET(t4, this[t4]))), this._$EM();
     }
     updated(t3) {
     }
     firstUpdated(t3) {
     }
   };
-  y.elementStyles = [], y.shadowRootOptions = { mode: "open" }, y[d("elementProperties")] = /* @__PURE__ */ new Map(), y[d("finalized")] = /* @__PURE__ */ new Map(), p?.({ ReactiveElement: y }), (a.reactiveElementVersions ??= []).push("2.1.0");
+  y.elementStyles = [], y.shadowRootOptions = { mode: "open" }, y[d("elementProperties")] = /* @__PURE__ */ new Map(), y[d("finalized")] = /* @__PURE__ */ new Map(), p?.({ ReactiveElement: y }), (a.reactiveElementVersions ??= []).push("2.1.1");
 
   // node_modules/lit-html/lit-html.js
   var t2 = globalThis;
@@ -423,7 +425,7 @@
       e4 < i5.length && (this._$AR(s4 && s4._$AB.nextSibling, e4), i5.length = e4);
     }
     _$AR(t3 = this._$AA.nextSibling, i5) {
-      for (this._$AP?.(false, true, i5); t3 && t3 !== this._$AB; ) {
+      for (this._$AP?.(false, true, i5); t3 !== this._$AB; ) {
         const i6 = t3.nextSibling;
         t3.remove(), t3 = i6;
       }
@@ -498,7 +500,7 @@
     }
   };
   var j = t2.litHtmlPolyfillSupport;
-  j?.(N, R), (t2.litHtmlVersions ??= []).push("3.3.0");
+  j?.(N, R), (t2.litHtmlVersions ??= []).push("3.3.1");
   var B = (t3, i5, s4) => {
     const e4 = s4?.renderBefore ?? i5;
     let h3 = e4._$litPart$;
@@ -536,7 +538,7 @@
   i4._$litElement$ = true, i4["finalized"] = true, s3.litElementHydrateSupport?.({ LitElement: i4 });
   var o4 = s3.litElementPolyfillSupport;
   o4?.({ LitElement: i4 });
-  (s3.litElementVersions ??= []).push("4.2.0");
+  (s3.litElementVersions ??= []).push("4.2.1");
 
   // packages/lazyload/index.js
   var LazyLoad = class extends i4 {
