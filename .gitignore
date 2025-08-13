@@ -1,0 +1,5 @@
+/storybook-static
+/node_modules
+/debug-storybook.log
+/.idea
+.DS_Store
