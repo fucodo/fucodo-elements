@@ -9,20 +9,23 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node build.js",
-    "storybook": "storybook dev -p 6006",
+    "prestorybook": "node ./check-node.js",
+    "storybook": "node -r ./unset-crypto.cjs ./node_modules/.bin/storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
   "author": "Jonas Knobloch",
   "license": "MIT",
   "description": "",
   "devDependencies": {
-    "@storybook/addon-storysource": "^8.6.12",
-    "@storybook/addon-webpack5-compiler-swc": "^3.0.0",
-    "@storybook/html": "^8.6.12",
-    "@storybook/html-webpack5": "^8.6.12",
-    "esbuild": "^0.25.3",
+    "@storybook/addon-docs": "^9.1.2",
+    "@storybook/html": "^9.1.2",
+    "@storybook/web-components-vite": "^9.1.2",
+    "esbuild": "^0.25.9",
     "esbuild-sass-plugin": "^3.3.1",
-    "lit": "^3.3.0",
-    "storybook": "^8.6.12"
+    "lit": "^3.3.1",
+    "storybook": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=18.18.0"
   }
 }

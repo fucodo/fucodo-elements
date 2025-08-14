@@ -2,14 +2,21 @@ import '../packages/imagecrop/dist/index';
 
 export default {
   title: 'Components/ImageCrop',
+  parameters: {
+    layout: 'centered',
+  },
+  argTypes: {
+    width: { control: { type: 'number', min: 50, step: 10 }, description: 'Target crop width (px)' },
+    height: { control: { type: 'number', min: 50, step: 10 }, description: 'Target crop height (px)' },
+  },
 };
 
-export const Default = () => {
+const Template = ({ width = 600, height = 800 }) => {
   const wrapper = document.createElement('main');
 
   wrapper.innerHTML = `
     <form>
-      <image-crop-dialog width="600" height="800">
+      <image-crop-dialog width="${width}" height="${height}">
         <input type="file" accept="image/png, image/jpeg, image/tiff" name="picture">
         <span slot="label-cancel">Abbrechen</span>
         <span slot="label-confirm">Bestätigen</span>
@@ -41,4 +48,10 @@ export const Default = () => {
   });
 
   return wrapper;
+};
+
+export const Default = Template.bind({});
+Default.args = {
+  width: 600,
+  height: 800,
 };

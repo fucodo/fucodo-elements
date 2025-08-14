@@ -1,17 +1,31 @@
-import '../packages/lazyload/dist/index'; // import your LazyLoad definition
+import '../packages/lazyload/dist/index';
 
 export default {
   title: 'Components/LazyLoad',
+  parameters: {
+    layout: 'centered',
+  },
+  argTypes: {
+    url: { control: 'text', description: 'URL to fetch and inject into the element' },
+    selectors: { control: 'text', description: 'CSS selector(s) to extract from the fetched HTML' },
+  },
 };
 
-export const Default = () => {
-  const wrapper = document.createElement('main');
+const Template = ({ url = 'lazy.html', selectors = '' }) => {
+  const el = document.createElement('lazy-load');
+  el.setAttribute('url', url);
+  if (selectors) el.setAttribute('selectors', selectors);
 
-  wrapper.innerHTML = `
-    <lazy-load url="lazy.html">
-      <span aria-busy="true">Loading...</span>
-    </lazy-load>
-  `;
+  const loading = document.createElement('span');
+  loading.setAttribute('aria-busy', 'true');
+  loading.textContent = 'Loading...';
+  el.appendChild(loading);
 
-  return wrapper;
+  return el;
+};
+
+export const Default = Template.bind({});
+Default.args = {
+  url: 'lazy.html',
+  selectors: '',
 };

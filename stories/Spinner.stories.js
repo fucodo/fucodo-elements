@@ -12,16 +12,6 @@ export default {
   },
 };
 
-export const Default = () => {
-  const wrapper = document.createElement('main');
-
-  wrapper.innerHTML = `
-    <fucodo-spinner enabled="1">
-  `;
-
-  return wrapper;
-};
-
 const Template = ({ size = 16, enabled = true, color }) => {
   const wrapper = document.createElement('main');
   wrapper.innerHTML = `
@@ -34,28 +24,5 @@ const Template = ({ size = 16, enabled = true, color }) => {
   return el;
 };
 
-export const Small = Template.bind({});
-Small.args = {
-  size: 16,
-  enabled: true,
-};
-
-export const Medium = Template.bind({});
-Medium.args = {
-  size: 32,
-  enabled: true,
-};
-
-export const LargeRedEnabled = Template.bind({});
-LargeRedEnabled.args = {
-  size: 100,
-  enabled: true,
-  color: 'red',
-};
-
-export const LargeRedDisabled = Template.bind({});
-LargeRedDisabled.args = {
-  size: 100,
-  enabled: false,
-  color: 'red',
-};
+export const Default = Template.bind({});
+Default.args = { size: 32, enabled: true };
