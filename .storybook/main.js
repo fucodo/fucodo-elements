@@ -5,7 +5,8 @@ const require = createRequire(import.meta.url);
 /** @type { import('@storybook/web-components-vite').StorybookConfig } */
 const config = {
   stories: [
-    "../stories/**/*.stories.js"
+    "../packages/**/stories/*.mdx", // 👈 Add this, to match your project's structure
+    "../stories/**/*.stories.@(js|jsx|ts|tsx)"
   ],
   addons: [
     {
