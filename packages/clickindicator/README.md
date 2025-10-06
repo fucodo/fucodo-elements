@@ -17,7 +17,27 @@
 | event        | event fired after the button returns it's state |
 
 
-## Example
+## Examples
+
+### using the loadingIndicator classes:
+
+The namespaced tags are fluid viewHelpers, are are not that important for this example.
+
+```html
+<fucodo-loading-action duration="1000">
+    <button type="submit" form="globalForm" class="btn btn-success btn-sm" accesskey="s">
+        <span class="loadingIndicator">
+            <fucodo-spinner size="12"></fucodo-spinner>
+        </span>
+        <span class="notLoadingIndicator">
+            <i:icon name="{button.icon}" size="14"></i:icon>
+        </span>
+        {btnLabel}
+    </button>
+</fucodo-loading-action>
+```
+
+### event
 
 ```javascript
 document.querySelector('fucodo-loading-action')?.addEventListener('action-finished', (e) => {
