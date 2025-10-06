@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/fucodo/fucodo.imagecrop.git"
   },
-  "author": "Jonas Knobloch",
+  "author": "fucodo GmbH - Jonas Knobloch",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/fucodo/fucodo.imagecrop/issues"

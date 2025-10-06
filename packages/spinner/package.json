@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/fucodo/fucodo.spinner.git"
   },
-  "author": "Kay Strobach",
+  "author": "fucodo GmbH - Kay Strobach",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/fucodo/fucodo.imagecrop/issues"

@@ -9,7 +9,7 @@
     "type": "git",
     "url": "git+https://github.com/fucodo/fucodo.editor.git"
   },
-  "author": "Jonas Knobloch",
+  "author": "fucodo GmbH - Jonas Knobloch",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/fucodo/fucodo.editor/issues"
