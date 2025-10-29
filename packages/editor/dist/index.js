@@ -3386,6 +3386,7 @@
     addTextNode(dom, marks) {
       let value = dom.nodeValue;
       let top = this.top, preserveWS = top.options & OPT_PRESERVE_WS_FULL ? "full" : this.localPreserveWS || (top.options & OPT_PRESERVE_WS) > 0;
+      let { schema: schema2 } = this.parser;
       if (preserveWS === "full" || top.inlineContext(dom) || /[^ \t\r\n\u000c]/.test(value)) {
         if (!preserveWS) {
           value = value.replace(/[ \t\r\n\u000c]+/g, " ");
@@ -3395,13 +3396,22 @@
             if (!nodeBefore || domNodeBefore && domNodeBefore.nodeName == "BR" || nodeBefore.isText && /[ \t\r\n\u000c]$/.test(nodeBefore.text))
               value = value.slice(1);
           }
-        } else if (preserveWS !== "full") {
-          value = value.replace(/\r?\n|\r/g, " ");
-        } else {
+        } else if (preserveWS === "full") {
           value = value.replace(/\r\n?/g, "\n");
+        } else if (schema2.linebreakReplacement && /[\r\n]/.test(value) && this.top.findWrapping(schema2.linebreakReplacement.create())) {
+          let lines = value.split(/\r?\n|\r/);
+          for (let i5 = 0; i5 < lines.length; i5++) {
+            if (i5)
+              this.insertNode(schema2.linebreakReplacement.create(), marks, true);
+            if (lines[i5])
+              this.insertNode(schema2.text(lines[i5]), marks, !/\S/.test(lines[i5]));
+          }
+          value = "";
+        } else {
+          value = value.replace(/\r?\n|\r/g, " ");
         }
         if (value)
-          this.insertNode(this.parser.schema.text(value), marks, !/\S/.test(value));
+          this.insertNode(schema2.text(value), marks, !/\S/.test(value));
         this.findInText(dom);
       } else {
         this.findInside(dom);
@@ -6378,7 +6388,6 @@
       } else {
         if (to == null)
           to = from2;
-        to = to == null ? from2 : to;
         if (!text2)
           return this.deleteRange(from2, to);
         let marks = this.storedMarks;
@@ -6387,7 +6396,7 @@
           marks = to == from2 ? $from.marks() : $from.marksAcross(this.doc.resolve(to));
         }
         this.replaceRangeWith(from2, to, schema2.text(text2, marks));
-        if (!this.selection.empty)
+        if (!this.selection.empty && this.selection.to == from2 + text2.length)
           this.setSelection(Selection.near(this.selection.$to));
         return this;
       }
@@ -6579,7 +6588,7 @@
       return newInstance;
     }
     /**
-    Start a [transaction](https://prosemirror.net/docs/ref/#state.Transaction) from this state.
+    Accessor that constructs and returns a new [transaction](https://prosemirror.net/docs/ref/#state.Transaction) from this state.
     */
     get tr() {
       return new Transaction(this);
@@ -7672,7 +7681,7 @@
       if (!(force || brKludge && safari) && isEquivalentPosition(anchorDOM.node, anchorDOM.offset, selRange.anchorNode, selRange.anchorOffset) && isEquivalentPosition(headDOM.node, headDOM.offset, selRange.focusNode, selRange.focusOffset))
         return;
       let domSelExtended = false;
-      if ((domSel.extend || anchor == head) && !brKludge) {
+      if ((domSel.extend || anchor == head) && !(brKludge && gecko)) {
         domSel.collapse(anchorDOM.node, anchorDOM.offset);
         try {
           if (anchor != head)
@@ -8052,17 +8061,18 @@
     }
     // Mark this node as being the selected node.
     selectNode() {
-      if (this.nodeDOM.nodeType == 1)
+      if (this.nodeDOM.nodeType == 1) {
         this.nodeDOM.classList.add("ProseMirror-selectednode");
-      if (this.contentDOM || !this.node.type.spec.draggable)
-        this.dom.draggable = true;
+        if (this.contentDOM || !this.node.type.spec.draggable)
+          this.nodeDOM.draggable = true;
+      }
     }
     // Remove selected node marking from this node.
     deselectNode() {
       if (this.nodeDOM.nodeType == 1) {
         this.nodeDOM.classList.remove("ProseMirror-selectednode");
         if (this.contentDOM || !this.node.type.spec.draggable)
-          this.dom.removeAttribute("draggable");
+          this.nodeDOM.removeAttribute("draggable");
       }
     }
     get domAtom() {
@@ -8826,17 +8836,14 @@
     });
   }
   function selectCursorWrapper(view) {
-    let domSel = view.domSelection(), range = document.createRange();
+    let domSel = view.domSelection();
     if (!domSel)
       return;
     let node = view.cursorWrapper.dom, img = node.nodeName == "IMG";
     if (img)
-      range.setStart(node.parentNode, domIndex(node) + 1);
+      domSel.collapse(node.parentNode, domIndex(node) + 1);
     else
-      range.setStart(node, 0);
-    range.collapse(true);
-    domSel.removeAllRanges();
-    domSel.addRange(range);
+      domSel.collapse(node, 0);
     if (!img && !view.state.selection.visible && ie && ie_version <= 11) {
       node.disabled = true;
       node.disabled = false;
@@ -9246,13 +9253,18 @@
     let dom, slice2;
     if (!html && !text2)
       return null;
-    let asText = text2 && (plainText || inCode || !html);
+    let asText = !!text2 && (plainText || inCode || !html);
     if (asText) {
       view.someProp("transformPastedText", (f3) => {
         text2 = f3(text2, inCode || plainText, view);
       });
-      if (inCode)
-        return text2 ? new Slice(Fragment.from(view.state.schema.text(text2.replace(/\r\n?/g, "\n"))), 0, 0) : Slice.empty;
+      if (inCode) {
+        slice2 = new Slice(Fragment.from(view.state.schema.text(text2.replace(/\r\n?/g, "\n"))), 0, 0);
+        view.someProp("transformPasted", (f3) => {
+          slice2 = f3(slice2, view, true);
+        });
+        return slice2;
+      }
       let parsed = view.someProp("clipboardTextParser", (f3) => f3(text2, $context, plainText, view));
       if (parsed) {
         slice2 = parsed;
@@ -9311,7 +9323,7 @@
       }
     }
     view.someProp("transformPasted", (f3) => {
-      slice2 = f3(slice2, view);
+      slice2 = f3(slice2, view, asText);
     });
     return slice2;
   }
@@ -9721,7 +9733,7 @@
       }
       const target = flushed ? null : event.target;
       const targetDesc = target ? view.docView.nearestDesc(target, true) : null;
-      this.target = targetDesc && targetDesc.dom.nodeType == 1 ? targetDesc.dom : null;
+      this.target = targetDesc && targetDesc.nodeDOM.nodeType == 1 ? targetDesc.nodeDOM : null;
       let { selection } = view.state;
       if (event.button == 0 && targetNode.type.spec.draggable && targetNode.type.spec.selectable !== false || selection instanceof NodeSelection && selection.from <= targetPos && selection.to > targetPos)
         this.mightDrag = {
@@ -10066,7 +10078,7 @@
     let slice2 = dragging && dragging.slice;
     if (slice2) {
       view.someProp("transformPasted", (f3) => {
-        slice2 = f3(slice2, view);
+        slice2 = f3(slice2, view, false);
       });
     } else {
       slice2 = parseFromClipboard(view, getText(event.dataTransfer), brokenClipboardAPI ? null : event.dataTransfer.getData("text/html"), false, $mouse);
@@ -11213,8 +11225,7 @@
     let $to = parse.doc.resolveNoCache(change.endB - parse.from);
     let $fromA = doc3.resolve(change.start);
     let inlineChange = $from.sameParent($to) && $from.parent.inlineContent && $fromA.end() >= change.endA;
-    let nextSel;
-    if ((ios && view.input.lastIOSEnter > Date.now() - 225 && (!inlineChange || addedNodes.some((n4) => n4.nodeName == "DIV" || n4.nodeName == "P")) || !inlineChange && $from.pos < parse.doc.content.size && (!$from.sameParent($to) || !$from.parent.inlineContent) && !/\S/.test(parse.doc.textBetween($from.pos, $to.pos, "", "")) && (nextSel = Selection.findFrom(parse.doc.resolve($from.pos + 1), 1, true)) && nextSel.head > $from.pos) && view.someProp("handleKeyDown", (f3) => f3(view, keyEvent(13, "Enter")))) {
+    if ((ios && view.input.lastIOSEnter > Date.now() - 225 && (!inlineChange || addedNodes.some((n4) => n4.nodeName == "DIV" || n4.nodeName == "P")) || !inlineChange && $from.pos < parse.doc.content.size && (!$from.sameParent($to) || !$from.parent.inlineContent) && $from.pos < $to.pos && !/\S/.test(parse.doc.textBetween($from.pos, $to.pos, "", ""))) && view.someProp("handleKeyDown", (f3) => f3(view, keyEvent(13, "Enter")))) {
       view.input.lastIOSEnter = 0;
       return;
     }
@@ -11273,6 +11284,8 @@
         let deflt = () => mkTr(view.state.tr.insertText(text2, chFrom, chTo));
         if (!view.someProp("handleTextInput", (f3) => f3(view, chFrom, chTo, text2, deflt)))
           view.dispatch(deflt());
+      } else {
+        view.dispatch(mkTr());
       }
     } else {
       view.dispatch(mkTr());
@@ -17595,6 +17608,9 @@ img.ProseMirror-separator {
       return GapCursor.valid($pos) ? new GapCursor($pos) : Selection.near($pos);
     }
   };
+  function needsGap(type) {
+    return type.isAtom || type.spec.isolating || type.spec.createGapCursor;
+  }
   function closedBefore($pos) {
     for (let d3 = $pos.depth; d3 >= 0; d3--) {
       let index2 = $pos.index(d3), parent = $pos.node(d3);
@@ -17604,7 +17620,7 @@ img.ProseMirror-separator {
         continue;
       }
       for (let before = parent.child(index2 - 1); ; before = before.lastChild) {
-        if (before.childCount == 0 && !before.inlineContent || before.isAtom || before.type.spec.isolating)
+        if (before.childCount == 0 && !before.inlineContent || needsGap(before.type))
           return true;
         if (before.inlineContent)
           return false;
@@ -17621,7 +17637,7 @@ img.ProseMirror-separator {
         continue;
       }
       for (let after = parent.child(index2); ; after = after.firstChild) {
-        if (after.childCount == 0 && !after.inlineContent || after.isAtom || after.type.spec.isolating)
+        if (after.childCount == 0 && !after.inlineContent || needsGap(after.type))
           return true;
         if (after.inlineContent)
           return false;
