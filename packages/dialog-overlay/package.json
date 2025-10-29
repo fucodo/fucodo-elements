@@ -1,5 +1,5 @@
 {
-  "name": "fucodo.dialog,overlay",
+  "name": "fucodo.dialog.overlay",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
