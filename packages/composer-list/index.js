@@ -190,12 +190,12 @@ class PackagistList extends HTMLElement {
           <code>${this._escape(name)}</code>
           ${abandoned}
         </h5>
-        <div class="small mb-1">${this._escape(description)}</div>
         <div class="d-flex flex-wrap gap-3 small text-muted">
-          ${repo ? `<span>Repo: <a href="${this._escape(repo)}" target="_blank" rel="noopener">${this._escape(repo)}</a></span>` : ''}
+          ${repo ? `<span>Repo: ${this._escape(repo)}</span>` : ''}
           <span>Downloads: ${this._formatNumber(downloads)}</span>
           <span>Favers: ${this._formatNumber(favers)}</span>
         </div>
+        <div class="small mb-1">${this._escape(description)}</div>
       </a>
     `;
     }
