@@ -1,0 +1,61 @@
+import { Meta, Title, Subtitle, Primary, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as DialogButtonStories from './DialogButton.stories';
+
+<Meta of={DialogButtonStories} />
+
+<Title>fucodo-dialogbutton</Title>
+<Subtitle>Fetch HTML from a URL, extract a selector, and show it inside a modal dialog</Subtitle>
+
+## Description
+
+The `fucodo-dialogbutton` web component renders its slotted content (e.g., a button) and,
+when clicked, opens a `<dialog>` element. It fetches HTML from a provided `url`, parses it,
+selects a sub-tree using the `selector` CSS selector, and injects that content into the dialog.
+
+- Required attributes: `url` and `selector`.
+- Optional: `dialogId` to reuse an existing `<dialog id="...">` in the document. If omitted, the
+  component creates a temporary dialog and removes it when closed.
+- A close button is rendered in the top right of the dialog.
+
+Tag name: `fucodo-dialogbutton`
+
+## Usage
+
+```html
+<!-- Trigger element with slotted content -->
+<fucodo-dialogbutton url="/page.html" selector="#content">
+  <button type="button">Open dialog</button>
+  <!-- Any HTML can be used as trigger content -->
+  <!-- Clicking it will load content and show the dialog -->
+</fucodo-dialogbutton>
+
+<!-- Optional: Reuse an existing dialog by id -->
+<dialog id="my-dialog"></dialog>
+<fucodo-dialogbutton url="/page.html" selector="#content" dialogId="my-dialog">
+  <a href="#">Open in existing dialog</a>
+</fucodo-dialogbutton>
+```
+
+## Interactive example
+
+<Primary />
+
+## Properties / Attributes
+
+- `url` (string): The URL to fetch HTML from. In the story, a `data:` URL is used for a self-contained demo.
+- `selector` (string, CSS selector): The element to extract from the fetched HTML document.
+- `dialogId` (string, optional): The id of an existing `<dialog>` element to reuse. If omitted, a dialog is created and removed on close.
+- Slotted content: Any inner HTML is used as the clickable trigger (for example, a `<button>`).
+
+<ArgTypes of={DialogButtonStories.Default} />
+
+## Notes
+
+- The component adds a simple close button with part names `close-button` and content area `content` so you can style via `::part()` if desired.
+- Fetch uses a 10s timeout and sets cache-control headers to avoid stale responses.
+- Errors (network issues, selector not found, non-OK status) are caught and rendered inside the dialog.
+- Pressing Esc or clicking the close button will close the dialog and clean up temporary dialogs created by the component.
+
+## All stories
+
+<Stories includePrimary={false} />
