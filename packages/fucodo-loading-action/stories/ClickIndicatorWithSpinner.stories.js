@@ -1,8 +1,8 @@
 import '../dist/index';
-import '../../spinner/dist/index';
+import '../../fucodo-spinner/dist/index';
 
 export default {
-  title: 'Components/Fundamentals/ClickIndicator/With spinner',
+  title: 'Components/Fundamentals/fucodo-loading-action/With spinner',
   parameters: {
     layout: 'centered',
   },

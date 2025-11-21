@@ -1,7 +1,7 @@
 import '../dist/index';
 
 export default {
-  title: 'Components/Fundamentals/LazyLoad',
+  title: 'Components/Fundamentals/fucodo-lazy-load',
   parameters: {
     layout: 'centered',
   },
@@ -12,7 +12,7 @@ export default {
 };
 
 const Template = ({ url = 'lazy.html', selectors = '' }) => {
-  const el = document.createElement('lazy-load');
+  const el = document.createElement('fucodo-lazy-load');
   el.setAttribute('url', url);
   if (selectors) el.setAttribute('selectors', selectors);
 

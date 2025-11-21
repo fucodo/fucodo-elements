@@ -66,4 +66,4 @@ export class LazyLoad extends LitElement {
   }
 }
 
-customElements.define('lazy-load', LazyLoad);
+customElements.define('fucodo-lazy-load', LazyLoad);

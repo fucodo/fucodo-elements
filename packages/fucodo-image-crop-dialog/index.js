@@ -135,4 +135,4 @@ export class ImageCrop extends LitElement {
   }
 }
 
-customElements.define('image-crop-dialog', ImageCrop);
+customElements.define('fucodo-image-crop-dialog', ImageCrop);

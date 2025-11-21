@@ -1,7 +1,7 @@
 import '../dist/index';
 
 export default {
-  title: 'Components/Fundamentals/ImageCrop/Default',
+  title: 'Components/Fundamentals/fucodo-image-crop-dialog/Default',
   parameters: {
     layout: 'centered',
   },
@@ -16,11 +16,11 @@ const Template = ({ width = 600, height = 800 }) => {
 
   wrapper.innerHTML = `
     <form>
-      <image-crop-dialog width="${width}" height="${height}">
+      <fucodo-image-crop-dialog width="${width}" height="${height}">
         <input type="file" accept="image/png, image/jpeg, image/tiff" name="picture">
         <span slot="label-cancel">Abbrechen</span>
         <span slot="label-confirm">Bestätigen</span>
-      </image-crop-dialog>
+      </fucodo-image-crop-dialog>
       <button id="foo">Submit</button>
     </form>
     <div id="result"></div>

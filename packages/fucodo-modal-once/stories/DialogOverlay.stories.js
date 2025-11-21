@@ -1,7 +1,7 @@
 import '../dist/index';
 
 export default {
-  title: 'Components/Fundamentals/DialogOverlay',
+  title: 'Components/Fundamentals/fucodo-modal-once',
   parameters: {
     layout: 'centered',
   },

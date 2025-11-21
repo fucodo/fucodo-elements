@@ -589,7 +589,7 @@
     `;
     }
   };
-  customElements.define("lazy-load", LazyLoad);
+  customElements.define("fucodo-lazy-load", LazyLoad);
 })();
 /*! Bundled license information:
 

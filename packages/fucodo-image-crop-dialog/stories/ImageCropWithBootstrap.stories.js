@@ -1,7 +1,7 @@
 import '../dist/index';
 
 export default {
-  title: 'Components/Fundamentals/ImageCrop/With Bootstrap',
+  title: 'Components/Fundamentals/fucodo-image-crop-dialog/With Bootstrap',
   parameters: {
     layout: 'centered',
   },
@@ -17,7 +17,7 @@ const BootstrapTemplate = ({ width = 600, height = 800 }) => {
 
   wrapper.innerHTML = `
     <form>
-      <image-crop-dialog width="${width}" height="${height}">
+      <fucodo-image-crop-dialog width="${width}" height="${height}">
         <input accept="image/png, image/jpeg, image/tiff" capture="user" class="form-control" id="uploader-passbild" type="file" name="object[passbild]">
         <span slot="label-cancel">
           <span style="display:inline-block; width:16px; height:16px;fill:currentColor;">
@@ -35,7 +35,7 @@ const BootstrapTemplate = ({ width = 600, height = 800 }) => {
           </span>
           Bestätigen
         </span>
-      </image-crop-dialog>
+      </fucodo-image-crop-dialog>
       <button id="foo" class="btn btn-primary">Submit</button>
     </form>
     <div id="result"></div>
