@@ -1,0 +1,42 @@
+import { Meta, Title, Subtitle, Description, Primary, ArgTypes, Source, Stories } from '@storybook/addon-docs/blocks';
+import * as SpinnerStories from './Spinner.stories';
+
+<Meta of={SpinnerStories} />
+
+<Title>Spinner</Title>
+<Subtitle>Lightweight loading spinner web component</Subtitle>
+
+## Description
+
+The `fucodo-spinner` web component renders a configurable loading spinner. You can control its
+size, color, and whether it is enabled (visible/animating) via attributes.
+
+Tag name: `fucodo-spinner`
+
+## Usage
+
+<Source
+  language="html"
+  code={`<fucodo-spinner size="32" enabled="1" color="#1e90ff"></fucodo-spinner>`}
+/>
+
+## Interactive example
+
+<Primary />
+
+## Properties / Attributes
+
+- `size` (number, px): Diameter of the spinner. Defaults to `32` in the story.
+- `enabled` (boolean as `"1"`/`"0"`): When `"1"` the spinner is visible and animates; when `"0"` it is hidden.
+- `color` (CSS color): Optional stroke color for the spinner (e.g., `#1e90ff`, `rgb(30,144,255)`, `dodgerblue`).
+
+<ArgTypes of={SpinnerStories.Default} />
+
+## Notes
+
+- Toggle the `enabled` attribute to show/hide without removing the element from the DOM.
+- The component aims to be lightweight and easy to theme via the `color` attribute or CSS.
+
+## All stories
+
+<Stories includePrimary={false} />
