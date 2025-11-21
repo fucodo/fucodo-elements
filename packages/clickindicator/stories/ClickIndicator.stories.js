@@ -1,7 +1,7 @@
 import '../dist/index';
 
 export default {
-  title: 'Components/Fundamentals/ClickIndicator',
+  title: 'Components/Fundamentals/ClickIndicator/Default',
   parameters: {
     layout: 'centered',
   },
