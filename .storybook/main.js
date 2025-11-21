@@ -2,9 +2,6 @@
 import {createRequire} from "node:module";
 import {dirname, join} from "node:path";
 import remarkGfm from 'remark-gfm';
-import {glob} from "glob";
-import path from "path";
-
 
 const require = createRequire(import.meta.url);
 
@@ -21,7 +18,7 @@ const config = {
     },
     addons: [
         {
-            name: getAbsolutePath("@storybook/addon-docs"),
+            name: "@storybook/addon-docs",
             options: {
                 csfPluginOptions: null,
                 mdxPluginOptions: {
@@ -33,7 +30,7 @@ const config = {
         }
     ],
     framework: {
-        name: getAbsolutePath("@storybook/web-components-vite"),
+        name: '@storybook/web-components-vite',
         options: {}
     },
     staticDirs: [
@@ -43,7 +40,3 @@ const config = {
 };
 
 export default config;
-
-function getAbsolutePath(value) {
-    return dirname(require.resolve(join(value, "package.json")));
-}
