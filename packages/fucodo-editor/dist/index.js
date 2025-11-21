@@ -4815,13 +4815,17 @@
   function liftTarget(range) {
     let parent = range.parent;
     let content = parent.content.cutByIndex(range.startIndex, range.endIndex);
-    for (let depth = range.depth; ; --depth) {
+    for (let depth = range.depth, contentBefore = 0, contentAfter = 0; ; --depth) {
       let node = range.$from.node(depth);
-      let index2 = range.$from.index(depth), endIndex = range.$to.indexAfter(depth);
+      let index2 = range.$from.index(depth) + contentBefore, endIndex = range.$to.indexAfter(depth) - contentAfter;
       if (depth < range.depth && node.canReplace(index2, endIndex, content))
         return depth;
       if (depth == 0 || node.type.spec.isolating || !canCut(node, index2, endIndex))
         break;
+      if (index2)
+        contentBefore = 1;
+      if (endIndex < node.childCount)
+        contentAfter = 1;
     }
     return null;
   }
@@ -5364,7 +5368,7 @@
     let $from = tr2.doc.resolve(from2), $to = tr2.doc.resolve(to);
     if (fitsTrivially($from, $to, slice2))
       return tr2.step(new ReplaceStep(from2, to, slice2));
-    let targetDepths = coveredDepths($from, tr2.doc.resolve(to));
+    let targetDepths = coveredDepths($from, $to);
     if (targetDepths[targetDepths.length - 1] == 0)
       targetDepths.pop();
     let preferredTarget = -($from.depth + 1);
@@ -18373,7 +18377,7 @@ img.ProseMirror-separator {
           beforeinput(view, e4) {
             let inputType = e4.inputType;
             let command2 = inputType == "historyUndo" ? undo : inputType == "historyRedo" ? redo : null;
-            if (!command2)
+            if (!command2 || !view.editable)
               return false;
             e4.preventDefault();
             return command2(view.state, view.dispatch);
@@ -27850,7 +27854,7 @@ ${element.innerHTML}
   // node_modules/bootstrap-icons/icons/markdown.svg
   var markdown_default = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-markdown" viewBox="0 0 16 16">\n  <path d="M14 3a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>\n  <path fill-rule="evenodd" d="M9.146 8.146a.5.5 0 0 1 .708 0L11.5 9.793l1.646-1.647a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 0-.708"/>\n  <path fill-rule="evenodd" d="M11.5 5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 1 .5-.5"/>\n  <path d="M3.56 11V7.01h.056l1.428 3.239h.774l1.42-3.24h.056V11h1.073V5.001h-1.2l-1.71 3.894h-.039l-1.71-3.894H2.5V11z"/>\n</svg>';
 
-  // packages/editor/style.scss
+  // packages/fucodo-editor/style.scss
   var style_default = `:host {
   width: 600px;
   height: 200px;
@@ -28001,7 +28005,7 @@ input[type=file] {
   position: relative;
 }`;
 
-  // packages/editor/index.js
+  // packages/fucodo-editor/index.js
   var MyEditor = class extends i4 {
     static styles = i`${r(style_default)}`;
     render() {

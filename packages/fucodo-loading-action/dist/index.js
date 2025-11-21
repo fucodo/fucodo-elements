@@ -1,5 +1,5 @@
 (() => {
-  // packages/clickindicator/index.js
+  // packages/fucodo-loading-action/index.js
   (() => {
     var LoadingAction = class extends HTMLElement {
       static get observedAttributes() {

@@ -540,7 +540,7 @@
   o4?.({ LitElement: i4 });
   (s3.litElementVersions ??= []).push("4.2.1");
 
-  // packages/lazyload/index.js
+  // packages/fucodo-lazy-load/index.js
   var LazyLoad = class extends i4 {
     static properties = {
       url: { type: String },

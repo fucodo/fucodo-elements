@@ -1,5 +1,5 @@
 (() => {
-  // packages/spinner/style.scss
+  // packages/fucodo-spinner/style.scss
   var style_default = `.loader {
   border: 5px solid #FFF;
   border-bottom-color: #FF3D00;
@@ -18,7 +18,7 @@
   }
 }`;
 
-  // packages/spinner/index.js
+  // packages/fucodo-spinner/index.js
   var SpinnerLoader = class extends HTMLElement {
     static get observedAttributes() {
       return ["enabled", "size", "color"];

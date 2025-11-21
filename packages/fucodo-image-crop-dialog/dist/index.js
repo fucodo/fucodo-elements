@@ -1853,10 +1853,10 @@
   o4?.({ LitElement: i4 });
   (s3.litElementVersions ??= []).push("4.2.1");
 
-  // packages/imagecrop/index.js
+  // packages/fucodo-image-crop-dialog/index.js
   var import_croppie = __toESM(require_croppie(), 1);
 
-  // packages/imagecrop/croppie.scss
+  // packages/fucodo-image-crop-dialog/croppie.scss
   var croppie_default = `@charset "UTF-8";
 .croppie-container {
   width: 100%;
@@ -2117,7 +2117,7 @@ background: #ccc;
   content: "\u21BB";
 }`;
 
-  // packages/imagecrop/style.scss
+  // packages/fucodo-image-crop-dialog/style.scss
   var style_default = `.dialog {
   width: 500px;
 }
@@ -2147,7 +2147,7 @@ background: #ccc;
   visibility: hidden;
 }`;
 
-  // packages/imagecrop/index.js
+  // packages/fucodo-image-crop-dialog/index.js
   var ImageCrop = class extends i4 {
     static get properties() {
       return {
@@ -2244,7 +2244,7 @@ background: #ccc;
       srcContext.drawImage(canvas, 0, 0);
     }
   };
-  customElements.define("image-crop-dialog", ImageCrop);
+  customElements.define("fucodo-image-crop-dialog", ImageCrop);
 })();
 /*! Bundled license information:
 

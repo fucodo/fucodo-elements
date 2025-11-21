@@ -1,5 +1,5 @@
 (() => {
-  // packages/dialog-overlay/style.scss
+  // packages/fucodo-modal-once/style.scss
   var style_default = `.dialog-overlay::backdrop {
   background: rgba(0, 0, 0, 0.5);
 }
@@ -22,7 +22,7 @@
   float: right;
 }`;
 
-  // packages/dialog-overlay/index.js
+  // packages/fucodo-modal-once/index.js
   var ModalOnce = class extends HTMLElement {
     constructor() {
       super();
