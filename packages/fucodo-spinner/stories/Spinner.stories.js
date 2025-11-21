@@ -1,7 +1,7 @@
 import '../dist/index';
 
 export default {
-  title: 'Components/Fundamentals/Spinner',
+  title: 'Components/Fundamentals/fucodo-spinner',
   parameters: {
     layout: 'centered',
   },
