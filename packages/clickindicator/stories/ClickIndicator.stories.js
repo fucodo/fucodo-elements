@@ -12,23 +12,25 @@ export default {
   },
 };
 
+// Return a real HTMLElement to avoid any editors rendering the template as literal text,
+// while still using args directly in the markup (no extra attribute-setting calls).
 const Template = ({ activeClass = 'is-loading', duration = 2500, event = 'action-finished' }) => {
-  const wrapper = document.createElement('main');
-  wrapper.innerHTML = `
+  const tpl = document.createElement('template');
+  tpl.innerHTML = `
     <fucodo-loading-action
-      active-class="is-loading"
-      duration="2500"
-      event="action-finished"
+      active-class="${String(activeClass)}"
+      duration="${Number(duration)}"
+      event="${String(event)}"
     >
       <button class="btn btn-primary">Speichern</button>
     </fucodo-loading-action>
   `;
-  const el = wrapper.querySelectorAll('fucodo-loading-action').item(0);
-  el.setAttribute('active-class', String(activeClass));
-  el.setAttribute('duration', Number(duration));
-  el.setAttribute('event', String(event));
-  return el;
+  return tpl.content.firstElementChild;
 };
 
 export const Default = Template.bind({});
-Default.args = {  };
+Default.args = {
+  activeClass: 'is-loading',
+  duration: 2500,
+  event: 'action-finished',
+};

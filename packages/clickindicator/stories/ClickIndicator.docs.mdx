@@ -1,0 +1,64 @@
+import { Meta, Canvas, Story, ArgTypes, Source, Stories, Title, Subtitle, Description, Primary } from '@storybook/addon-docs/blocks';
+import * as ClickIndicatorStories from './ClickIndicator.stories';
+
+<Meta of={ClickIndicatorStories} />
+
+<Title>ClickIndicator</Title>
+<Subtitle>Lightweight helper to indicate a running action on click</Subtitle>
+
+<Description>
+  The `fucodo-loading-action` web component wraps any interactive element (e.g., a button)
+  and applies a CSS class while an action is in progress. It optionally emits a custom event
+  when the action finishes. Use it to provide instant visual feedback while saving or
+  performing async operations.
+  
+  This documentation page is powered by the same stories and args used in the controls panel,
+  so what you see here always reflects the live story configuration.
+  
+  Note: The component itself is registered via the stories file (`ClickIndicator.stories.js`),
+  which imports the package build.
+  
+  Tag name: `fucodo-loading-action`
+</Description>
+
+## Usage
+
+<Source
+  language="html"
+  code={`<fucodo-loading-action
+  active-class="is-loading"
+  duration="2500"
+  event="action-finished"
+>
+  <button class="btn btn-primary">Speichern</button>
+</fucodo-loading-action>`}
+/>
+
+You can adjust the attributes to match your UI and timing requirements. The inner content can
+be any element that should visually reflect the loading state.
+
+## Interactive example
+
+<Primary />
+
+## Properties / Attributes
+
+- `active-class` (string): CSS class applied while the action is considered in progress. Defaults to `is-loading`.
+- `duration` (number, ms): How long the loading indication should be active. Defaults to `2500`.
+- `event` (string): Name of the custom event to dispatch upon finishing. Defaults to `action-finished`.
+
+<ArgTypes of={ClickIndicatorStories.Default} />
+
+## All stories
+
+<Stories includePrimary={false} />
+
+## Accessibility
+
+- Ensure the wrapped control (e.g., button) has an accessible name and proper focus handling.
+- If the loading state disables interaction, also convey state changes to assistive tech (e.g., `aria-busy` on a relevant region).
+
+## Styling
+
+- Provide styles for the `active-class` you choose (e.g., show a spinner, reduce opacity, or prevent clicks).
+- The component does not enforce a specific visual; it toggles the class so you can keep styling within your design system.
