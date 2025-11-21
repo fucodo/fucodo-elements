@@ -1,0 +1,54 @@
+import { Meta, Canvas, Story, ArgTypes, Source, Stories, Title, Subtitle, Description, Primary } from '@storybook/addon-docs/blocks';
+import * as DialogOverlayStories from './DialogOverlay.stories';
+
+<Meta of={DialogOverlayStories} />
+
+<Title>DialogOverlay — shown once</Title>
+
+## Description
+
+Demonstrates `fucodo-modal-once`, which wraps a native `dialog` and will auto-open once
+(optionally controlled by cookies). The overlay closes when a descendant with
+`.dialog-close-btn` or `[data-close]` is clicked, and sets a cookie if `data-cookie-days` is
+provided, preventing subsequent auto-opens for that duration.
+
+The elemente itself is invisible, and only the `dialog` element is shown.
+
+The element does not use Shadow DOM, so it can be used in any part of the DOM.
+
+Tag name: `fucodo-modal-once`
+
+## Example markup
+
+<Source
+  language="html"
+  code={`<fucodo-modal-once data-auto-open="1">
+  <dialog>
+    <form method="dialog">
+      <button value="close" class="dialog-close-btn">close</button>
+    </form>
+    Overlay shown once
+  </dialog>
+</fucodo-modal-once>`}
+/>
+
+## Interactive story
+
+<Primary />
+
+## Properties / Attributes
+
+- `buttonText` (string): Label of the Button. Defaults to `close`.
+- `autoOpen` (bool): Should the dialog open instantly on load. Defaults to `true`.
+- `cookieDays` (number, days): How long the dialog should be hidden. Defaults to `0`.
+- `cookieName` (string): Name of the cookie where we save the information, that the dialog was open. Defaults to `<empty>`.
+<ArgTypes of={DialogOverlayStories.Default} />
+
+## All stories
+
+<Stories includePrimary={false} />
+
+## Use cases
+
+- Can be used on websites to show interstitial loading screens.
+- Can be used to show loading indicators for long-running actions.
