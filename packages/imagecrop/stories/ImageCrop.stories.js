@@ -1,13 +1,13 @@
 import '../dist/index';
 
 export default {
-  title: 'Components/Fundamentals/ImageCrop',
+  title: 'Components/Fundamentals/ImageCrop/Default',
   parameters: {
     layout: 'centered',
   },
   argTypes: {
-    width: { control: { type: 'number', min: 50, step: 10 }, description: 'Target crop width (px)' },
-    height: { control: { type: 'number', min: 50, step: 10 }, description: 'Target crop height (px)' },
+    width: { control: { type: 'number', min: 50, step: 10 }, description: 'Target crop width (px)', table: { defaultValue: { summary: 600 } } },
+    height: { control: { type: 'number', min: 50, step: 10 }, description: 'Target crop height (px)', table: { defaultValue: { summary: 800 } } },
   },
 };
 

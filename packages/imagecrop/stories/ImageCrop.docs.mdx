@@ -1,0 +1,47 @@
+import { Meta, Title, Subtitle, Description, Primary, ArgTypes, Source, Stories } from '@storybook/addon-docs/blocks';
+import * as ImageCropStories from './ImageCrop.stories';
+
+<Meta of={ImageCropStories} />
+
+<Title>ImageCrop</Title>
+<Subtitle>Dialog component to crop an uploaded image to a target width/height</Subtitle>
+
+## Description
+
+The `image-crop-dialog` web component opens a dialog that lets users select and crop an image
+to a specific target size. It is designed to be embedded in forms: once the user confirms the crop,
+the resulting image file is placed in the form data under the same `name` as the file input.
+
+This documentation page is powered by the same stories and args used in the controls panel,
+so what you see here always reflects the live story configuration.
+
+Tag name: `image-crop-dialog`
+
+## Usage
+
+<Source
+  language="html"
+  code={`<form>
+  <image-crop-dialog width="600" height="800">
+    <input type="file" accept="image/png, image/jpeg, image/tiff" name="picture" />
+    <span slot="label-cancel">Abbrechen</span>
+    <span slot="label-confirm">Bestätigen</span>
+  </image-crop-dialog>
+  <button type="submit">Submit</button>
+</form>`}
+/>
+
+## Interactive example
+
+<Primary />
+
+## Properties / Attributes
+
+<ArgTypes of={ImageCropStories.Default} />
+
+## Notes
+
+- Place an `<input type="file" name="...">` inside the component; it will be used as the source image.
+- Provide optional slot content for `label-cancel` and `label-confirm` to localize the dialog actions.
+- On submit, the cropped image will be available from the form data for the file input's `name`.
+
