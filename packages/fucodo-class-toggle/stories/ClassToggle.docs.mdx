@@ -1,0 +1,52 @@
+import { Meta, Title, Subtitle, Primary, ArgTypes, Stories } from '@storybook/addon-docs/blocks';
+import * as ClassToggleStories from './ClassToggle.stories';
+
+<Meta of={ClassToggleStories} />
+
+<Title>fucodo-class-toggle</Title>
+<Subtitle>Toggle a CSS class on one or more target elements using a simple trigger element</Subtitle>
+
+## Description
+
+The `fucodo-class-toggle` web component toggles a CSS class on elements matched by a CSS selector.
+It is useful for driving show/hide or active state UI without custom JavaScript.
+
+- Provide a `target` attribute with any valid selector; all matching elements will be affected.
+- Provide a `toggle-class` attribute to set the class name to toggle (defaults to `is-active`).
+- Clicking the element will toggle the class. If the click originates from an `<a>` or `<button>`,
+  the component prevents default navigation/submit behavior.
+
+Tag name: `fucodo-class-toggle`
+
+## Usage
+
+```html
+<!-- Toggler -->
+<fucodo-class-toggle target=".cards .card" toggle-class="is-active">
+  Toggle highlight
+</fucodo-class-toggle>
+
+<!-- Targets -->
+<div class="cards">
+  <div class="card">A</div>
+  <div class="card">B</div>
+  <div class="card">C</div>
+  <!-- CSS can style .card.is-active as desired -->
+</div>
+```
+
+## Interactive example
+
+<Primary />
+
+## Properties / Attributes
+
+- `target` (string, CSS selector): Elements that receive the toggled class.
+- `toggle-class` (string): The class name to toggle. Defaults to `is-active`.
+- Text content or slotted content inside the element is rendered as the clickable label.
+
+<ArgTypes of={ClassToggleStories.Default} />
+
+## All stories
+
+<Stories includePrimary={false} />
