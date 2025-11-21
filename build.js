@@ -23,7 +23,8 @@ for (const entry of entries) {
         outdir: path.join(packagePath, 'dist'),
         platform: 'browser',
         loader: {
-          '.svg': 'text'
+          '.svg': 'text',
+          '.html': 'text'
         },
         plugins: [sassPlugin({ type: 'css-text' })],
       });

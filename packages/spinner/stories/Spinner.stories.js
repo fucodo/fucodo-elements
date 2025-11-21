@@ -1,7 +1,7 @@
-import '../packages/spinner/dist/index';
+import '../dist/index';
 
 export default {
-  title: 'Components/Spinner',
+  title: 'Components/Fundamentals/Spinner',
   parameters: {
     layout: 'centered',
   },

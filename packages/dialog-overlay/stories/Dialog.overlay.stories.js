@@ -1,7 +1,7 @@
-import '../packages/dialog-overlay/dist/index';
+import '../dist/index';
 
 export default {
-  title: 'Components/DialogOverlay',
+  title: 'Components/Fundamentals/DialogOverlay',
   parameters: {
     layout: 'centered',
   },

@@ -1,7 +1,7 @@
-import '../packages/imagecrop/dist/index';
+import '../dist/index';
 
 export default {
-  title: 'Components/ImageCrop',
+  title: 'Components/Fundamentals/ImageCrop',
   parameters: {
     layout: 'centered',
   },

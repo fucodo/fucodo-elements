@@ -1,7 +1,7 @@
-import '../packages/lazyload/dist/index';
+import '../dist/index';
 
 export default {
-  title: 'Components/LazyLoad',
+  title: 'Components/Fundamentals/LazyLoad',
   parameters: {
     layout: 'centered',
   },

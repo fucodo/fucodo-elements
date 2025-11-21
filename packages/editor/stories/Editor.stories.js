@@ -1,7 +1,7 @@
-import '../packages/editor/dist/index';
+import '../dist/index';
 
 export default {
-  title: 'Components/Editor',
+  title: 'Apps/Editors/Markdown',
 };
 
 export const Default = () => {

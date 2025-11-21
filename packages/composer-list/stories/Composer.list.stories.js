@@ -1,7 +1,7 @@
-import '../packages/composer-list/dist/index';
+import '../dist/index';
 
 export default {
-  title: 'Components/ComposerList',
+  title: 'Apps/DataSources/ComposerList',
   parameters: {
     layout: 'centered',
   },

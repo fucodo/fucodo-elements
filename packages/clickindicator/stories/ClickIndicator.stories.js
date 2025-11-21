@@ -1,7 +1,7 @@
-import '../packages/clickindicator/dist/index';
+import '../dist/index';
 
 export default {
-  title: 'Components/ClickIndicator',
+  title: 'Components/Fundamentals/ClickIndicator',
   parameters: {
     layout: 'centered',
   },
