@@ -1,0 +1,54 @@
+import { Meta, Title, Subtitle, Description, Primary, ArgTypes, Source, Stories } from '@storybook/addon-docs/blocks';
+import * as ComposerListStories from './Composer.list.stories';
+
+<Meta of={ComposerListStories} />
+
+<Title>Composer Packages List</Title>
+<Subtitle>List Composer/Packagist packages by vendor, type, and sort order</Subtitle>
+
+## Description
+
+The `fucodo-composer-list` web component fetches and displays packages from Packagist.org.
+You can filter by `vendor`, limit results per page, and control sort order. This is useful
+for embedding curated lists of packages (e.g., all packages from a given organization).
+
+Tag name: `fucodo-composer-list`
+
+## Usage
+
+<Source
+  language="html"
+  code={`<fucodo-composer-list
+  vendor="fucodo"
+  excact-vendor="1"
+  type=""
+  page="1"
+  per-page="25"
+  sort="downloads"
+></fucodo-composer-list>`}
+/>
+
+## Interactive example
+
+<Primary />
+
+## Properties / Attributes
+
+- `vendor` (string): Vendor or namespace to search for (e.g., `symfony`, `fucodo`).
+- `exact-vendor` (boolean as "1"/"0"): When enabled, restrict results to the exact vendor only.
+- `type` (string): Optional Composer package type (e.g., `library`, `project`).
+- `page` (number): Page number for pagination (1-based).
+- `per-page` (number): Items per page (max often 50; check API limits).
+- `sort` (string): Sort mode (e.g., `downloads`, `favers`, or API-supported values).
+
+<ArgTypes of={ComposerListStories.Default} />
+
+## Notes
+
+- The component queries Packagist; ensure your environment allows network access.
+- For best UX, consider placing the element inside a layout container and pairing it with
+  a spinner while loading results.
+
+## All stories
+
+<Stories includePrimary={false} />

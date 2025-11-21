@@ -1,0 +1,74 @@
+import { Meta, Title, Subtitle, Description, Primary, ArgTypes, Source, Stories } from '@storybook/addon-docs/blocks';
+import * as StoriesFile from './ComposerListWithBootstrap.stories';
+
+<Meta of={StoriesFile} />
+
+<Title>Composer Packages List (Bootstrap)</Title>
+<Subtitle>Bootstrap-styled wrapper around the <code>fucodo-composer-list</code> web component</Subtitle>
+
+## Description
+
+This page documents the Bootstrap-flavored story for the `fucodo-composer-list` component.
+The story renders the component inside a Shadow DOM and imports Bootstrap 5 CSS via CDN
+inside that Shadow DOM so the styles are scoped only to this story and do not pollute
+global Storybook styles.
+
+Component tag: `fucodo-composer-list`
+
+## Usage
+
+The example below shows a typical Bootstrap layout wrapping the component. In this
+Storybook story, Bootstrap is injected inside a Shadow DOM; in your own application,
+load Bootstrap according to your setup (globally, or scoped as you prefer).
+
+<Source
+  language="html"
+  code={`<main class="container my-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Composer Packages</h5>
+        </div>
+        <div class="card-body">
+          <fucodo-composer-list
+            vendor="fucodo"
+            excact-vendor="1"
+            type=""
+            page="1"
+            per-page="25"
+            sort="downloads"
+          ></fucodo-composer-list>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>`}
+/>
+
+## Interactive example
+
+<Primary />
+
+## Properties / Attributes
+
+- `vendor` (string): Vendor/namespace to search (e.g., `symfony`, `fucodo`).
+- `excact-vendor` (boolean as "1"/"0"): Restrict results to the exact vendor.
+- `type` (string): Optional Composer package type (e.g., `library`, `project`).
+- `page` (number): Page number (1-based).
+- `per-page` (number): Items per page (max 50).
+- `sort` (string): Sort mode (e.g., `downloads`, `favers`).
+
+<ArgTypes of={StoriesFile.WithBootstrap} />
+
+## Notes
+
+- In this story, Bootstrap CSS is loaded inside a Shadow DOM to avoid affecting global styles.
+- If you need Bootstrap in your application, include it within your app as usual (e.g., via
+  your bundler or a `<link rel="stylesheet" ...>` in your document) or scope it as needed.
+- The attribute name used by the component is `excact-vendor` (note the spelling), which is
+  reflected in the story and examples here.
+
+## All stories
+
+<Stories includePrimary={false} />

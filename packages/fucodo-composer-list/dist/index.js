@@ -1,5 +1,5 @@
 (() => {
-  // packages/composer-list/index.js
+  // packages/fucodo-composer-list/index.js
   var PackagistList = class extends HTMLElement {
     static get observedAttributes() {
       return ["vendor", "type", "q", "per-page", "page", "sort"];

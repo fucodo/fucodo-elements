@@ -1,7 +1,7 @@
 import '../dist/index';
 
 export default {
-  title: 'Apps/DataSources/ComposerList',
+  title: 'Apps/DataSources/ComposerList/Default',
   parameters: {
     layout: 'centered',
   },
