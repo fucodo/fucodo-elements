@@ -38,11 +38,7 @@ const config = {
     },
     staticDirs: [
         "../stories/public",
-        "../stories/static",
-        {
-            from: '../packages/drk-menu/stories/static',
-            to: '/assets'
-        }
+        "../stories/static"
     ]
 };
 
