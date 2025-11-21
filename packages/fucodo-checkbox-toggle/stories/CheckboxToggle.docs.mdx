@@ -1,0 +1,55 @@
+import { Meta, Title, Subtitle, Primary, ArgTypes, Source, Stories } from '@storybook/addon-docs/blocks';
+import * as CheckboxToggleStories from './CheckboxToggle.stories';
+
+<Meta of={CheckboxToggleStories} />
+
+<Title>fucodo-checkbox-toggle</Title>
+<Subtitle>Click or press Space/Enter to toggle groups of checkboxes or radios by selector</Subtitle>
+
+## Description
+
+The `fucodo-checkbox-toggle` web component acts as a lightweight trigger that toggles the
+checked state of matching checkbox or radio inputs found via a CSS selector.
+
+- Provide a `target` attribute with any valid selector; all matching inputs are toggled.
+- Works with mouse click and keyboard (Space or Enter) for accessibility.
+- Dispatches a native `change` event on each affected input so listeners react properly.
+
+Tag name: `fucodo-checkbox-toggle`
+
+## Usage
+
+```html
+<fucodo-checkbox-toggle target=".settings input[type=checkbox]">
+  Toggle all
+</fucodo-checkbox-toggle>
+
+<div class="settings">
+  <label><input type="checkbox" name="a"> A</label>
+  <label><input type="checkbox" name="b"> B</label>
+</div>
+```
+
+## Interactive example
+
+<Primary />
+
+## Properties / Attributes
+
+- `target` (string, CSS selector): Elements to toggle. Only input elements of type
+  checkbox or radio are affected; other elements are ignored.
+- Text content or slotted content inside the element is rendered as the clickable label.
+
+<ArgTypes of={CheckboxToggleStories.Default} />
+
+## Notes
+
+- For radio inputs, toggling flips their `checked` state per matched element. Keep in mind that
+  radio buttons are mutually exclusive by name, so toggling several within the same group may
+  end up with only one checked depending on the browser behavior.
+- The element sets `tabindex="0"` and `role="button"` by default for accessibility.
+- A `change` event is fired for each toggled input. Use this to update UI or form state.
+
+## All stories
+
+<Stories includePrimary={false} />
