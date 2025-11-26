@@ -21,7 +21,7 @@ const Template = ({ vendor = 'symfony', type = 'library', page = 1, perPage = 25
   const shadow = host.attachShadow({ mode: 'open' });
 
   shadow.innerHTML = `
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     <main class="container my-4">
       <div class="row justify-content-center">
         <div class="col-12 col-md-10 col-lg-8">
