@@ -17,6 +17,16 @@ export default {
       description: 'Progress in percent (0–100).',
       table: { category: 'attributes' },
     },
+    totalSteps: {
+        control: { type: 'number', step: 1 },
+        description: 'maximum number of steps',
+        table: { category: 'attributes' },
+    },
+    stepsSolved: {
+        control: { type: 'number', step: 1 },
+        description: 'steps solved',
+        table: { category: 'attributes' },
+    },
     size: {
       control: { type: 'number', min: 40, step: 1 },
       description: 'Diameter in pixels (sets CSS var --size).',
@@ -46,7 +56,7 @@ export default {
   },
 };
 
-const Template = ({ percent, size, color, extraClass, title, text }) => {
+const Template = ({ percent, size, color, extraClass, title, text, totalSteps, stepsSolved}) => {
   const host = document.createElement('div');
   host.style.minWidth = '220px';
 
@@ -60,8 +70,11 @@ const Template = ({ percent, size, color, extraClass, title, text }) => {
   const titleAttr = title ? ` title="${title}"` : '';
   const textAttr = typeof text === 'string' && text.length ? ` text="${text}"` : '';
 
+  const totalStepsAttr = totalSteps ? ` total-steps="${totalSteps}"` : '';
+  const stepsSolvedAttr = stepsSolved ? ` steps-solved="${stepsSolved}"` : '';
+
   host.innerHTML = `
-    <fucodo-progress-circle percent="${safePercent}"${sizeAttr}${classAttribute}${titleAttr}${textAttr}></fucodo-progress-circle>
+    <fucodo-progress-circle percent="${safePercent}"${sizeAttr}${classAttribute}${titleAttr}${textAttr}${totalStepsAttr}${stepsSolvedAttr}></fucodo-progress-circle>
   `;
   return host;
 };

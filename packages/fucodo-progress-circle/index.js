@@ -2,7 +2,7 @@ import style from './style.scss';
 
 class CircleProgress extends HTMLElement {
     static get observedAttributes() {
-        return ['percent', 'size', 'class', 'color', 'title', 'text'];
+        return ['percent', 'size', 'class', 'color', 'title', 'text', 'total-steps', 'steps-solved'];
     }
 
     constructor() {
@@ -16,7 +16,14 @@ class CircleProgress extends HTMLElement {
     }
 
     _render() {
-        const percentAttr = this.getAttribute('percent') || '0';
+        let percentAttr = 0;
+        if (this.hasAttribute('percent')) {
+            percentAttr = this.getAttribute('percent') || '0';
+        }
+        if (this.hasAttribute('total-steps') && this.hasAttribute('steps-solved')) {
+            percentAttr = parseInt(parseFloat(this.getAttribute('steps-solved')) / parseFloat(this.getAttribute('total-steps')) * 100);
+        }
+
         const percent = Math.max(0, Math.min(100, parseInt(percentAttr, 10)));
 
         const extraClass = this.getAttribute('class') || '';
