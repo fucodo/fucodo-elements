@@ -71,12 +71,19 @@ class FucodoSteps extends HTMLElement {
             const step = document.createElement('div');
             step.classList.add('step');
 
-            if (index < currentIndex) step.classList.add('step--done');
-            else if (index === currentIndex) step.classList.add('step--active');
+            let filler = 'X';
+            if (index < currentIndex) {
+                step.classList.add('step--done');
+                filler = '✔';
+            } else if (index === currentIndex) {
+                step.classList.add('step--active');
+                filler = '?';
+            }
 
             if (this.mode === 'bubble') {
                 const bubble = document.createElement('button');
                 bubble.className = 'step-bubble';
+                bubble.innerHTML = filler;
 
                 const pop = document.createElement('div');
                 pop.className = 'step-bubble__popover';
@@ -94,4 +101,4 @@ class FucodoSteps extends HTMLElement {
     }
 }
 
-customElements.define('fucodo-steps', FucodoSteps);
+customElements.define('fucodo-progress-steps', FucodoSteps);

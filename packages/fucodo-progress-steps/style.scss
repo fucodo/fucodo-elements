@@ -1,0 +1,200 @@
+:host {
+  display: block;
+  --bubble-size: 32px;         /* <-- bubble size variable */
+  --line-width: 80px;          /* Länge der Verbindungslinie */
+  --line-height: 4px;          /* Dicke der Linie */
+}
+
+.steps-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+/* Basis-Step-Styles (für beide Modi) */
+.step {
+  --bs-alert-color: var(--bs-dark-text, currentColor);
+  --bs-alert-bg: var(--bs-dark-bg-subtle, transparent);
+  --bs-alert-border-color: var(--bs-dark-border-subtle, currentColor);
+  --bs-alert-link-color: var(--bs-dark-text, currentColor);
+  --bs-alert-border: var(--bs-border-width, 1px) solid var(--bs-alert-border-color);
+
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bs-alert-color);
+  position: relative; /* für Popover */
+}
+
+/* Verbindungs-Linie (Default – Full-Mode) */
+.step::before {
+  --bs-alert-border-color: var(--bs-dark-border-subtle);
+  display: inline-block;
+  width: 120px;           /* wird im Bubble-Mode überschrieben */
+  height: 6px;
+  content: " ";
+  background: var(--bs-alert-border-color);
+}
+
+.step:first-child::before {
+  display: none;
+}
+
+/* ===========================
+   FULL MODE (Karten-Ansicht)
+   =========================== */
+
+.steps-wrapper--full .step > span {
+  padding: 1rem;
+  border: var(--bs-alert-border);
+  border-radius: var(--bs-border-radius, .375rem);
+  background-color: var(--bs-alert-bg);
+}
+
+.steps-wrapper--full .step.step--active {
+  --bs-alert-color: var(--bs-primary-text);
+  --bs-alert-bg: var(--bs-primary-bg-subtle);
+  --bs-alert-border-color: var(--bs-primary-border-subtle);
+  --bs-alert-link-color: var(--bs-primary-text);
+}
+
+.steps-wrapper--full .step.step--active::before {
+  --bs-alert-border-color: var(--bs-success-border);
+}
+
+.steps-wrapper--full .step.step--done {
+  --bs-alert-color: var(--bs-success);
+  --bs-alert-bg: var(--bs-success-bg-subtle);
+  --bs-alert-border-color: var(--bs-success-border);
+  --bs-alert-link-color: var(--bs-success-text);
+}
+
+.steps-wrapper--full .step.step--done::before {
+  --bs-alert-border-color: var(--bs-success-border);
+}
+
+/* ===========================
+   BUBBLE MODE
+   =========================== */
+
+.steps-wrapper--bubble {
+  /* Bubble-Durchmesser und daraus abgeleiteter Abstand */
+  --bubble-gap: calc(var(--bubble-size) / 2); /* = halber Durchmesser */
+
+  gap: var(--bubble-gap);                /* Abstand zwischen den Steps */
+}
+
+.steps-wrapper--bubble .step {
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Linie im Bubble-Mode: Breite = halber Durchmesser */
+.steps-wrapper--bubble .step::before {
+  width: var(--bubble-gap);
+  height: var(--line-height);
+  top: calc((var(--bubble-size)/2) - (var(--line-height)/2));
+  position: absolute;
+  left: -50%;
+}
+
+/* Bubble selbst */
+.steps-wrapper--bubble .step-bubble {
+  width: var(--bubble-size);
+  height: var(--bubble-size);
+  border-radius: 999px;
+  border: var(--bs-alert-border);
+  background-color: var(--bs-alert-bg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+  box-shadow: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  color: var(--bs-alert-border-color);
+  font-size: calc(0.6 * var(--bubble-size));
+}
+
+.steps-wrapper--bubble .step-bubble:focus-visible {
+  outline: 2px solid var(--bs-primary-border-subtle, rgba(13,110,253,.5));
+  outline-offset: 2px;
+}
+
+/* State-Farben im Bubble-Mode */
+.steps-wrapper--bubble .step.step--active {
+  --bs-alert-color: var(--bs-primary-text);
+  --bs-alert-bg: var(--bs-primary-bg-subtle);
+  --bs-alert-border-color: var(--bs-primary-border-subtle);
+  --bs-alert-link-color: var(--bs-primary-text);
+}
+
+.steps-wrapper--bubble .step.step--active::before {
+  --bs-alert-border-color: var(--bs-primary-border-subtle);
+}
+
+.steps-wrapper--bubble .step.step--done {
+  --bs-alert-color: var(--bs-success-text);
+  --bs-alert-bg: var(--bs-success-bg-subtle);
+  --bs-alert-border-color: var(--bs-success-border-subtle);
+  --bs-alert-link-color: var(--bs-success-text);
+}
+
+.steps-wrapper--bubble .step.step--done::before {
+  --bs-alert-border-color: var(--bs-success-border-subtle);
+}
+
+.steps-wrapper--bubble .step.step--done .step-bubble {
+  transform: scale(1.0);
+}
+
+.steps-wrapper--bubble .step.step--active .step-bubble {
+  transform: scale(1.05);
+  box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.15);
+}
+
+/* ===========================
+   POPOVER
+   =========================== */
+
+.step-bubble__popover {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 200px;
+  max-width: 280px;
+  padding: 0.75rem 1rem;
+  border-radius: var(--bs-border-radius, .375rem);
+  border: 1px solid var(--bs-border-color, rgba(0,0,0,0.125));
+  background-color: var(--bs-body-bg, #fff);
+  color: var(--bs-body-color, #212529);
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+  z-index: 10;
+  display: none;
+}
+
+.step-bubble__content > *:first-child {
+  margin-top: 0;
+}
+
+.step-bubble__content > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Hover zeigt Popover (Maus) */
+.steps-wrapper--bubble .step:hover .step-bubble__popover {
+  display: block;
+}
+
+/* Klick toggelt Popover (per JS wird .step--popover-open gesetzt) */
+.steps-wrapper--bubble .step.step--popover-open .step-bubble__popover {
+  display: block;
+}
+
+/* Im Full-Mode gibt es kein Popover */
+.steps-wrapper--full .step-bubble__popover {
+  display: none !important;
+}

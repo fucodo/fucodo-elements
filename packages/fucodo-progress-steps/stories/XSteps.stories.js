@@ -55,9 +55,9 @@ const Template = ({ current, mode, bubbleSize }) => {
 
   host.innerHTML = `
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" crossorigin="anonymous">
-    <fucodo-steps current="${Number.isFinite(current) ? current : 0}" mode="${mode}"${styleAttr}>
+    <fucodo-progress-steps current="${Number.isFinite(current) ? current : 0}" mode="${mode}"${styleAttr}>
       ${StepsMarkup()}
-    </fucodo-steps>
+    </fucodo-progress-steps>
   `;
 
   return host;
