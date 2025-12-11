@@ -46,12 +46,14 @@ class CurrencyInput extends HTMLElement {
         this.visibleInput.autocomplete = 'off';
         this.visibleInput.className = 'form-control currency-input-field';
 
+        this.visibleInput.disabled = this.currencyField.disabled || this.valueField.disabled;
+
         // rechtsbündig + Monospace
         this.visibleInput.style.textAlign = 'right';
         this.visibleInput.style.fontFamily = 'monospace';
 
-        wrapper.appendChild(prefix);
         wrapper.appendChild(this.visibleInput);
+        wrapper.appendChild(prefix);
         this.appendChild(wrapper);
 
         // Initialwert aus Cent
@@ -153,7 +155,7 @@ class CurrencyInput extends HTMLElement {
         if (lastChar === ',' || lastChar === '.') {
             const eurosDigits = (trimmed.slice(0, -1).match(/\d/g) || []).join('');
             if (eurosDigits.length === 0) return 0;
-            const euros = parseInt(eurosDigits, 10) || 0;
+            let euros = parseInt(eurosDigits, 10) || 0;
             return sign * euros * 100;
         }
 
@@ -187,22 +189,12 @@ class CurrencyInput extends HTMLElement {
             return sign * (euros * 100 + decimals);
         }
 
-        // Fall 3: kein Dezimaltrennzeichen -> letztes 2 Ziffern sind Cent
+        // Fall 3: kein Dezimaltrennzeichen -> gesamte Zahl ist Eurobetrag (keine automatische Cent-Interpretation)
         const digits = (trimmed.match(/\d/g) || []).join('');
         if (digits.length === 0) return 0;
 
-        let normalized = digits;
-        if (normalized.length === 1) {
-            normalized = '0' + normalized;
-        }
-
-        const eurosPart = normalized.slice(0, -2) || '0';
-        const centsPart = normalized.slice(-2);
-
-        const euros = parseInt(eurosPart, 10) || 0;
-        const cents = parseInt(centsPart, 10) || 0;
-
-        return sign * (euros * 100 + cents);
+        const euros = parseInt(digits, 10) || 0;
+        return sign * (euros * 100);
     }
 
     /**

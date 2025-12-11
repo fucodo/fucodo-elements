@@ -36,10 +36,11 @@
       this.visibleInput.inputMode = "decimal";
       this.visibleInput.autocomplete = "off";
       this.visibleInput.className = "form-control currency-input-field";
+      this.visibleInput.disabled = this.currencyField.disabled || this.valueField.disabled;
       this.visibleInput.style.textAlign = "right";
       this.visibleInput.style.fontFamily = "monospace";
-      wrapper.appendChild(prefix);
       wrapper.appendChild(this.visibleInput);
+      wrapper.appendChild(prefix);
       this.appendChild(wrapper);
       const initialCents = parseInt(this.valueField.value, 10);
       if (!isNaN(initialCents)) {
@@ -121,7 +122,7 @@
       if (lastChar === "," || lastChar === ".") {
         const eurosDigits = (trimmed.slice(0, -1).match(/\d/g) || []).join("");
         if (eurosDigits.length === 0) return 0;
-        const euros2 = parseInt(eurosDigits, 10) || 0;
+        let euros2 = parseInt(eurosDigits, 10) || 0;
         return sign * euros2 * 100;
       }
       const lastComma = trimmed.lastIndexOf(",");
@@ -146,15 +147,8 @@
       }
       const digits = (trimmed.match(/\d/g) || []).join("");
       if (digits.length === 0) return 0;
-      let normalized = digits;
-      if (normalized.length === 1) {
-        normalized = "0" + normalized;
-      }
-      const eurosPart = normalized.slice(0, -2) || "0";
-      const centsPart = normalized.slice(-2);
-      const euros = parseInt(eurosPart, 10) || 0;
-      const cents = parseInt(centsPart, 10) || 0;
-      return sign * (euros * 100 + cents);
+      const euros = parseInt(digits, 10) || 0;
+      return sign * (euros * 100);
     }
     /**
      * Cent -> formatierter String mit Locale:

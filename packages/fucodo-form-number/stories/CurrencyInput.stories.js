@@ -30,6 +30,7 @@ const Template = ({ currency, valueInCents }) => {
   host.style.minWidth = '320px';
 
   host.innerHTML = `
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" crossorigin="anonymous">
     <fucodo-form-currency currency="${currency}">
       <input slot="currency" name="currency" value="${currency}" />
       <input slot="value" name="amount" value="${Number(valueInCents) || 0}" />
