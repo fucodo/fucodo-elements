@@ -1,7 +1,7 @@
 import '../index.js';
 
 export default {
-  title: 'Apps/Tools/CstateStatusTool/WithBootstrap',
+  title: 'Apps/CstateStatusTool/WithBootstrap',
   parameters: {
     layout: 'centered',
   },

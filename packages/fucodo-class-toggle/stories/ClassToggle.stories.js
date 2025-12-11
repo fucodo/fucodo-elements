@@ -1,7 +1,7 @@
 import '../dist/index';
 
 export default {
-  title: 'Components/Fundamentals/fucodo-class-toggle',
+  title: 'Components/fucodo-class-toggle',
   parameters: {
     layout: 'centered',
   },

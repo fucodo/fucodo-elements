@@ -1,7 +1,7 @@
 import '../dist/index';
 
 export default {
-  title: 'Components/Fundamentals/fucodo-loading-action/Default',
+  title: 'Components/fucodo-loading-action/Default',
   parameters: {
     layout: 'centered',
   },

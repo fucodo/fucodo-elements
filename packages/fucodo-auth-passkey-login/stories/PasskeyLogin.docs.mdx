@@ -1,0 +1,33 @@
+import { Meta, Title, Subtitle, Primary, ArgTypes, Source, Stories } from '@storybook/addon-docs/blocks';
+import * as LoginStories from './PasskeyLogin.stories.js';
+
+<Meta of={LoginStories} />
+
+<Title />
+<Subtitle>Web Component: <code>&lt;fucodo-auth-passkey-login&gt;</code></Subtitle>
+
+Meldet einen Benutzer mit Passkey (WebAuthn) am Backend an. Diese Komponente nutzt den Username‑First‑Flow
+und wird über folgende Attribute konfiguriert:
+
+- <code>endpoint</code> (Pflicht): Basis-URL deines Backends, z. B. <code>https://example.com</code>
+- <code>username</code> (Pflicht): Eindeutiger Benutzername
+
+Die Mock-Story zeigt einen vollständigen Ablauf mit gemocktem <code>fetch</code> und
+<code>navigator.credentials.get</code> ohne echtes Backend/Authenticator.
+
+### Attribute/Args
+
+<ArgTypes of={LoginStories.Default} />
+
+### Beispiel
+
+```html
+<fucodo-auth-passkey-login
+  endpoint="https://example.com"
+  username="j.doe">
+</fucodo-auth-passkey-login>
+```
+
+### Stories
+
+<Stories includePrimary />

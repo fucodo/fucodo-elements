@@ -1,0 +1,144 @@
+openapi: 3.0.3
+info:
+  title: Fucodo Passkey Login API
+  version: 1.0.0
+  description: |
+    Endpunkte zur Anmeldung (Login) mit Passkeys (WebAuthn). Die Client‑Komponente
+    `fucodo-auth-passkey-login` nutzt diese Endpunkte im Username‑First‑Flow.
+
+servers:
+  - url: https://example.com
+    description: Beispiel-Server (ersetzen)
+
+paths:
+  /webauthn/login/options:
+    post:
+      summary: Liefert PublicKeyCredentialRequestOptions
+      description: |
+        Liefert die WebAuthn Request‑Optionen für einen gegebenen Benutzernamen.
+        Alle Bytefelder werden als Base64URL kodierte Strings übertragen.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username]
+              properties:
+                username:
+                  type: string
+                  description: Eindeutiger Benutzername
+      responses:
+        '200':
+          description: Erfolgreich – Optionen zurückgegeben
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKeyCredentialRequestOptionsB64'
+        '400':
+          description: Ungültige Anforderung oder Benutzer unbekannt
+
+  /webauthn/login/verify:
+    post:
+      summary: Verifiziert die Assertion und meldet den Benutzer an
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, assertion]
+              properties:
+                username:
+                  type: string
+                assertion:
+                  $ref: '#/components/schemas/AssertionResultB64'
+      responses:
+        '200':
+          description: Anmeldung erfolgreich
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  userId:
+                    type: string
+                  credentialId:
+                    type: string
+                  token:
+                    type: string
+                    description: Optionales Session/JWT Token
+        '400':
+          description: Ungültige oder abgelehnte Assertion
+
+components:
+  schemas:
+    Base64Url:
+      type: string
+      description: Base64URL-kodierter String (ohne Padding)
+      example: 4M8p8KX9p3y0d_3cV0yqgQ
+
+    PublicKeyCredentialRequestOptionsB64:
+      type: object
+      required: [challenge]
+      properties:
+        challenge:
+          $ref: '#/components/schemas/Base64Url'
+        timeout:
+          type: integer
+          description: Timeout in Millisekunden
+        rpId:
+          type: string
+        allowCredentials:
+          type: array
+          description: Liste erlaubter Credentials (optional)
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum: [public-key]
+              id:
+                $ref: '#/components/schemas/Base64Url'
+              transports:
+                type: array
+                items:
+                  type: string
+                  enum: [usb, nfc, ble, internal, hybrid]
+        userVerification:
+          type: string
+          enum: [required, preferred, discouraged]
+
+    AssertionResultB64:
+      type: object
+      required: [id, rawId, response, type]
+      properties:
+        id:
+          type: string
+        rawId:
+          $ref: '#/components/schemas/Base64Url'
+        type:
+          type: string
+          enum: [public-key]
+        response:
+          type: object
+          required: [authenticatorData, clientDataJSON, signature]
+          properties:
+            authenticatorData:
+              $ref: '#/components/schemas/Base64Url'
+            clientDataJSON:
+              $ref: '#/components/schemas/Base64Url'
+            signature:
+              $ref: '#/components/schemas/Base64Url'
+            userHandle:
+              oneOf:
+                - $ref: '#/components/schemas/Base64Url'
+                - type: 'null'
+        clientExtensionResults:
+          type: object
+        authenticatorAttachment:
+          type: string
+          nullable: true

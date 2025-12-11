@@ -1,7 +1,7 @@
 import '../index.js';
 
 export default {
-  title: 'Elements/Form/CurrencyInput',
+  title: 'Form/CurrencyInput',
   parameters: {
     layout: 'centered',
     docs: {

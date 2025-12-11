@@ -1,7 +1,7 @@
 import '../dist/index';
 
 export default {
-  title: 'Apps/DataSources/ComposerList/WithBootstrap',
+  title: 'Apps/ComposerList/WithBootstrap',
   parameters: {
     layout: 'centered',
   },

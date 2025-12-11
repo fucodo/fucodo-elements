@@ -1,0 +1,177 @@
+openapi: 3.0.3
+info:
+  title: Fucodo Passkey Registration API
+  version: 1.0.0
+  description: |
+    Endpunkte zur Registrierung von Passkeys (WebAuthn). Die Client‑Komponente
+    `fucodo-auth-passkey-register` nutzt diese Endpunkte.
+
+servers:
+  - url: https://example.com
+    description: Beispiel-Server (ersetzen)
+
+paths:
+  /webauthn/register/options:
+    post:
+      summary: Liefert PublicKeyCredentialCreationOptions
+      description: |
+        Erstellt eine neue WebAuthn Registrierungssitzung und gibt die Optionen
+        an den Client zurück. Alle Bytefelder werden als Base64URL kodierte Strings geliefert.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username]
+              properties:
+                username:
+                  type: string
+                  description: Eindeutiger Benutzername
+                displayName:
+                  type: string
+                  description: Anzeigename des Benutzers
+      responses:
+        '200':
+          description: Erfolgreich – Optionen zurückgegeben
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKeyCredentialCreationOptionsB64'
+        '400':
+          description: Ungültige Anforderung
+
+  /webauthn/register/verify:
+    post:
+      summary: Verifiziert die Attestation und schließt die Registrierung ab
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, credential]
+              properties:
+                username:
+                  type: string
+                credential:
+                  $ref: '#/components/schemas/AttestationResultB64'
+      responses:
+        '200':
+          description: Registrierung erfolgreich
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  userId:
+                    type: string
+                  credentialId:
+                    type: string
+        '400':
+          description: Ungültige oder abgelehnte Attestation
+
+components:
+  schemas:
+    Base64Url:
+      type: string
+      description: Base64URL-kodierter String (ohne Padding)
+      example: 4M8p8KX9p3y0d_3cV0yqgQ
+
+    PublicKeyCredentialCreationOptionsB64:
+      type: object
+      required: [challenge, rp, user, pubKeyCredParams]
+      properties:
+        challenge:
+          $ref: '#/components/schemas/Base64Url'
+        rp:
+          type: object
+          required: [name, id]
+          properties:
+            name: { type: string }
+            id: { type: string }
+        user:
+          type: object
+          required: [id, name, displayName]
+          properties:
+            id:
+              $ref: '#/components/schemas/Base64Url'
+            name:
+              type: string
+            displayName:
+              type: string
+        pubKeyCredParams:
+          type: array
+          items:
+            type: object
+            required: [type, alg]
+            properties:
+              type:
+                type: string
+                enum: [public-key]
+              alg:
+                type: integer
+                description: COSE-Algorithmus-ID (z. B. -7 für ES256)
+        timeout:
+          type: integer
+          description: Timeout in Millisekunden
+        attestation:
+          type: string
+          enum: [none, indirect, direct, enterprise]
+        excludeCredentials:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum: [public-key]
+              id:
+                $ref: '#/components/schemas/Base64Url'
+              transports:
+                type: array
+                items:
+                  type: string
+                  enum: [usb, nfc, ble, internal, hybrid]
+        authenticatorSelection:
+          type: object
+          properties:
+            authenticatorAttachment:
+              type: string
+              enum: [platform, cross-platform]
+            residentKey:
+              type: string
+              enum: [discouraged, preferred, required]
+            requireResidentKey:
+              type: boolean
+            userVerification:
+              type: string
+              enum: [required, preferred, discouraged]
+
+    AttestationResultB64:
+      type: object
+      required: [id, rawId, response, type]
+      properties:
+        id:
+          type: string
+        rawId:
+          $ref: '#/components/schemas/Base64Url'
+        type:
+          type: string
+          enum: [public-key]
+        response:
+          type: object
+          required: [attestationObject, clientDataJSON]
+          properties:
+            attestationObject:
+              $ref: '#/components/schemas/Base64Url'
+            clientDataJSON:
+              $ref: '#/components/schemas/Base64Url'
+        clientExtensionResults:
+          type: object
+        authenticatorAttachment:
+          type: string
+          nullable: true

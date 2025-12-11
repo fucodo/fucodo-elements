@@ -1,7 +1,7 @@
 import '../dist/index';
 
 export default {
-  title: 'Components/Fundamentals/fucodo-checkbox-toggle',
+  title: 'Form/fucodo-checkbox-toggle',
   parameters: {
     layout: 'centered',
   },

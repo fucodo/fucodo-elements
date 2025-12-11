@@ -1,7 +1,7 @@
 import '../dist/index';
 
 export default {
-  title: 'Components/Fundamentals/fucodo-image-crop-dialog/With Bootstrap',
+  title: 'Components/fucodo-image-crop-dialog/With Bootstrap',
   parameters: {
     layout: 'centered',
   },

@@ -1,7 +1,7 @@
 import '../dist/index.js';
 
 export default {
-  title: 'Elements/Steps/XSteps',
+  title: 'Components/Progress/XSteps',
   parameters: {
     layout: 'centered',
     docs: {

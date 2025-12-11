@@ -2,7 +2,7 @@
 import '../index';
 
 export default {
-  title: 'Components/Fundamentals/fucodo-dialogbutton',
+  title: 'Components/fucodo-dialogbutton',
   parameters: {
     layout: 'centered',
   },

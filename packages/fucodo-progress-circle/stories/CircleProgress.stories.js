@@ -1,7 +1,7 @@
 import '../dist/index.js';
 
 export default {
-  title: 'Elements/Progress/CircleProgress',
+  title: 'Components/Progress/CircleProgress',
   parameters: {
     layout: 'centered',
     docs: {

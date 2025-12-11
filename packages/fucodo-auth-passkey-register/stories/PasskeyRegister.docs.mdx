@@ -1,0 +1,34 @@
+import { Meta, Title, Subtitle, Primary, ArgTypes, Source, Stories } from '@storybook/addon-docs/blocks';
+import * as RegisterStories from './PasskeyRegister.stories.js';
+
+<Meta of={RegisterStories} />
+
+<Title />
+<Subtitle>Web Component: <code>&lt;fucodo-auth-passkey-register&gt;</code></Subtitle>
+
+Registriert einen Passkey (WebAuthn) an einem angegebenen Backend. Die Komponente wird ausschließlich
+über Attribute konfiguriert:
+
+- <code>endpoint</code> (Pflicht): Basis-URL deines Backends, z. B. <code>https://example.com</code>
+- <code>username</code> (Pflicht): Eindeutiger Benutzername
+- <code>display-name</code> (optional): Anzeigename; fällt ansonsten auf <code>username</code> zurück
+
+Der Button ist deaktiviert, solange Pflicht-Attribute fehlen. Die Mock-Story demonstriert den Ablauf ohne echtes Backend oder Authenticator.
+
+### Attribute/Args
+
+<ArgTypes of={RegisterStories.Default} />
+
+### Beispiele
+
+```html
+<fucodo-auth-passkey-register
+  endpoint="https://example.com"
+  username="j.doe"
+  display-name="John Doe">
+</fucodo-auth-passkey-register>
+```
+
+### Stories
+
+<Stories includePrimary />

@@ -1,7 +1,7 @@
 import '../dist/index';
 
 export default {
-  title: 'Components/Fundamentals/fucodo-lazy-load',
+  title: 'Components/fucodo-lazy-load',
   parameters: {
     layout: 'centered',
   },

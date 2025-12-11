@@ -2,7 +2,7 @@ import '../dist/index';
 import '../../fucodo-spinner/dist/index';
 
 export default {
-  title: 'Components/Fundamentals/fucodo-loading-action/With spinner',
+  title: 'Components/fucodo-loading-action/With spinner',
   parameters: {
     layout: 'centered',
   },
