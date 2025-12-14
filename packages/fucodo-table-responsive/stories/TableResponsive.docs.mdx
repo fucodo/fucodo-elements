@@ -1,0 +1,88 @@
+import { Meta, Title, Subtitle, Primary, ArgTypes, Stories, Source } from '@storybook/addon-docs/blocks';
+import * as TableResponsiveStories from './TableResponsive.stories.js';
+
+<Meta of={TableResponsiveStories} />
+
+<Title>fucodo-table-responsive</Title>
+<Subtitle>Make any HTML table responsive: auto-stacks rows on small widths using header labels as cell prefixes</Subtitle>
+
+## Description
+
+The `fucodo-table-responsive` Web Component wraps a regular HTML table and switches
+between desktop and mobile layouts:
+
+- Desktop: the table renders normally.
+- Mobile: the header row is visually hidden, rows are stacked, and each cell shows
+  the corresponding header label via `data-label` (derived from `<th>` text or
+  `data-label` on the header cell).
+
+No Shadow DOM is used; styles are injected globally but scoped to the tag selector
+to avoid affecting other tables.
+
+Tag name: `fucodo-table-responsive`
+
+## Usage
+
+```html
+<fucodo-table-responsive>
+  <table>
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>SKU</th>
+        <th>Price</th>
+        <th>Stock</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Coffee Beans</td>
+        <td>CAF-001</td>
+        <td>$12.90</td>
+        <td>In stock</td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- Optional slot content like captions can be used above/below the table -->
+  <p slot="footer" hidden></p>
+  <!-- (no named slots are defined; regular light DOM content renders around your table) -->
+  
+</fucodo-table-responsive>
+```
+
+### Forcing thresholds
+
+- By default, the component measures the table’s natural width and uses that as the
+  threshold. If the available width is less, it switches to mobile layout.
+- You can override the threshold with the `min-width` attribute (accepts numbers or px values, e.g. `720` or `720px`).
+
+```html
+<fucodo-table-responsive min-width="720">
+  <!-- table here -->
+</fucodo-table-responsive>
+```
+
+## Interactive example
+
+<Primary />
+
+## Attributes / Args
+
+- `min-width` (string|number, optional): Minimum width to keep desktop layout.
+  If omitted, the component auto-computes from the table’s natural width.
+- `containerWidth` (Story-only control): Controls the preview container width to
+  simulate responsiveness.
+
+<ArgTypes of={TableResponsiveStories.Default} />
+
+## Notes
+
+- Header labels are taken from the first `<thead>` row. If there is no `<thead>`,
+  the component falls back to the first row of the table.
+- You can override a header’s text for mobile by setting `data-label` on the corresponding
+  `<th>` (e.g., `<th data-label="Unit Price">Price</th>`).
+- Changes to the table structure or content are observed and reflected automatically.
+
+## All stories
+
+<Stories includePrimary={false} />
