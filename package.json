@@ -17,13 +17,13 @@
   "license": "MIT",
   "description": "",
   "devDependencies": {
-    "@storybook/addon-docs": "^10.0.8",
-    "@storybook/html": "^10.0.8",
-    "@storybook/web-components-vite": "^10.0.8",
+    "@storybook/addon-docs": "^10.1.9",
+    "@storybook/html": "^10.1.9",
+    "@storybook/web-components-vite": "^10.1.9",
     "esbuild": "^0.25.9",
     "esbuild-sass-plugin": "^3.3.1",
     "lit": "^3.3.1",
-    "storybook": "^10.0.8"
+    "storybook": "^10.1.9"
   },
   "engines": {
     "node": ">=18.18.0"

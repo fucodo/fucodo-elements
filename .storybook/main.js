@@ -1,3 +1,4 @@
+import { fileURLToPath } from "node:url";
 // This file has been automatically migrated to valid ESM format by Storybook.
 import {createRequire} from "node:module";
 import {dirname, join} from "node:path";
@@ -18,7 +19,7 @@ const config = {
     },
     addons: [
         {
-            name: "@storybook/addon-docs",
+            name: getAbsolutePath("@storybook/addon-docs"),
             options: {
                 csfPluginOptions: null,
                 mdxPluginOptions: {
@@ -30,7 +31,7 @@ const config = {
         }
     ],
     framework: {
-        name: '@storybook/web-components-vite',
+        name: getAbsolutePath("@storybook/web-components-vite"),
         options: {}
     },
     staticDirs: [
@@ -40,3 +41,7 @@ const config = {
 };
 
 export default config;
+
+function getAbsolutePath(value) {
+    return dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)));
+}
