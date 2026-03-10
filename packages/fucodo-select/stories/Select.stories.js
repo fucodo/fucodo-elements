@@ -1,7 +1,7 @@
 import '../dist/index.js';
 
 export default {
-  title: 'Components/Forms/Select',
+  title: 'Form/Select',
   parameters: {
     layout: 'padded',
     docs: {

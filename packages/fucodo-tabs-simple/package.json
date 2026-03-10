@@ -1,21 +1,20 @@
 {
-    "name": "fucodo.tabs.simple",
-    "type": "module",
-    "version": "1.0.0",
-    "main": "index.js",
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/fucodo/fucodo.tabs.git"
-    },
-    "author": "fucodo GmbH - Kay Strobach",
-    "license": "MIT",
-    "bugs": {
-      "url": "https://github.com/fucodo/fucodo.tabs/issues"
-    },
-    "homepage": "https://github.com/fucodo/fucodo.tabs#readme",
-    "description": "",
-    "dependencies": {}
-  }
+  "name": "fucodo.tabs.simple",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fucodo/fucodo.tabs.git"
+  },
+  "author": "fucodo GmbH - Kay Strobach",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fucodo/fucodo.tabs/issues"
+  },
+  "homepage": "https://github.com/fucodo/fucodo.tabs#readme",
+  "description": ""
+}
