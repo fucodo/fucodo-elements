@@ -1,0 +1,38 @@
+.form-control .choices__list,
+.form-control .choices__list--single {
+    padding: 0;
+}
+
+.choices__input {
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg)!important;
+}
+
+.choices__list--dropdown,
+.choices__list[aria-expanded] {
+    width: min(90vh, 300px)!important;
+    border-radius: var(--bs-border-radius);
+}
+
+.choices__list--dropdown .choices__item--selectable[data-select-text]::after,
+.choices__list[aria-expanded] .choices__item--selectable[data-select-text]::after {
+    display: none;
+}
+
+.choices__list--dropdown .choices__item--selectable.is-highlighted::after,
+.choices__list[aria-expanded] .choices__item--selectable {
+    display: block;
+    color: var(--bs-body-color)!important;
+    background-color: var(--bs-body-bg)!important;
+}
+
+.choices__list--dropdown .choices__item--selectable.is-highlighted,
+.choices__list[aria-expanded] .choices__item--selectable.is-highlighted {
+    color: var(--bs-body-color)!important;
+    background-color: var(--bs-border-color)!important;
+}
+
+.choices__list--dropdown .choices__item.has-no-results {
+    color: var(--bs-body-color)!important;
+    background-color: var(--bs-border-color)!important;
+}

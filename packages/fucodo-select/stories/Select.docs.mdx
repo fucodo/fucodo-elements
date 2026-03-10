@@ -1,0 +1,71 @@
+import { Meta, Title, Subtitle, Description, Primary, ArgTypes, Source, Stories } from '@storybook/addon-docs/blocks';
+import * as SelectStories from './Select.stories';
+
+<Meta of={SelectStories} />
+
+<Title>Select (AJAX & Choices.js)</Title>
+<Subtitle>Enhance standard select elements with remote search and multiple selection</Subtitle>
+
+## Description
+
+The `fucodo-select` web component is a wrapper around a standard `<select>` element. 
+It uses the [Choices.js](https://choices-js.github.io/Choices/) library to provide 
+a modern UI, including search functionality, tags for multiple selections, 
+and asynchronous data loading from a remote URL.
+
+Tag name: `fucodo-select`
+
+## Usage
+
+Place a `<select>` element inside `<fucodo-select>`. Use `data-ajax--url` for remote loading.
+
+<Source
+  language="html"
+  code={`<fucodo-select>
+  <select 
+    class="form-select" 
+    data-ajax--url="https://api.example.com/search" 
+    data-ajax--cache="true"
+  >
+    <option value="">Select...</option>
+  </select>
+</fucodo-select>`}
+/>
+
+## Interactive example
+
+<Primary />
+
+## Attributes (on the inner select)
+
+- `data-ajax--url` (string): The endpoint for remote searching.
+- `data-ajax--cache` (`"true"`|`"false"`): Enable/disable local caching of search results.
+- `multiple`: Standard HTML attribute for multiple selection.
+- `disabled`: Standard HTML attribute to disable the control.
+
+## AJAX Response Format
+
+The component expects a JSON response containing an array of objects.
+It supports both a top-level array or an object with a `results` property (similar to Select2).
+Objects should have `id` and `text` properties.
+
+```json
+{
+  "results": [
+    { "id": "1", "text": "Option A" },
+    { "id": "2", "text": "Option B" }
+  ]
+}
+```
+
+## Features
+- **Remote Search**: Fetches data as the user types.
+- **Caching**: Optional caching of remote search results.
+- **Multiple Selection**: Support for multiple items with tag-like UI.
+- **Mutation Support**: Automatically refreshes when the underlying `<select>` is updated or disabled/enabled.
+
+<ArgTypes of={SelectStories.Default} />
+
+## All stories
+
+<Stories includePrimary={false} />
