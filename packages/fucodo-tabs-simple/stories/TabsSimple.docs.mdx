@@ -1,0 +1,55 @@
+import { Meta, Title, Subtitle, Description, Primary, ArgTypes, Source, Stories } from '@storybook/addon-docs/blocks';
+import * as TabsSimpleStories from './TabsSimple.stories';
+
+<Meta of={TabsSimpleStories} />
+
+<Title>Simple Tabs</Title>
+<Subtitle>Minimalist tabs web component</Subtitle>
+
+## Description
+
+The `fucodo-tabs-simple` web component provides a clean and simple tabbed interface. 
+It uses a shadow DOM for encapsulation and slots for content panels. 
+Tabs are automatically generated based on the `title` attribute of the slotted elements.
+
+Tag name: `fucodo-tabs-simple`
+
+## Usage
+
+<Source
+  language="html"
+  code={`<fucodo-tabs-simple>
+  <div title="Tab 1" active>
+    <h3>Content 1</h3>
+    <p>This is the content for the first tab.</p>
+  </div>
+  <div title="Tab 2">
+    <h3>Content 2</h3>
+    <p>This is the content for the second tab.</p>
+  </div>
+</fucodo-tabs-simple>`}
+/>
+
+## Interactive example
+
+<Primary />
+
+## Properties / Attributes
+
+### Slotted Elements Attributes:
+- `title` (string): The text to display in the tab button.
+- `active` (boolean attribute): If present, this tab will be initially active.
+
+### Component Methods:
+- `activateTab(index)`: Programmatically activates the tab at the given zero-based index.
+
+<ArgTypes of={TabsSimpleStories.Default} />
+
+## Features
+- Keyboard navigation (Arrow keys, Home, End).
+- Smooth scrolling of active tab into view.
+- ARIA-compliant (tablist, tab, tabpanel).
+
+## All stories
+
+<Stories includePrimary={false} />
