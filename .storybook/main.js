@@ -17,19 +17,17 @@ const config = {
         disableTelemetry: true, // 👈 Disables telemetry
         disableWhatsNewNotifications: true  // 👈 Disables whats new notifications
     },
-    addons: [
-        {
-            name: getAbsolutePath("@storybook/addon-docs"),
-            options: {
-                csfPluginOptions: null,
-                mdxPluginOptions: {
-                    mdxCompileOptions: {
-                        remarkPlugins: [remarkGfm],
-                    },
+    addons: [{
+        name: getAbsolutePath("@storybook/addon-docs"),
+        options: {
+            csfPluginOptions: null,
+            mdxPluginOptions: {
+                mdxCompileOptions: {
+                    remarkPlugins: [remarkGfm],
                 },
-            }
+            },
         }
-    ],
+    }, getAbsolutePath("@storybook/addon-a11y")],
     framework: {
         name: getAbsolutePath("@storybook/web-components-vite"),
         options: {}
