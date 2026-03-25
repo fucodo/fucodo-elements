@@ -532,6 +532,7 @@
         data-item-id="${this.escapeAttr(item.id)}"
         role="button"
         tabindex="0"
+        title="${this.escapeHtml(item.id)} - ${this.escapeHtml(item.topic)} - ${this.escapeHtml(peopleText)}"
       >
         <div>${this.escapeHtml(item.id)}</div>
         <div>${this.escapeHtml(item.topic)}</div>
