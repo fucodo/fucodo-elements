@@ -205,6 +205,88 @@ Default.args = {
   jsonData: defaultData,
 };
 
+export const SameTimeIntervall = Template.bind({});
+SameTimeIntervall.args = {
+  jsonData: [
+
+    {
+      "name": "Platform",
+      "children": [
+        {
+          "name": "Frontend",
+          "children": [
+            {
+              "id": "UX-LOGIN-001",
+              "topic": "Login UX concept",
+              "owner": "Mia",
+              "assignees": ["Tom"],
+              "link": "https://example.org/tickets/102",
+              "column": "Q2",
+              "progress": 100,
+              "startDate": "2026-03-15",
+              "endDate": "2026-04-01",
+              "dependsOn": []
+            },
+            {
+              "id": "UX-LOGIN-002",
+              "topic": "Login modernization",
+              "owner": "Anna",
+              "assignees": ["Ben", "Mia"],
+              "link": "https://example.org/tickets/123",
+              "column": "Q2",
+              "progress": 75,
+              "startDate": "2026-03-15",
+              "endDate": "2026-04-01",
+              "dependsOn": ["UX-LOGIN-001"]
+            }
+          ]
+        },
+      ]
+    }
+  ]
+};
+
+export const LongTimeIntervall = Template.bind({});
+LongTimeIntervall.args = {
+  jsonData: [
+
+    {
+      "name": "Platform",
+      "children": [
+        {
+          "name": "Frontend",
+          "children": [
+            {
+              "id": "UX-LOGIN-001",
+              "topic": "Login UX concept",
+              "owner": "Mia",
+              "assignees": ["Tom"],
+              "link": "https://example.org/tickets/102",
+              "column": "Q2",
+              "progress": 100,
+              "startDate": "2026-03-15",
+              "endDate": "2026-04-01",
+              "dependsOn": []
+            },
+            {
+              "id": "UX-LOGIN-002",
+              "topic": "Login modernization",
+              "owner": "Anna",
+              "assignees": ["Ben", "Mia"],
+              "link": "https://example.org/tickets/123",
+              "column": "Q2",
+              "progress": 75,
+              "startDate": "2026-04-15",
+              "endDate": "2028-04-01",
+              "dependsOn": ["UX-LOGIN-001"]
+            }
+          ]
+        },
+      ]
+    }
+  ]
+};
+
 export const Empty = Template.bind({});
 Empty.args = {
   jsonData: [],
