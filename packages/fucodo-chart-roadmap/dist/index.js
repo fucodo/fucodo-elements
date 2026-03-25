@@ -233,6 +233,251 @@
 
   // packages/fucodo-chart-roadmap/index.js
   var connector = __toESM(require_roadmap_connector());
+
+  // packages/fucodo-chart-roadmap/style.scss
+  var style_default = `@charset "UTF-8";
+:host {
+  display: block;
+}
+
+.roadmap-chart {
+  position: relative;
+  font-family: Arial, sans-serif;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.roadmap-connection-layer {
+  inset: 0;
+  pointer-events: none;
+}
+
+.roadmap-validation,
+.roadmap-grid-header,
+.roadmap-grid-row,
+.roadmap-group-title {
+  position: relative;
+  z-index: 4;
+}
+
+.roadmap-validation {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e7c66a;
+  background: #fff8db;
+  color: #6b5300;
+}
+
+.roadmap-validation-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.roadmap-validation ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.roadmap-grid-header,
+.roadmap-grid-row {
+  display: grid;
+  grid-template-columns: 220px 220px 220px minmax(500px, 1fr);
+  align-items: stretch;
+}
+
+.roadmap-grid-header {
+  background: #f7f7f7;
+  font-weight: 700;
+  border-bottom: 1px solid #ddd;
+}
+
+.roadmap-grid-header > div,
+.roadmap-grid-row > div {
+  padding: 0.5rem;
+  border-right: 1px solid #eee;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.roadmap-grid-header > div:last-child,
+.roadmap-grid-row > div:last-child {
+  border-right: 0;
+}
+
+.roadmap-grid-row {
+  border-bottom: 1px solid #eee;
+  background: #fff;
+  cursor: pointer;
+}
+
+.roadmap-grid-row:hover {
+  background: #f8fbff;
+}
+
+.roadmap-grid-row:focus {
+  outline: 2px solid #0d6efd;
+  outline-offset: -2px;
+}
+
+.roadmap-grid-row.is-blocked {
+  background: #fff8e1;
+}
+
+.roadmap-people-cell {
+  line-height: 1.4;
+}
+
+.roadmap-group {
+  background: #fafafa;
+  border-top: 1px solid #ddd;
+}
+
+.roadmap-group-title {
+  padding: 12px 16px;
+  font-weight: 700;
+  background: #f1f3f5;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.roadmap-group-title::-webkit-details-marker {
+  display: none;
+}
+
+.roadmap-group-title::marker {
+  content: "";
+}
+
+.roadmap-group-title-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.roadmap-group-toggle {
+  width: 14px;
+  min-width: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.roadmap-group-toggle::before {
+  content: "\u25B8";
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.roadmap-group[open] > .roadmap-group-title .roadmap-group-toggle::before {
+  transform: rotate(90deg);
+}
+
+.roadmap-link a {
+  color: #0d6efd;
+  text-decoration: none;
+  position: relative;
+  z-index: 6;
+}
+
+.roadmap-link a:hover {
+  text-decoration: underline;
+}
+
+.roadmap-axis-cell {
+  padding: 12px;
+}
+
+.roadmap-axis {
+  position: relative;
+  height: 24px;
+  border-left: 1px solid #ddd;
+  background: linear-gradient(to right, #f0f0f0 1px, transparent 1px);
+  background-size: 12.5% 100%;
+}
+
+.roadmap-axis-labels {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  font-size: 12px;
+  color: #666;
+  margin-top: 6px;
+}
+
+.roadmap-timeline-cell {
+  position: relative;
+  min-height: 2rem;
+  display: flex;
+  align-items: center;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.roadmap-bar-wrap {
+  position: relative;
+  width: 100%;
+  height: 28px;
+  background: #eef3f8;
+  border-radius: 14px;
+  overflow: visible;
+}
+
+.roadmap-bar {
+  position: absolute;
+  top: 0;
+  height: 28px;
+  border-radius: 14px;
+  background: #c9d8e6;
+  overflow: hidden;
+  min-width: 24px;
+  z-index: 5;
+}
+
+.roadmap-progress {
+  height: 100%;
+  background: #198754;
+  color: #fff;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.roadmap-dates {
+  position: absolute;
+  top: 34px;
+  left: 0;
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+}
+
+roadmap-connector {
+  position: absolute;
+  left: var(--connector-left);
+  top: var(--connector-top);
+  width: var(--connector-width);
+  height: var(--connector-height);
+  pointer-events: none;
+  z-index: 99999;
+  display: block;
+}
+
+.roadmap-loading,
+.roadmap-error,
+.roadmap-empty {
+  padding: 16px;
+}
+
+.roadmap-error {
+  color: #b42318;
+}`;
+
+  // packages/fucodo-chart-roadmap/index.js
   var RoadmapChart = class extends HTMLElement {
     constructor() {
       super();
@@ -532,16 +777,16 @@
         data-item-id="${this.escapeAttr(item.id)}"
         role="button"
         tabindex="0"
-        title="${this.escapeHtml(item.id)} - ${this.escapeHtml(item.topic)} - ${this.escapeHtml(peopleText)}"
+        title="${this.escapeHtml(item.id)} | ${this.escapeHtml(item.topic)} | ${this.escapeHtml(item.column || "-")} | ${this.escapeHtml(peopleText)}"
       >
-        <div>${this.escapeHtml(item.id)}</div>
-        <div>${this.escapeHtml(item.topic)}</div>
-        <div class="roadmap-people-cell">${this.escapeHtml(peopleText)}</div>
-        <div class="roadmap-link">
-          ${item.link ? `<a href="${this.escapeAttr(item.link)}" target="_blank" rel="noopener noreferrer">open</a>` : "-"}
+        <div>
+            ${this.escapeHtml(item.topic)}<br>
+            <small>
+                ${item.link ? `<a href="${this.escapeAttr(item.link)}" target="_blank" rel="noopener noreferrer">${this.escapeHtml(item.id)}</a>` : this.escapeHtml(item.id)}
+            </small>
         </div>
-        <div>${this.escapeHtml(item.column || "-")}</div>
-        <div>${this.escapeHtml(dependsOnText)}</div>
+        <div class="roadmap-people-cell">${this.escapeHtml(peopleText)}</div>
+        <div><small>${this.escapeHtml(dependsOnText)}</small></div>
         <div class="roadmap-timeline-cell">
           <div class="roadmap-bar-wrap">
             <div
@@ -590,263 +835,26 @@
       }).join("");
     }
     render() {
-      const style = `
+      const styleString = `
       <style>
-        :host {
-          display: block;
-        }
-
-        .roadmap-chart {
-          position: relative;
-          font-family: Arial, sans-serif;
-          border: 1px solid #dcdcdc;
-          border-radius: 8px;
-          overflow: hidden;
-          background: #fff;
-        }
-
-        .roadmap-connection-layer {
-          inset: 0;
-          pointer-events: none;
-        }
-
-        .roadmap-validation,
-        .roadmap-grid-header,
-        .roadmap-grid-row,
-        .roadmap-group-title {
-          position: relative;
-          z-index: 4;
-        }
-
-        .roadmap-validation {
-          padding: 12px 16px;
-          border-bottom: 1px solid #e7c66a;
-          background: #fff8db;
-          color: #6b5300;
-        }
-
-        .roadmap-validation-title {
-          font-weight: 700;
-          margin-bottom: 6px;
-        }
-
-        .roadmap-validation ul {
-          margin: 0;
-          padding-left: 18px;
-        }
-
-        .roadmap-grid-header,
-        .roadmap-grid-row {
-          display: grid;
-          grid-template-columns: 160px 220px 220px 180px 140px 220px minmax(500px, 1fr);
-          align-items: stretch;
-        }
-
-        .roadmap-grid-header {
-          background: #f7f7f7;
-          font-weight: 700;
-          border-bottom: 1px solid #ddd;
-        }
-
-        .roadmap-grid-header > div,
-        .roadmap-grid-row > div {
-          padding: 12px;
-          border-right: 1px solid #eee;
-          min-width: 0;
-          overflow-wrap: anywhere;
-        }
-
-        .roadmap-grid-header > div:last-child,
-        .roadmap-grid-row > div:last-child {
-          border-right: 0;
-        }
-
-        .roadmap-grid-row {
-          border-bottom: 1px solid #eee;
-          background: #fff;
-          cursor: pointer;
-        }
-
-        .roadmap-grid-row:hover {
-          background: #f8fbff;
-        }
-
-        .roadmap-grid-row:focus {
-          outline: 2px solid #0d6efd;
-          outline-offset: -2px;
-        }
-
-        .roadmap-grid-row.is-blocked {
-          background: #fff8e1;
-        }
-
-        .roadmap-people-cell {
-          line-height: 1.4;
-        }
-
-        .roadmap-group {
-          background: #fafafa;
-          border-top: 1px solid #ddd;
-        }
-
-        .roadmap-group-title {
-          padding: 12px 16px;
-          font-weight: 700;
-          background: #f1f3f5;
-          border-bottom: 1px solid #ddd;
-          cursor: pointer;
-          list-style: none;
-          user-select: none;
-        }
-
-        .roadmap-group-title::-webkit-details-marker {
-          display: none;
-        }
-
-        .roadmap-group-title::marker {
-          content: "";
-        }
-
-        .roadmap-group-title-inner {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-        }
-
-        .roadmap-group-toggle {
-          width: 14px;
-          min-width: 14px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .roadmap-group-toggle::before {
-          content: "\u25B8";
-          display: inline-block;
-          transition: transform 0.2s ease;
-        }
-
-        .roadmap-group[open] > .roadmap-group-title .roadmap-group-toggle::before {
-          transform: rotate(90deg);
-        }
-
-        .roadmap-link a {
-          color: #0d6efd;
-          text-decoration: none;
-          position: relative;
-          z-index: 6;
-        }
-
-        .roadmap-link a:hover {
-          text-decoration: underline;
-        }
-
-        .roadmap-axis-cell {
-          padding: 12px;
-        }
-
-        .roadmap-axis {
-          position: relative;
-          height: 24px;
-          border-left: 1px solid #ddd;
-          background: linear-gradient(to right, #f0f0f0 1px, transparent 1px);
-          background-size: 12.5% 100%;
-        }
-
-        .roadmap-axis-labels {
-          display: grid;
-          grid-template-columns: repeat(8, 1fr);
-          font-size: 12px;
-          color: #666;
-          margin-top: 6px;
-        }
-
-        .roadmap-timeline-cell {
-          position: relative;
-          min-height: 72px;
-          display: flex;
-          align-items: center;
-        }
-
-        .roadmap-bar-wrap {
-          position: relative;
-          width: 100%;
-          height: 28px;
-          background: #eef3f8;
-          border-radius: 14px;
-          overflow: visible;
-        }
-
-        .roadmap-bar {
-          position: absolute;
-          top: 0;
-          height: 28px;
-          border-radius: 14px;
-          background: #c9d8e6;
-          overflow: hidden;
-          min-width: 24px;
-          z-index: 5;
-        }
-
-        .roadmap-progress {
-          height: 100%;
-          background: #198754;
-          color: #fff;
-          font-size: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          white-space: nowrap;
-          overflow: hidden;
-        }
-
-        .roadmap-dates {
-          position: absolute;
-          top: 34px;
-          left: 0;
-          font-size: 12px;
-          color: #666;
-          white-space: nowrap;
-        }
-
-        roadmap-connector {
-          position: absolute;
-          left: var(--connector-left);
-          top: var(--connector-top);
-          width: var(--connector-width);
-          height: var(--connector-height);
-          pointer-events: none;
-          z-index: 99999;
-          display: block;
-        }
-
-        .roadmap-loading,
-        .roadmap-error,
-        .roadmap-empty {
-          padding: 16px;
-        }
-
-        .roadmap-error {
-          color: #b42318;
-        }
+        ${style_default}
       </style>
     `;
       if (this.loading) {
-        this.shadowRoot.innerHTML = `${style}<div class="roadmap-chart"><div class="roadmap-loading">Loading roadmap data\u2026</div></div>`;
+        this.shadowRoot.innerHTML = `${styleString}<div class="roadmap-chart"><div class="roadmap-loading">Loading roadmap data\u2026</div></div>`;
         return;
       }
       if (this.error) {
-        this.shadowRoot.innerHTML = `${style}<div class="roadmap-chart"><div class="roadmap-error">Error: ${this.escapeHtml(this.error)}</div></div>`;
+        this.shadowRoot.innerHTML = `${styleString}<div class="roadmap-chart"><div class="roadmap-error">Error: ${this.escapeHtml(this.error)}</div></div>`;
         return;
       }
       if (!this.treeData.length || !this.flatItems.length) {
-        this.shadowRoot.innerHTML = `${style}<div class="roadmap-chart"><div class="roadmap-empty">No roadmap data available.</div></div>`;
+        this.shadowRoot.innerHTML = `${styleString}<div class="roadmap-chart"><div class="roadmap-empty">No roadmap data available.</div></div>`;
         return;
       }
       const range = this.getDateRange();
       if (!range) {
-        this.shadowRoot.innerHTML = `${style}<div class="roadmap-chart"><div class="roadmap-empty">No valid roadmap data available.</div></div>`;
+        this.shadowRoot.innerHTML = `${styleString}<div class="roadmap-chart"><div class="roadmap-empty">No valid roadmap data available.</div></div>`;
         return;
       }
       const minTime = range.min.getTime();
@@ -856,16 +864,13 @@
       const contentHtml = this.renderNodes(this.treeData, minTime, totalDuration, 0);
       const validationHtml = this.renderValidationErrors();
       this.shadowRoot.innerHTML = `
-      ${style}
+      ${styleString}
       <div class="roadmap-chart">
         <div class="roadmap-connection-layer" id="connection-layer" aria-hidden="true"></div>
         ${validationHtml}
         <div class="roadmap-grid-header">
-          <div>ID</div>
           <div>Topic</div>
           <div>People</div>
-          <div>Link</div>
-          <div>Column</div>
           <div>Depends On</div>
           <div class="roadmap-axis-cell">
             <div class="roadmap-axis"></div>

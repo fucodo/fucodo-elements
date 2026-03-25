@@ -1,4 +1,4 @@
-import '../index.js';
+import '../dist/index.js';
 
 export default {
   title: 'Charts/RoadmapChart',
