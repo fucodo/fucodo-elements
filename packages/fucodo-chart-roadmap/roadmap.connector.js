@@ -61,26 +61,26 @@ class RoadmapConnector extends HTMLElement {
         background: transparent;
       }
       .roadmap-connector-corner--left-to-bottom {
-        transform: translateX(-50%);
+        transform: translateX(calc(-50% + 1px)) translateY(-1px);
         border-top-right-radius: 10px;
         border-top: var(--stroke-border, 3px solid red);
         border-right: var(--stroke-border, 3px solid red);
       }
       .roadmap-connector-corner--left-to-top {
-        transform: translateX(-50%);
+        transform: translateX(calc(-50% + 1px)) translateY(1px);
         border-bottom-right-radius: 10px;
         border-bottom: var(--stroke-border, 3px solid red);
         border-right: var(--stroke-border, 3px solid red);
       }
       .roadmap-connector-corner--top-to-right {
-        transform: translateX(50%);
+        transform: translateX(calc(50% - 1px)) translateY(1px);
         border-bottom-left-radius: 10px;
         border-bottom: var(--stroke-border, 3px solid red);
         border-left: var(--stroke-border, 3px solid red);
         
       }
       .roadmap-connector-corner--bottom-to-right {
-        transform: translateX(50%);
+        transform: translateX(calc(50% - 1px)) translateY(-1px);
         border-top-left-radius: 10px;
         border-top: var(--stroke-border, 3px solid red);
         border-left: var(--stroke-border, 3px solid red);
@@ -161,8 +161,14 @@ class RoadmapConnector extends HTMLElement {
             secondCornerClass = 'roadmap-connector-corner--top-to-right';
         }
 
+        let dynamicStyles = `
+            --connector-color:${color};
+            --stroke-width:${strokeWidth}px;
+            --stroke-border: ${strokeWidth}px solid ${color};
+        `;
+
         this.innerHTML = `
-      <div id="roadmap-connector-root" class="roadmap-connector-root" style="--stroke-border: ${strokeWidth}px solid ${color}; --connector-color:${color};">
+      <div id="roadmap-connector-root" class="roadmap-connector-root" style="${dynamicStyles}">
         <div
           class="roadmap-connector-segment roadmap-connector-segment--horizontal"
           style="

@@ -85,26 +85,26 @@
         background: transparent;
       }
       .roadmap-connector-corner--left-to-bottom {
-        transform: translateX(-50%);
+        transform: translateX(calc(-50% + 1px)) translateY(-1px);
         border-top-right-radius: 10px;
         border-top: var(--stroke-border, 3px solid red);
         border-right: var(--stroke-border, 3px solid red);
       }
       .roadmap-connector-corner--left-to-top {
-        transform: translateX(-50%);
+        transform: translateX(calc(-50% + 1px)) translateY(1px);
         border-bottom-right-radius: 10px;
         border-bottom: var(--stroke-border, 3px solid red);
         border-right: var(--stroke-border, 3px solid red);
       }
       .roadmap-connector-corner--top-to-right {
-        transform: translateX(50%);
+        transform: translateX(calc(50% - 1px)) translateY(1px);
         border-bottom-left-radius: 10px;
         border-bottom: var(--stroke-border, 3px solid red);
         border-left: var(--stroke-border, 3px solid red);
         
       }
       .roadmap-connector-corner--bottom-to-right {
-        transform: translateX(50%);
+        transform: translateX(calc(50% - 1px)) translateY(-1px);
         border-top-left-radius: 10px;
         border-top: var(--stroke-border, 3px solid red);
         border-left: var(--stroke-border, 3px solid red);
@@ -169,8 +169,13 @@
           if (downward) {
             secondCornerClass = "roadmap-connector-corner--top-to-right";
           }
+          let dynamicStyles = `
+            --connector-color:${color};
+            --stroke-width:${strokeWidth}px;
+            --stroke-border: ${strokeWidth}px solid ${color};
+        `;
           this.innerHTML = `
-      <div id="roadmap-connector-root" class="roadmap-connector-root" style="--stroke-border: ${strokeWidth}px solid ${color}; --connector-color:${color};">
+      <div id="roadmap-connector-root" class="roadmap-connector-root" style="${dynamicStyles}">
         <div
           class="roadmap-connector-segment roadmap-connector-segment--horizontal"
           style="
@@ -245,7 +250,7 @@
   font-family: Arial, sans-serif;
   border: 1px solid #dcdcdc;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: auto;
   background: #fff;
 }
 
@@ -282,8 +287,30 @@
 .roadmap-grid-header,
 .roadmap-grid-row {
   display: grid;
-  grid-template-columns: 220px 220px 220px minmax(500px, 1fr);
+  grid-template-columns: 220px 220px minmax(800px, 1fr);
   align-items: stretch;
+}
+
+.roadmap-grid-header > div:nth-child(-n+3),
+.roadmap-grid-row > div:nth-child(-n+3) {
+  position: sticky;
+  z-index: 10;
+  background: inherit;
+}
+
+.roadmap-grid-header > div:nth-of-type(1),
+.roadmap-grid-row > div:nth-of-type(1) {
+  left: 0;
+}
+
+.roadmap-grid-header > div:nth-of-type(2),
+.roadmap-grid-row > div:nth-of-type(2) {
+  left: 220px;
+}
+
+.roadmap-grid-header > div:nth-of-type(3),
+.roadmap-grid-row > div:nth-of-type(3) {
+  left: 440px;
 }
 
 .roadmap-grid-header {
@@ -341,6 +368,9 @@
   cursor: pointer;
   list-style: none;
   user-select: none;
+  left: 0;
+  z-index: 11;
+  position: relative;
 }
 
 .roadmap-group-title::-webkit-details-marker {
@@ -355,6 +385,8 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  position: sticky;
+  left: 16px; /* Gleiches Padding wie in .roadmap-group-title */
 }
 
 .roadmap-group-toggle {
@@ -777,7 +809,7 @@ roadmap-connector {
         data-item-id="${this.escapeAttr(item.id)}"
         role="button"
         tabindex="0"
-        title="${this.escapeHtml(item.id)} | ${this.escapeHtml(item.topic)} | ${this.escapeHtml(item.column || "-")} | ${this.escapeHtml(peopleText)}"
+        title="${this.escapeHtml(item.id)} | ${this.escapeHtml(item.topic)} | ${this.escapeHtml(item.column || "-")} | ${this.escapeHtml(peopleText)} | ${this.escapeHtml(dependsOnText)}"
       >
         <div>
             ${this.escapeHtml(item.topic)}<br>
@@ -786,7 +818,6 @@ roadmap-connector {
             </small>
         </div>
         <div class="roadmap-people-cell">${this.escapeHtml(peopleText)}</div>
-        <div><small>${this.escapeHtml(dependsOnText)}</small></div>
         <div class="roadmap-timeline-cell">
           <div class="roadmap-bar-wrap">
             <div
@@ -871,7 +902,6 @@ roadmap-connector {
         <div class="roadmap-grid-header">
           <div>Topic</div>
           <div>People</div>
-          <div>Depends On</div>
           <div class="roadmap-axis-cell">
             <div class="roadmap-axis"></div>
             <div class="roadmap-axis-labels">${axisLabels}</div>

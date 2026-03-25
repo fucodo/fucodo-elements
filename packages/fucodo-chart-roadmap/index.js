@@ -368,7 +368,7 @@ class RoadmapChart extends HTMLElement {
         data-item-id="${this.escapeAttr(item.id)}"
         role="button"
         tabindex="0"
-        title="${this.escapeHtml(item.id)} | ${this.escapeHtml(item.topic)} | ${this.escapeHtml(item.column || '-')} | ${this.escapeHtml(peopleText)}"
+        title="${this.escapeHtml(item.id)} | ${this.escapeHtml(item.topic)} | ${this.escapeHtml(item.column || '-')} | ${this.escapeHtml(peopleText)} | ${this.escapeHtml(dependsOnText)}"
       >
         <div>
             ${this.escapeHtml(item.topic)}<br>
@@ -381,7 +381,6 @@ class RoadmapChart extends HTMLElement {
             </small>
         </div>
         <div class="roadmap-people-cell">${this.escapeHtml(peopleText)}</div>
-        <div><small>${this.escapeHtml(dependsOnText)}</small></div>
         <div class="roadmap-timeline-cell">
           <div class="roadmap-bar-wrap">
             <div
@@ -477,7 +476,6 @@ class RoadmapChart extends HTMLElement {
         <div class="roadmap-grid-header">
           <div>Topic</div>
           <div>People</div>
-          <div>Depends On</div>
           <div class="roadmap-axis-cell">
             <div class="roadmap-axis"></div>
             <div class="roadmap-axis-labels">${axisLabels}</div>
