@@ -166,7 +166,36 @@ const defaultData = [
             ]
           }
         ]
-      }
+      },
+      {
+        "name": "low percentage",
+        "children": [
+          {
+            "id": "P-LOGIN-001",
+            "topic": "Login UX concept",
+            "owner": "Mia",
+            "assignees": ["Tom"],
+            "link": "https://example.org/tickets/102",
+            "column": "Q2",
+            "progress": 10,
+            "startDate": "2026-02-05",
+            "endDate": "2026-03-05",
+            "dependsOn": []
+          },
+          {
+            "id": "P-LOGIN-002",
+            "topic": "Login modernization",
+            "owner": "Anna",
+            "assignees": ["Ben", "Mia"],
+            "link": "https://example.org/tickets/123",
+            "column": "Q2",
+            "progress": 1,
+            "startDate": "2026-03-15",
+            "endDate": "2026-04-01",
+            "dependsOn": ["BE-AUTH-001", "UX-LOGIN-001"]
+          }
+        ]
+      },
     ]
   }
 ];
