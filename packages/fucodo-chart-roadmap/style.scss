@@ -1,5 +1,6 @@
 :host {
   display: block;
+  --roadmap-week-width: 70px;
 }
 
 .roadmap-chart {
@@ -185,7 +186,7 @@
 }
 
 .roadmap-week-bg {
-  flex: 0 0 100px;
+  flex: 0 0 var(--roadmap-week-width);
   border-right: 1px solid #eee;
   box-sizing: border-box;
 }

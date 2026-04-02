@@ -243,6 +243,7 @@
   var style_default = `@charset "UTF-8";
 :host {
   display: block;
+  --roadmap-week-width: 70px;
 }
 
 .roadmap-chart {
@@ -428,7 +429,7 @@
 }
 
 .roadmap-week-bg {
-  flex: 0 0 100px;
+  flex: 0 0 var(--roadmap-week-width);
   border-right: 1px solid #eee;
   box-sizing: border-box;
 }
@@ -955,7 +956,7 @@ roadmap-connector {
       const minTime = weeks[0].start.getTime();
       const maxTime = weeks[weeks.length - 1].end.getTime();
       const totalDuration = maxTime - minTime;
-      const weekWidth = 100;
+      const weekWidth = 70;
       const timelineWidth = weeks.length * weekWidth;
       const now = /* @__PURE__ */ new Date();
       const axisLabels = weeks.map((w) => {
@@ -987,7 +988,7 @@ roadmap-connector {
             grid-template-columns: 220px 220px ${timelineWidth}px;
         }
         .roadmap-axis-labels {
-            grid-template-columns: repeat(${weeks.length}, ${weekWidth}px);
+            grid-template-columns: repeat(${weeks.length}, var(--roadmap-week-width));
         }
       </style>
       <div class="roadmap-chart">

@@ -525,7 +525,7 @@ class RoadmapChart extends HTMLElement {
         const minTime = weeks[0].start.getTime();
         const maxTime = weeks[weeks.length - 1].end.getTime();
         const totalDuration = maxTime - minTime;
-        const weekWidth = 100; // Fixed width per week in px
+        const weekWidth = 70; // Fixed width per week in px
         const timelineWidth = weeks.length * weekWidth;
 
         const now = new Date();
@@ -562,7 +562,7 @@ class RoadmapChart extends HTMLElement {
             grid-template-columns: 220px 220px ${timelineWidth}px;
         }
         .roadmap-axis-labels {
-            grid-template-columns: repeat(${weeks.length}, ${weekWidth}px);
+            grid-template-columns: repeat(${weeks.length}, var(--roadmap-week-width));
         }
       </style>
       <div class="roadmap-chart">
