@@ -261,8 +261,7 @@
 
 .roadmap-validation,
 .roadmap-grid-header,
-.roadmap-grid-row,
-.roadmap-group-title {
+.roadmap-grid-row {
   position: relative;
   z-index: 4;
 }
@@ -287,12 +286,11 @@
 .roadmap-grid-header,
 .roadmap-grid-row {
   display: grid;
-  grid-template-columns: 220px 220px minmax(800px, 1fr);
   align-items: stretch;
 }
 
-.roadmap-grid-header > div:nth-child(-n+3),
-.roadmap-grid-row > div:nth-child(-n+3) {
+.roadmap-grid-header > div:nth-child(-n+2),
+.roadmap-grid-row > div:nth-child(-n+2) {
   position: sticky;
   z-index: 10;
   background: inherit;
@@ -301,16 +299,15 @@
 .roadmap-grid-header > div:nth-of-type(1),
 .roadmap-grid-row > div:nth-of-type(1) {
   left: 0;
+  width: 220px;
+  min-width: 220px;
 }
 
 .roadmap-grid-header > div:nth-of-type(2),
 .roadmap-grid-row > div:nth-of-type(2) {
   left: 220px;
-}
-
-.roadmap-grid-header > div:nth-of-type(3),
-.roadmap-grid-row > div:nth-of-type(3) {
-  left: 440px;
+  width: 220px;
+  min-width: 220px;
 }
 
 .roadmap-grid-header {
@@ -358,6 +355,8 @@
 .roadmap-group {
   background: #fafafa;
   border-top: 1px solid #ddd;
+  width: auto;
+  min-width: fit-content;
 }
 
 .roadmap-group-title {
@@ -368,17 +367,12 @@
   cursor: pointer;
   list-style: none;
   user-select: none;
+  position: sticky;
   left: 0;
+  width: fit-content;
+  min-width: 100%;
+  box-sizing: border-box;
   z-index: 11;
-  position: relative;
-}
-
-.roadmap-group-title::-webkit-details-marker {
-  display: none;
-}
-
-.roadmap-group-title::marker {
-  content: "";
 }
 
 .roadmap-group-title-inner {
@@ -386,7 +380,7 @@
   align-items: center;
   gap: 8px;
   position: sticky;
-  left: 16px; /* Gleiches Padding wie in .roadmap-group-title */
+  left: 16px;
 }
 
 .roadmap-group-toggle {
@@ -419,23 +413,44 @@
 }
 
 .roadmap-axis-cell {
-  padding: 12px;
+  padding: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
-.roadmap-axis {
-  position: relative;
-  height: 24px;
-  border-left: 1px solid #ddd;
-  background: linear-gradient(to right, #f0f0f0 1px, transparent 1px);
-  background-size: 12.5% 100%;
+.roadmap-week-backgrounds {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.roadmap-week-bg {
+  flex: 0 0 100px;
+  border-right: 1px solid #eee;
+  box-sizing: border-box;
+}
+
+.roadmap-week-bg.is-current {
+  background: rgba(40, 167, 69, 0.1);
 }
 
 .roadmap-axis-labels {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
   font-size: 12px;
   color: #666;
-  margin-top: 6px;
+  height: 100%;
+}
+
+.roadmap-axis-labels > div {
+  padding: 8px 4px;
+  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .roadmap-timeline-cell {
@@ -443,8 +458,7 @@
   min-height: 2rem;
   display: flex;
   align-items: center;
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 0;
 }
 
 .roadmap-bar-wrap {
@@ -524,7 +538,7 @@ roadmap-connector {
       this._resizeHandler = null;
     }
     static get observedAttributes() {
-      return ["src", "data-json"];
+      return ["src", "data-json", "week-colors"];
     }
     connectedCallback() {
       this.initialize();
@@ -538,7 +552,7 @@ roadmap-connector {
     }
     attributeChangedCallback(name, oldValue, newValue) {
       if (!this.isConnected || oldValue === newValue) return;
-      if (name === "src" || name === "data-json") {
+      if (name === "src" || name === "data-json" || name === "week-colors") {
         this.initialize();
       }
     }
@@ -798,7 +812,7 @@ roadmap-connector {
       </div>
     `;
     }
-    renderItemRow(item, minTime, totalDuration) {
+    renderItemRow(item, minTime, totalDuration, gridBackgrounds = "") {
       const { left, width } = this.calculatePosition(item, minTime, totalDuration);
       const dependsOnText = item.dependsOn.length ? item.dependsOn.join(", ") : "-";
       const blocked = this.isBlocked(item);
@@ -819,6 +833,7 @@ roadmap-connector {
         </div>
         <div class="roadmap-people-cell">${this.escapeHtml(peopleText)}</div>
         <div class="roadmap-timeline-cell">
+          <div class="roadmap-week-backgrounds">${gridBackgrounds}</div>
           <div class="roadmap-bar-wrap">
             <div
               class="roadmap-bar"
@@ -837,12 +852,12 @@ roadmap-connector {
       </div>
     `;
     }
-    renderNodes(nodes, minTime, totalDuration, level = 0) {
+    renderNodes(nodes, minTime, totalDuration, level = 0, gridBackgrounds = "") {
       return (nodes || []).map((node) => {
         if (this.isGroupNode(node)) {
           const groupName = node.name ?? "Unnamed group";
           const marginLeft = level * 20;
-          const childrenHtml = this.renderNodes(node.children, minTime, totalDuration, level + 1);
+          const childrenHtml = this.renderNodes(node.children, minTime, totalDuration, level + 1, gridBackgrounds);
           return `
           <details class="roadmap-group" open>
             <summary class="roadmap-group-title">
@@ -860,10 +875,58 @@ roadmap-connector {
         if (this.isItemNode(node)) {
           const item = this.normalizeItem(node);
           if (!item) return "";
-          return this.renderItemRow(item, minTime, totalDuration);
+          return this.renderItemRow(item, minTime, totalDuration, gridBackgrounds);
         }
         return "";
       }).join("");
+    }
+    getWeekNumber(date) {
+      const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+      d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+      const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+      return Math.ceil(((d - yearStart) / 864e5 + 1) / 7);
+    }
+    getWeeksInRange(minTime, maxTime) {
+      const weeks = [];
+      let current = new Date(minTime);
+      const day = current.getDay();
+      const diff = current.getDate() - (day === 0 ? 6 : day - 1);
+      current.setDate(diff);
+      current.setHours(0, 0, 0, 0);
+      const end = new Date(maxTime);
+      const lastDay = end.getDay();
+      const lastDiff = end.getDate() + (lastDay === 0 ? 0 : 7 - lastDay);
+      end.setDate(lastDiff);
+      end.setHours(23, 59, 59, 999);
+      const weekColors = this.getWeekColors();
+      while (current <= end) {
+        const weekStart = new Date(current);
+        const weekEnd = new Date(current);
+        weekEnd.setDate(weekEnd.getDate() + 6);
+        weekEnd.setHours(23, 59, 59, 999);
+        const weekNum = this.getWeekNumber(current);
+        const yearNum = current.getFullYear();
+        const colorKey = `${yearNum}-W${weekNum}`;
+        const bgColor = weekColors[colorKey] || weekColors[`W${weekNum}`] || null;
+        weeks.push({
+          start: weekStart,
+          end: weekEnd,
+          year: yearNum,
+          week: weekNum,
+          bgColor
+        });
+        current.setDate(current.getDate() + 7);
+      }
+      return weeks;
+    }
+    getWeekColors() {
+      const attr = this.getAttribute("week-colors");
+      if (!attr) return {};
+      try {
+        return JSON.parse(attr);
+      } catch {
+        return {};
+      }
     }
     render() {
       const styleString = `
@@ -888,14 +951,45 @@ roadmap-connector {
         this.shadowRoot.innerHTML = `${styleString}<div class="roadmap-chart"><div class="roadmap-empty">No valid roadmap data available.</div></div>`;
         return;
       }
-      const minTime = range.min.getTime();
-      const maxTime = range.max.getTime();
-      const totalDuration = Math.max(maxTime - minTime, 24 * 60 * 60 * 1e3);
-      const axisLabels = this.createAxisLabels(minTime, totalDuration, 8);
-      const contentHtml = this.renderNodes(this.treeData, minTime, totalDuration, 0);
+      const weeks = this.getWeeksInRange(range.min.getTime(), range.max.getTime());
+      const minTime = weeks[0].start.getTime();
+      const maxTime = weeks[weeks.length - 1].end.getTime();
+      const totalDuration = maxTime - minTime;
+      const weekWidth = 100;
+      const timelineWidth = weeks.length * weekWidth;
+      const now = /* @__PURE__ */ new Date();
+      const axisLabels = weeks.map((w) => {
+        const isCurrent = now >= w.start && now <= w.end;
+        const startDateStr = this.formatDate(w.start);
+        const endDateStr = this.formatDate(w.end);
+        return `<div class="${isCurrent ? "is-current" : ""}" title="${this.escapeAttr(startDateStr)} \u2013 ${this.escapeAttr(endDateStr)}">W${w.week}<br><small>${startDateStr.slice(0, 5)}</small></div>`;
+      }).join("");
+      const weekBackgrounds = weeks.map((w) => {
+        const isCurrent = now >= w.start && now <= w.end;
+        const bgColor = w.bgColor ? `background-color: ${w.bgColor};` : "";
+        const startDateStr = this.formatDate(w.start);
+        const endDateStr = this.formatDate(w.end);
+        return `<div class="roadmap-week-bg ${isCurrent ? "is-current" : ""}" style="${bgColor}" title="${this.escapeAttr(startDateStr)} \u2013 ${this.escapeAttr(endDateStr)}"></div>`;
+      }).join("");
+      const gridBackgrounds = weeks.map((w) => {
+        const isCurrent = now >= w.start && now <= w.end;
+        const bgColor = w.bgColor ? `background-color: ${w.bgColor}; opacity: 0.1;` : "";
+        const startDateStr = this.formatDate(w.start);
+        const endDateStr = this.formatDate(w.end);
+        return `<div class="roadmap-week-bg ${isCurrent ? "is-current" : ""}" style="${bgColor}" title="${this.escapeAttr(startDateStr)} \u2013 ${this.escapeAttr(endDateStr)}"></div>`;
+      }).join("");
+      const contentHtml = this.renderNodes(this.treeData, minTime, totalDuration, 0, gridBackgrounds);
       const validationHtml = this.renderValidationErrors();
       this.shadowRoot.innerHTML = `
       ${styleString}
+      <style>
+        .roadmap-grid-header, .roadmap-grid-row {
+            grid-template-columns: 220px 220px ${timelineWidth}px;
+        }
+        .roadmap-axis-labels {
+            grid-template-columns: repeat(${weeks.length}, ${weekWidth}px);
+        }
+      </style>
       <div class="roadmap-chart">
         <div class="roadmap-connection-layer" id="connection-layer" aria-hidden="true"></div>
         ${validationHtml}
@@ -903,7 +997,7 @@ roadmap-connector {
           <div>Topic</div>
           <div>People</div>
           <div class="roadmap-axis-cell">
-            <div class="roadmap-axis"></div>
+            <div class="roadmap-week-backgrounds">${weekBackgrounds}</div>
             <div class="roadmap-axis-labels">${axisLabels}</div>
           </div>
         </div>

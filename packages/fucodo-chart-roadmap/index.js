@@ -18,7 +18,7 @@ class RoadmapChart extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['src', 'data-json'];
+        return ['src', 'data-json', 'week-colors'];
     }
 
     connectedCallback() {
@@ -35,7 +35,7 @@ class RoadmapChart extends HTMLElement {
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (!this.isConnected || oldValue === newValue) return;
-        if (name === 'src' || name === 'data-json') {
+        if (name === 'src' || name === 'data-json' || name === 'week-colors') {
             this.initialize();
         }
     }
@@ -356,7 +356,7 @@ class RoadmapChart extends HTMLElement {
     `;
     }
 
-    renderItemRow(item, minTime, totalDuration) {
+    renderItemRow(item, minTime, totalDuration, gridBackgrounds = '') {
         const { left, width } = this.calculatePosition(item, minTime, totalDuration);
         const dependsOnText = item.dependsOn.length ? item.dependsOn.join(', ') : '-';
         const blocked = this.isBlocked(item);
@@ -382,6 +382,7 @@ class RoadmapChart extends HTMLElement {
         </div>
         <div class="roadmap-people-cell">${this.escapeHtml(peopleText)}</div>
         <div class="roadmap-timeline-cell">
+          <div class="roadmap-week-backgrounds">${gridBackgrounds}</div>
           <div class="roadmap-bar-wrap">
             <div
               class="roadmap-bar"
@@ -401,12 +402,12 @@ class RoadmapChart extends HTMLElement {
     `;
     }
 
-    renderNodes(nodes, minTime, totalDuration, level = 0) {
+    renderNodes(nodes, minTime, totalDuration, level = 0, gridBackgrounds = '') {
         return (nodes || []).map(node => {
             if (this.isGroupNode(node)) {
                 const groupName = node.name ?? 'Unnamed group';
                 const marginLeft = level * 20;
-                const childrenHtml = this.renderNodes(node.children, minTime, totalDuration, level + 1);
+                const childrenHtml = this.renderNodes(node.children, minTime, totalDuration, level + 1, gridBackgrounds);
 
                 return `
           <details class="roadmap-group" open>
@@ -426,11 +427,70 @@ class RoadmapChart extends HTMLElement {
             if (this.isItemNode(node)) {
                 const item = this.normalizeItem(node);
                 if (!item) return '';
-                return this.renderItemRow(item, minTime, totalDuration);
+                return this.renderItemRow(item, minTime, totalDuration, gridBackgrounds);
             }
 
             return '';
         }).join('');
+    }
+
+    getWeekNumber(date) {
+        const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+        d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+        const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+        return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    }
+
+    getWeeksInRange(minTime, maxTime) {
+        const weeks = [];
+        let current = new Date(minTime);
+        
+        // Move to the Monday of the current week (ISO 8601)
+        const day = current.getDay();
+        const diff = current.getDate() - (day === 0 ? 6 : day - 1);
+        current.setDate(diff);
+        current.setHours(0, 0, 0, 0);
+
+        const end = new Date(maxTime);
+        // Ensure we cover the full last week (Sunday)
+        const lastDay = end.getDay();
+        const lastDiff = end.getDate() + (lastDay === 0 ? 0 : 7 - lastDay);
+        end.setDate(lastDiff);
+        end.setHours(23, 59, 59, 999);
+
+        const weekColors = this.getWeekColors();
+
+        while (current <= end) {
+            const weekStart = new Date(current);
+            const weekEnd = new Date(current);
+            weekEnd.setDate(weekEnd.getDate() + 6);
+            weekEnd.setHours(23, 59, 59, 999);
+            
+            const weekNum = this.getWeekNumber(current);
+            const yearNum = current.getFullYear();
+            const colorKey = `${yearNum}-W${weekNum}`;
+            const bgColor = weekColors[colorKey] || weekColors[`W${weekNum}`] || null;
+
+            weeks.push({
+                start: weekStart,
+                end: weekEnd,
+                year: yearNum,
+                week: weekNum,
+                bgColor: bgColor
+            });
+            current.setDate(current.getDate() + 7);
+        }
+        return weeks;
+    }
+
+    getWeekColors() {
+        const attr = this.getAttribute('week-colors');
+        if (!attr) return {};
+        try {
+            return JSON.parse(attr);
+        } catch {
+            return {};
+        }
     }
 
     render() {
@@ -461,15 +521,50 @@ class RoadmapChart extends HTMLElement {
             return;
         }
 
-        const minTime = range.min.getTime();
-        const maxTime = range.max.getTime();
-        const totalDuration = Math.max(maxTime - minTime, 24 * 60 * 60 * 1000);
-        const axisLabels = this.createAxisLabels(minTime, totalDuration, 8);
-        const contentHtml = this.renderNodes(this.treeData, minTime, totalDuration, 0);
+        const weeks = this.getWeeksInRange(range.min.getTime(), range.max.getTime());
+        const minTime = weeks[0].start.getTime();
+        const maxTime = weeks[weeks.length - 1].end.getTime();
+        const totalDuration = maxTime - minTime;
+        const weekWidth = 100; // Fixed width per week in px
+        const timelineWidth = weeks.length * weekWidth;
+
+        const now = new Date();
+        const axisLabels = weeks.map(w => {
+            const isCurrent = now >= w.start && now <= w.end;
+            const startDateStr = this.formatDate(w.start);
+            const endDateStr = this.formatDate(w.end);
+            return `<div class="${isCurrent ? 'is-current' : ''}" title="${this.escapeAttr(startDateStr)} – ${this.escapeAttr(endDateStr)}">W${w.week}<br><small>${startDateStr.slice(0, 5)}</small></div>`;
+        }).join('');
+
+        const weekBackgrounds = weeks.map(w => {
+            const isCurrent = now >= w.start && now <= w.end;
+            const bgColor = w.bgColor ? `background-color: ${w.bgColor};` : '';
+            const startDateStr = this.formatDate(w.start);
+            const endDateStr = this.formatDate(w.end);
+            return `<div class="roadmap-week-bg ${isCurrent ? 'is-current' : ''}" style="${bgColor}" title="${this.escapeAttr(startDateStr)} – ${this.escapeAttr(endDateStr)}"></div>`;
+        }).join('');
+
+        const gridBackgrounds = weeks.map(w => {
+            const isCurrent = now >= w.start && now <= w.end;
+            const bgColor = w.bgColor ? `background-color: ${w.bgColor}; opacity: 0.1;` : '';
+            const startDateStr = this.formatDate(w.start);
+            const endDateStr = this.formatDate(w.end);
+            return `<div class="roadmap-week-bg ${isCurrent ? 'is-current' : ''}" style="${bgColor}" title="${this.escapeAttr(startDateStr)} – ${this.escapeAttr(endDateStr)}"></div>`;
+        }).join('');
+
+        const contentHtml = this.renderNodes(this.treeData, minTime, totalDuration, 0, gridBackgrounds);
         const validationHtml = this.renderValidationErrors();
 
         this.shadowRoot.innerHTML = `
       ${styleString}
+      <style>
+        .roadmap-grid-header, .roadmap-grid-row {
+            grid-template-columns: 220px 220px ${timelineWidth}px;
+        }
+        .roadmap-axis-labels {
+            grid-template-columns: repeat(${weeks.length}, ${weekWidth}px);
+        }
+      </style>
       <div class="roadmap-chart">
         <div class="roadmap-connection-layer" id="connection-layer" aria-hidden="true"></div>
         ${validationHtml}
@@ -477,7 +572,7 @@ class RoadmapChart extends HTMLElement {
           <div>Topic</div>
           <div>People</div>
           <div class="roadmap-axis-cell">
-            <div class="roadmap-axis"></div>
+            <div class="roadmap-week-backgrounds">${weekBackgrounds}</div>
             <div class="roadmap-axis-labels">${axisLabels}</div>
           </div>
         </div>
