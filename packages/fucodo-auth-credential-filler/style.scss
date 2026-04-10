@@ -1,0 +1,66 @@
+.cf-dropdown {
+  position: fixed;
+  background: #1c1c1c;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.6);
+  overflow-y: auto;
+  max-height: 280px;
+  z-index: 99999;
+  min-width: 180px;
+  display: none;
+  font-family: 'JetBrains Mono','Fira Mono','Consolas',monospace;
+  font-size: 13px;
+}
+.cf-dropdown.cf-open { display: block; }
+
+.cf-group-header {
+  padding: 8px 12px 4px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #555;
+  background: #161616;
+  border-top: 1px solid #282828;
+  user-select: none;
+  pointer-events: none;
+  position: sticky;
+  top: 0;
+}
+.cf-group-header:first-child { border-top: none; }
+
+.cf-item {
+  padding: 7px 12px 7px 16px;
+  color: #b8b4aa;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.cf-item:hover,
+.cf-item.cf-active { background: #242424; color: #c8f07a; }
+.cf-item:hover .cf-item-desc,
+.cf-item.cf-active .cf-item-desc { color: #7a9e45; }
+
+.cf-item mark {
+  background: transparent;
+  color: #c8f07a;
+  font-weight: 500;
+}
+
+.cf-item-desc {
+  display: block;
+  font-size: 11px;
+  color: #4a4a4a;
+  margin-top: 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'IBM Plex Sans',system-ui,sans-serif;
+  font-style: italic;
+  letter-spacing: 0;
+}
+
+.cf-empty {
+  padding: 10px 12px;
+  color: #444;
+  font-style: italic;
+  user-select: none;
+}
