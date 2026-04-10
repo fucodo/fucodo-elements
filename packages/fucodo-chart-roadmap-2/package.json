@@ -1,0 +1,22 @@
+{
+  "name": "fucodo.chart.roadmap.2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "lit": "^3.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fucodo/fucodo.chart.roadmap.git"
+  },
+  "author": "fucodo GmbH - Kay Strobach",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fucodo/fucodo.chart.roadmap/issues"
+  },
+  "homepage": "https://github.com/fucodo/fucodo.chart.roadmap#readme",
+  "description": ""
+}

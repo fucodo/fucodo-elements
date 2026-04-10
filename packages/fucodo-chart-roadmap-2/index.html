@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>fucodo-chart-roadmap — demo</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #0d1117;
+            color: #c9d1d9;
+            font-family: 'DM Mono', 'IBM Plex Mono', ui-monospace, monospace;
+            padding: 24px;
+            min-height: 100vh;
+        }
+        h1 { font-size: 14px; letter-spacing: 0.08em; color: #79c0ff; margin-bottom: 6px; }
+        p  { font-size: 11px; color: #6e7681; margin-bottom: 16px; }
+
+        fucodo-chart-roadmap {
+            width: 100%;
+            height: calc(100vh - 120px);
+            border: 1px solid #21262d;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Override a few tokens for demo */
+        fucodo-chart-roadmap {
+            --fc-bar-h: 24px;
+            --fc-bar-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+<h1>fucodo-chart-roadmap</h1>
+<p>Improved Gantt component · Drag bars to reschedule · Drag right edge to resize · Click group headers to collapse</p>
+
+<fucodo-chart-roadmap
+        view-mode="Month"
+        today-button
+        view-mode-select
+        progress-draggable
+></fucodo-chart-roadmap>
+
+<!--
+  Use an import map so the bare 'lit' import resolves in the browser.
+  In a real project (Vite / Rollup / esbuild) this is handled by the bundler.
+-->
+<script type="importmap">
+    {
+      "imports": {
+        "lit":                   "https://esm.sh/lit@3",
+        "lit/decorators.js":     "https://esm.sh/lit@3/decorators.js",
+        "lit/directives/repeat.js": "https://esm.sh/lit@3/directives/repeat.js"
+      }
+    }
+</script>
+
+<script type="module">
+    import './index.js';
+
+    const today = new Date();
+    const fmt = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    const rel = (offsetDays) => fmt(new Date(today.getFullYear(), today.getMonth(), today.getDate() + offsetDays));
+
+    const el = document.querySelector('fucodo-chart-roadmap');
+
+    el.tasks = [
+        // ── Phase 1 ──────────────────────────────────────────────────────────
+        { id:'p1-research',  name:'Research & Discovery', group:'Phase 1 — Foundation',
+            start: rel(-60), end: rel(-42), progress: 100, color:'#6366f1' },
+        { id:'p1-arch',      name:'Architecture Design',  group:'Phase 1 — Foundation',
+            start: rel(-45), end: rel(-25), progress: 100, color:'#6366f1',
+            dependencies: ['p1-research'] },
+        { id:'p1-ux',        name:'UX Wireframes',        group:'Phase 1 — Foundation',
+            start: rel(-50), end: rel(-30), progress: 100, color:'#818cf8' },
+
+        // ── Phase 2 ──────────────────────────────────────────────────────────
+        { id:'p2-api',       name:'API Development',      group:'Phase 2 — Build',
+            start: rel(-28), end: rel(+12), progress: 72,  color:'#22d3ee',
+            dependencies: ['p1-arch'] },
+        { id:'p2-ui',        name:'UI Implementation',    group:'Phase 2 — Build',
+            start: rel(-20), end: rel(+18), progress: 45,  color:'#22d3ee',
+            dependencies: ['p1-ux'] },
+        { id:'p2-db',        name:'Database Schema',      group:'Phase 2 — Build',
+            start: rel(-25), end: rel(-5),  progress: 100, color:'#06b6d4' },
+        { id:'p2-auth',      name:'Auth & Security',      group:'Phase 2 — Build',
+            start: rel(-8),  end: rel(+15), progress: 30,  color:'#0ea5e9',
+            dependencies: ['p2-db'] },
+
+        // ── Phase 3 ──────────────────────────────────────────────────────────
+        { id:'p3-int',       name:'Integration Testing',  group:'Phase 3 — QA & Launch',
+            start: rel(+14), end: rel(+28), progress: 0,   color:'#10b981',
+            dependencies: ['p2-api','p2-ui'] },
+        { id:'p3-perf',      name:'Performance Tuning',   group:'Phase 3 — QA & Launch',
+            start: rel(+20), end: rel(+35), progress: 0,   color:'#34d399',
+            dependencies: ['p3-int'] },
+        { id:'p3-staging',   name:'Staging Deploy',       group:'Phase 3 — QA & Launch',
+            start: rel(+30), end: rel(+38), progress: 0,   color:'#6ee7b7',
+            dependencies: ['p3-perf'] },
+        { id:'p3-launch',    name:'Production Launch 🚀', group:'Phase 3 — QA & Launch',
+            start: rel(+40), end: rel(+42), progress: 0,   color:'#f59e0b',
+            dependencies: ['p3-staging'] },
+    ];
+
+    el.addEventListener('date-change', e => {
+        console.log('Date changed:', e.detail.task.name, e.detail.start, '→', e.detail.end);
+    });
+    el.addEventListener('progress-change', e => {
+        console.log('Progress changed:', e.detail.task.name, e.detail.progress + '%');
+    });
+    el.addEventListener('task-click', e => {
+        console.log('Task clicked:', e.detail.task.name);
+    });
+</script>
+</body>
+</html>
