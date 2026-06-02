@@ -1,18 +1,40 @@
 (() => {
   // packages/fucodo-auth-credential-filler/style.scss
-  var style_default = `.cf-dropdown {
+  var style_default = `:root {
+  --cf-background: #1c1c1c;
+  --cf-border-color: #3a3a3a;
+  --cf-border-radius: 6px;
+  --cf-shadow: 0 8px 28px rgba(0,0,0,0.6);
+  --cf-max-height: 280px;
+  --cf-z-index: 99999;
+  --cf-font-family: inherit;
+  --cf-font-size: 13px;
+  --cf-text-color: #b8b4aa;
+  --cf-group-bg: #161616;
+  --cf-group-text: #555;
+  --cf-group-border: #282828;
+  --cf-item-hover-bg: #242424;
+  --cf-item-hover-text: #c8f07a;
+  --cf-item-desc-color: #4a4a4a;
+  --cf-item-desc-hover-color: #7a9e45;
+  --cf-item-desc-font-family: inherit;
+  --cf-mark-color: #c8f07a;
+  --cf-empty-color: #444;
+}
+
+.cf-dropdown {
   position: fixed;
-  background: #1c1c1c;
-  border: 1px solid #3a3a3a;
-  border-radius: 6px;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
+  background: var(--cf-background);
+  border: 1px solid var(--cf-border-color);
+  border-radius: var(--cf-border-radius);
+  box-shadow: var(--cf-shadow);
   overflow-y: auto;
-  max-height: 280px;
-  z-index: 99999;
+  max-height: var(--cf-max-height);
+  z-index: var(--cf-z-index);
   min-width: 180px;
   display: none;
-  font-family: "JetBrains Mono", "Fira Mono", "Consolas", monospace;
-  font-size: 13px;
+  font-family: var(--cf-font-family);
+  font-size: var(--cf-font-size);
 }
 
 .cf-dropdown.cf-open {
@@ -24,9 +46,9 @@
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #555;
-  background: #161616;
-  border-top: 1px solid #282828;
+  color: var(--cf-group-text);
+  background: var(--cf-group-bg);
+  border-top: 1px solid var(--cf-group-border);
   user-select: none;
   pointer-events: none;
   position: sticky;
@@ -39,43 +61,43 @@
 
 .cf-item {
   padding: 7px 12px 7px 16px;
-  color: #b8b4aa;
+  color: var(--cf-text-color);
   cursor: pointer;
   white-space: nowrap;
 }
 
 .cf-item:hover,
 .cf-item.cf-active {
-  background: #242424;
-  color: #c8f07a;
+  background: var(--cf-item-hover-bg);
+  color: var(--cf-item-hover-text);
 }
 
 .cf-item:hover .cf-item-desc,
 .cf-item.cf-active .cf-item-desc {
-  color: #7a9e45;
+  color: var(--cf-item-desc-hover-color);
 }
 
 .cf-item mark {
   background: transparent;
-  color: #c8f07a;
+  color: var(--cf-mark-color);
   font-weight: 500;
 }
 
 .cf-item-desc {
   display: block;
   font-size: 11px;
-  color: #4a4a4a;
+  color: var(--cf-item-desc-color);
   margin-top: 1px;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-family: var(--cf-item-desc-font-family);
   font-style: italic;
   letter-spacing: 0;
 }
 
 .cf-empty {
   padding: 10px 12px;
-  color: #444;
+  color: var(--cf-empty-color);
   font-style: italic;
   user-select: none;
 }`;
@@ -122,7 +144,8 @@
         "username-key",
         "password-key",
         "group-key",
-        "description-key"
+        "description-key",
+        "position"
       ];
     }
     connectedCallback() {
@@ -140,7 +163,8 @@
         usernameKey: this.getAttribute("username-key") || "username",
         passwordKey: this.getAttribute("password-key") || "password",
         groupKey: this.getAttribute("group-key") || null,
-        descriptionKey: this.getAttribute("description-key") || null
+        descriptionKey: this.getAttribute("description-key") || null,
+        position: this.getAttribute("position") || "auto"
       };
     }
     _parseInlineDefault() {
@@ -303,9 +327,34 @@
     }
     _reposition(field) {
       const r = field.getBoundingClientRect();
-      this._dd.style.top = r.bottom + 4 + "px";
-      this._dd.style.left = r.left + "px";
-      this._dd.style.width = r.width + "px";
+      const dd = this._dd;
+      const cfg = this._cfg_cache;
+      const dropdownHeight = dd.offsetHeight || 280;
+      const spaceBelow = window.innerHeight - r.bottom;
+      const spaceAbove = r.top;
+      const pos = cfg.position || "auto";
+      let showAbove = false;
+      if (pos === "top") {
+        showAbove = true;
+      } else if (pos === "bottom") {
+        showAbove = false;
+      } else {
+        const hasIgnoreAttr = field.hasAttribute("data-1p-ignore") || field.hasAttribute("data-lpignore") || field.hasAttribute("data-bwignore");
+        const isSensitiveField = field.type === "password" || field.name?.includes("user") || field.id?.includes("user") || field.autocomplete?.includes("username");
+        const likelyHasManager = !hasIgnoreAttr && isSensitiveField;
+        const has1PButton = !!document.querySelector("com-1password-button");
+        const has1PAttr = field.hasAttribute("data-1p-ignore") === false && !!field.getAttribute("data-com-1password-filled");
+        if ((likelyHasManager || has1PButton || has1PAttr || spaceBelow < dropdownHeight + 20) && spaceAbove > dropdownHeight) {
+          showAbove = true;
+        }
+      }
+      if (showAbove) {
+        dd.style.top = r.top - dropdownHeight - 4 + "px";
+      } else {
+        dd.style.top = r.bottom + 4 + "px";
+      }
+      dd.style.left = r.left + "px";
+      dd.style.width = r.width + "px";
     }
     async _init() {
       const cfg = this._cfg();

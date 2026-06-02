@@ -40,7 +40,7 @@ function highlight(text, query) {
 class CredentialFiller extends HTMLElement {
     static get observedAttributes() {
         return ['url','username-selector','password-selector',
-            'label-key','username-key','password-key','group-key','description-key'];
+            'label-key','username-key','password-key','group-key','description-key', 'position'];
     }
 
     connectedCallback()  { this._init(); }
@@ -56,6 +56,7 @@ class CredentialFiller extends HTMLElement {
             passwordKey:      this.getAttribute('password-key') || 'password',
             groupKey:         this.getAttribute('group-key') || null,
             descriptionKey:   this.getAttribute('description-key') || null,
+            position:         this.getAttribute('position') || 'auto',
         };
     }
 
@@ -215,9 +216,53 @@ class CredentialFiller extends HTMLElement {
 
     _reposition(field) {
         const r = field.getBoundingClientRect();
-        this._dd.style.top   = (r.bottom + 4) + 'px';
-        this._dd.style.left  = r.left + 'px';
-        this._dd.style.width = r.width + 'px';
+        const dd = this._dd;
+        const cfg = this._cfg_cache;
+        const dropdownHeight = dd.offsetHeight || 280; // Fallback to max-height
+        const spaceBelow = window.innerHeight - r.bottom;
+        const spaceAbove = r.top;
+        const pos = cfg.position || 'auto';
+
+        let showAbove = false;
+
+        if (pos === 'top') {
+            showAbove = true;
+        } else if (pos === 'bottom') {
+            showAbove = false;
+        } else {
+            // auto mode
+            // 1Password and others often inject icons or behaviors if ignore attributes are MISSING.
+            // Also, we can check for common attributes they add.
+            const hasIgnoreAttr = field.hasAttribute('data-1p-ignore') ||
+                                  field.hasAttribute('data-lpignore') ||
+                                  field.hasAttribute('data-bwignore');
+
+            // If ignore attributes are MISSING, assume a manager MIGHT be active.
+            // In high-conflict fields (username/password), we prefer 'above' if there's space.
+            const isSensitiveField = field.type === 'password' ||
+                                     field.name?.includes('user') ||
+                                     field.id?.includes('user') ||
+                                     field.autocomplete?.includes('username');
+
+            const likelyHasManager = !hasIgnoreAttr && isSensitiveField;
+
+            // Check for 1Password's button specifically
+            const has1PButton = !!document.querySelector('com-1password-button');
+            const has1PAttr = field.hasAttribute('data-1p-ignore') === false && !!field.getAttribute('data-com-1password-filled');
+
+            if ((likelyHasManager || has1PButton || has1PAttr || spaceBelow < (dropdownHeight + 20)) && spaceAbove > dropdownHeight) {
+                showAbove = true;
+            }
+        }
+
+        if (showAbove) {
+            dd.style.top = (r.top - dropdownHeight - 4) + 'px';
+        } else {
+            dd.style.top = (r.bottom + 4) + 'px';
+        }
+
+        dd.style.left  = r.left + 'px';
+        dd.style.width = r.width + 'px';
     }
 
     async _init() {

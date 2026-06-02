@@ -88,6 +88,7 @@ The component expects an array of objects. You can map custom keys using attribu
 | `username-key` | No | `username` | Property name to be used as the username. |
 | `password-key` | No | `password` | Property name to be used as the password. |
 | `label-key` | No | `username` | Property name to be displayed as the primary label in the dropdown. |
+| `position` | No | `auto` | Preferred dropdown position: `auto`, `top`, or `bottom`. In `auto` mode, it prefers `top` if a password manager is detected or space below is tight. |
 
 ### Events
 
@@ -99,13 +100,19 @@ The component expects an array of objects. You can map custom keys using attribu
 
 ## Theming
 
-The dropdown is injected into the document body and can be styled via global CSS. It uses the following classes:
+The dropdown is injected into the document body and can be styled via CSS variables.
 
-- `.cf-dropdown`: The main container.
-- `.cf-group-header`: Headers for each group.
-- `.cf-item`: Individual entries.
-- `.cf-item-desc`: Secondary description text.
-- `.cf-active`: Highlighted state (hover or keyboard focus).
-- `mark`: Highlighted text matching the search query.
+### CSS Variables
 
-Refer to `style.scss` for the default styling details.
+| Variable | Default |
+|----------|---------|
+| `--cf-background` | `#1c1c1c` |
+| `--cf-border-color` | `#3a3a3a` |
+| `--cf-border-radius` | `6px` |
+| `--cf-font-family` | `inherit` |
+| `--cf-font-size` | `13px` |
+| `--cf-text-color` | `#b8b4aa` |
+| `--cf-item-hover-bg` | `#242424` |
+| `--cf-item-hover-text` | `#c8f07a` |
+
+Refer to `style.scss` for the full list of available variables.
