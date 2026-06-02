@@ -1,6 +1,7 @@
 :host {
   /* fallback size: inherits from the element's font-size (1em) */
   font-size: 120px; /* optional default */
+  font-family: inherit;
 }
 
 .c100 {

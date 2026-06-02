@@ -4,6 +4,7 @@
 :host {
   /* fallback size: inherits from the element's font-size (1em) */
   font-size: 120px; /* optional default */
+  font-family: inherit;
 }
 
 .c100 {
@@ -100,6 +101,7 @@
       const wrapperClass = `c100 ${extraClass} ${color}`.trim();
       this.shadowRoot.innerHTML = `
       <style>
+        :host { font-family: inherit; }
         ${style_default}
       </style>
 

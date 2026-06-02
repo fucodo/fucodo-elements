@@ -40,6 +40,7 @@ class CircleProgress extends HTMLElement {
 
         this.shadowRoot.innerHTML = `
       <style>
+        :host { font-family: inherit; }
         ${style}
       </style>
 
