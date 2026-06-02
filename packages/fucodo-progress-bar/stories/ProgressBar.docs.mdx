@@ -1,0 +1,59 @@
+import { Meta, Title, Subtitle, Description, Primary, ArgTypes, Source, Stories, Canvas } from '@storybook/addon-docs/blocks';
+import * as ProgressBarStories from './ProgressBar.stories';
+
+<Meta of={ProgressBarStories} title="Components/Progress/ProgressBar/Documentation" />
+
+# Progress Bar
+
+Die `fucodo-progress-bar` Web Component bietet eine einfache, horizontale Fortschrittsanzeige.
+Sie unterstützt verschiedene Farben, Größen und Textlabel.
+
+## Installation
+
+Die Komponente kann direkt via Script-Tag eingebunden werden:
+
+```html
+<script type="module" src="path/to/fucodo-progress-bar/dist/index.js"></script>
+```
+
+## Verwendung
+
+Binden Sie die Komponente in Ihre HTML-Seite ein. Der Fortschritt wird über das `percent` Attribut gesteuert.
+
+```html
+<fucodo-progress-bar percent="50" size="300px" color="orange" text="50% geladen"></fucodo-progress-bar>
+```
+
+## Attribute
+
+<ArgTypes of={ProgressBarStories.Basic} />
+
+- `percent`: Fortschritt in Prozent (0–100).
+- `total-steps` & `steps-solved`: Alternative zur Angabe von `percent`. Berechnet den Prozentsatz automatisch.
+- `size`: Breite der Fortschrittsanzeige (z.B. `300`, `100%`, `20rem`). Wenn nur eine Zahl angegeben wird, wird `px` verwendet.
+- `color`: Theme-Klasse (z.B. `green`, `orange`, `dark`, `green dark`).
+- `text`: Der im Balken angezeigte Text. Standardmäßig `{percent}%`.
+- `title`: Tooltip-Text (Standard HTML `title` Attribut).
+
+## CSS Variablen
+
+Die Komponente kann über CSS-Variablen angepasst werden:
+
+```css
+fucodo-progress-bar {
+  --height: 20px;
+  --track-color: #ccc;
+  --indicator-color: #307bbb;
+}
+```
+
+## Beispiele
+
+### Standard
+<Canvas of={ProgressBarStories.Basic} />
+
+### Feste Breite und Farbe
+<Canvas of={ProgressBarStories.FixedWidth} />
+
+### Dark Theme
+<Canvas of={ProgressBarStories.ThemedDark} />

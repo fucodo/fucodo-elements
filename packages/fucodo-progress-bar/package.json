@@ -1,0 +1,15 @@
+{
+  "name": "fucodo.progress.bar",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fucodo/fucodo-elements.git"
+  },
+  "author": "fucodo GmbH - Kay Strobach",
+  "license": "MIT",
+  "description": "Progress bar web component"
+}
