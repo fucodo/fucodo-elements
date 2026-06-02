@@ -1,0 +1,175 @@
+openapi: 3.1.0
+
+info:
+  title: Fucodo Universe Navigation API
+  version: 1.0.0
+  description: API zur Auslieferung der Navigation für die fucodo-universe-navigation Web Component.
+
+servers:
+  - url: https://example.com
+
+paths:
+  /api/navigation:
+    get:
+      summary: Liefert Logo, Menüeinträge und Benachrichtigungen
+      operationId: getFucodoUniverseNavigation
+      tags:
+        - Navigation
+      responses:
+        "200":
+          description: Erfolgreiche Navigation-Response
+          headers:
+            Cache-Control:
+              description: Optionaler HTTP Cache Header
+              schema:
+                type: string
+                example: private, max-age=60
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NavigationResponse"
+              examples:
+                default:
+                  summary: Beispielnavigation
+                  value:
+                    logo:
+                      text: Fucodo Universe
+                      url: /
+                      image: /assets/logo.svg
+                    notifications:
+                      count: 7
+                      url: /notifications
+                      label: Benachrichtigungen
+                    menu:
+                      - text: Dashboard
+                        url: /dashboard
+                        icon:
+                          type: svg
+                          value: '<svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>'
+                        badge: 3
+                      - text: Projekte
+                        url: /projects
+                        icon:
+                          type: url
+                          value: /assets/icons/projects.svg
+                      - text: Einstellungen
+                        url: /settings
+                        icon:
+                          type: svg
+                          value: '<svg viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 1 1 12 8a3.5 3.5 0 0 1 0 7.5z"/></svg>'
+
+        "401":
+          description: Nicht authentifiziert
+
+        "403":
+          description: Keine Berechtigung
+
+        "500":
+          description: Interner Serverfehler
+
+components:
+  schemas:
+    NavigationResponse:
+      type: object
+      required:
+        - menu
+      properties:
+        logo:
+          $ref: "#/components/schemas/Logo"
+        notifications:
+          $ref: "#/components/schemas/Notifications"
+        menu:
+          type: array
+          items:
+            $ref: "#/components/schemas/MenuItem"
+
+    Logo:
+      type: object
+      properties:
+        text:
+          type: string
+          example: Fucodo Universe
+        url:
+          type: string
+          format: uri-reference
+          example: /
+        image:
+          type: string
+          format: uri-reference
+          example: /assets/logo.svg
+
+    Notifications:
+      type: object
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          example: 7
+        url:
+          type: string
+          format: uri-reference
+          example: /notifications
+        label:
+          type: string
+          example: Benachrichtigungen
+
+    MenuItem:
+      type: object
+      required:
+        - text
+        - url
+      properties:
+        text:
+          type: string
+          example: Dashboard
+        url:
+          type: string
+          format: uri-reference
+          example: /dashboard
+        icon:
+          $ref: "#/components/schemas/Icon"
+        badge:
+          type:
+            - integer
+            - "null"
+          minimum: 0
+          description: Optionaler Badge-Wert. 0 oder null wird nicht angezeigt.
+          example: 3
+
+    Icon:
+      oneOf:
+        - $ref: "#/components/schemas/IconUrl"
+        - $ref: "#/components/schemas/IconSvg"
+      discriminator:
+        propertyName: type
+        mapping:
+          url: "#/components/schemas/IconUrl"
+          svg: "#/components/schemas/IconSvg"
+
+    IconUrl:
+      type: object
+      required:
+        - type
+        - value
+      properties:
+        type:
+          type: string
+          const: url
+        value:
+          type: string
+          format: uri-reference
+          example: /assets/icons/dashboard.svg
+
+    IconSvg:
+      type: object
+      required:
+        - type
+        - value
+      properties:
+        type:
+          type: string
+          const: svg
+        value:
+          type: string
+          description: Eingebettetes, serverseitig sanitiziertes SVG/XML als String.
+          example: '<svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>'

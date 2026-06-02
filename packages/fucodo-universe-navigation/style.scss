@@ -1,0 +1,286 @@
+:host {
+  --fucodo-navigation-height: 44px;
+  --fucodo-navigation-bg: #ffffff;
+  --fucodo-navigation-fg: #1f2937;
+  --fucodo-navigation-muted: #6b7280;
+  --fucodo-navigation-border: #e5e7eb;
+  --fucodo-navigation-active-bg: #f3f4f6;
+  --fucodo-navigation-badge-bg: #dc2626;
+  --fucodo-navigation-badge-fg: #ffffff;
+  --fucodo-navigation-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --fucodo-navigation-z-index: 1000;
+
+  display: block;
+  color: var(--fucodo-navigation-fg);
+  font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+}
+
+.topbar,
+.mobilebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--fucodo-navigation-z-index);
+  height: var(--fucodo-navigation-height);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1rem;
+  background: var(--fucodo-navigation-bg);
+  color: var(--fucodo-navigation-fg);
+  border-bottom: 1px solid var(--fucodo-navigation-border);
+  box-shadow: var(--fucodo-navigation-shadow);
+}
+
+.topbar {
+  justify-content: flex-start;
+}
+
+.mobilebar {
+  justify-content: space-between;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: max-content;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.logo img {
+  display: block;
+  max-height: 28px;
+  max-width: 140px;
+  object-fit: contain;
+}
+
+.menu-list,
+.drawer-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-list {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  height: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.menu-item {
+  display: block;
+}
+
+.menu-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 32px;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.5rem;
+  color: var(--fucodo-navigation-fg);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.menu-link:hover,
+.menu-link:focus-visible,
+.menu-link[aria-current="page"] {
+  background: var(--fucodo-navigation-active-bg);
+  outline: none;
+}
+
+.menu-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: 0 0 auto;
+}
+
+.menu-icon img,
+.menu-icon svg {
+  display: block;
+  width: 1.15rem;
+  height: 1.15rem;
+  object-fit: contain;
+}
+
+.menu-icon svg {
+  fill: currentColor;
+}
+
+.menu-icon svg [stroke] {
+  stroke: currentColor;
+}
+
+.menu-text {
+  display: inline-block;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.2rem;
+  height: 1.2rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: var(--fucodo-navigation-badge-bg);
+  color: var(--fucodo-navigation-badge-fg);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.notifications {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 32px;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.notifications:hover,
+.notifications:focus-visible {
+  background: var(--fucodo-navigation-active-bg);
+  outline: none;
+}
+
+.notifications-icon {
+  line-height: 1;
+}
+
+.drawer-toggle,
+.drawer-close,
+.drawer-backdrop {
+  border: 0;
+  cursor: pointer;
+}
+
+.drawer-toggle,
+.drawer-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--fucodo-navigation-fg);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.drawer-toggle:hover,
+.drawer-close:hover,
+.drawer-toggle:focus-visible,
+.drawer-close:focus-visible {
+  background: var(--fucodo-navigation-active-bg);
+  outline: none;
+}
+
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--fucodo-navigation-z-index) + 1);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: calc(var(--fucodo-navigation-z-index) + 2);
+  width: min(85vw, 340px);
+  padding: 1rem;
+  background: var(--fucodo-navigation-bg);
+  border-right: 1px solid var(--fucodo-navigation-border);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.drawer-list {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.drawer-list .menu-link {
+  width: 100%;
+  justify-content: flex-start;
+  min-height: 44px;
+  padding: 0.5rem 0.75rem;
+}
+
+.drawer-list .badge {
+  margin-left: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .drawer {
+    animation: fucodo-navigation-drawer-in 140ms ease-out;
+  }
+
+  .drawer-backdrop {
+    animation: fucodo-navigation-fade-in 140ms ease-out;
+  }
+
+  @keyframes fucodo-navigation-drawer-in {
+    from {
+      transform: translateX(-100%);
+    }
+
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fucodo-navigation-fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+}

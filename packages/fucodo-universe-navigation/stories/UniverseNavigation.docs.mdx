@@ -1,0 +1,101 @@
+import { Meta, Title, Subtitle, Description, Primary, ArgTypes, Source, Stories, Canvas } from '@storybook/addon-docs/blocks';
+import * as UniverseNavigationStories from './UniverseNavigation.stories';
+
+<Meta of={UniverseNavigationStories} title="Components/Universe/Navigation/Documentation" />
+
+# Fucodo Universe Navigation
+
+Die `fucodo-universe-navigation` Web Component bietet eine responsive Top-Navigation für das Fucodo Universe.
+Sie lädt ihre Konfiguration (Logo, Menü, Benachrichtigungen) dynamisch von einer API.
+
+## Installation
+
+Die Komponente kann direkt via Script-Tag eingebunden werden:
+
+```html
+<script type="module" src="path/to/fucodo-universe-navigation/dist/index.js"></script>
+```
+
+## Verwendung
+
+Binden Sie die Komponente in Ihre HTML-Seite ein und geben Sie das `src`-Attribut an, das auf den API-Endpunkt verweist.
+
+```html
+<fucodo-universe-navigation
+  src="/api/navigation"
+  interval="300"
+  breakpoint="768"
+></fucodo-universe-navigation>
+```
+
+## Attribute
+
+<ArgTypes of={UniverseNavigationStories.Default} />
+
+- `src` (erforderlich): Die URL zum API-Endpunkt.
+- `interval`: Aktualisierungsintervall in Sekunden (Standard: 300).
+- `breakpoint`: Pixel-Wert, ab dem die mobile Ansicht (Drawer) angezeigt wird (Standard: 768).
+- `cache-key`: Optionaler Schlüssel für das Caching im localStorage.
+
+## API Datenformat
+
+Der API-Endpunkt sollte ein JSON-Objekt zurückgeben, das dem folgenden Format entspricht:
+
+```json
+{
+  "logo": {
+    "text": "Fucodo Universe",
+    "url": "/",
+    "image": "/assets/logo.svg"
+  },
+  "notifications": {
+    "count": 7,
+    "url": "/notifications",
+    "label": "Benachrichtigungen"
+  },
+  "menu": [
+    {
+      "text": "Dashboard",
+      "url": "/dashboard",
+      "icon": {
+        "type": "svg",
+        "value": "<svg>...</svg>"
+      },
+      "badge": 3
+    }
+  ]
+}
+```
+
+## CSS Variablen
+
+Die Komponente kann über CSS-Variablen angepasst werden:
+
+```css
+fucodo-universe-navigation {
+  --fucodo-navigation-bg: #ffffff;
+  --fucodo-navigation-fg: #1f2937;
+  --fucodo-navigation-active-bg: #f3f4f6;
+  --fucodo-navigation-badge-bg: #dc2626;
+}
+```
+
+## Beispiele
+
+### Standard
+<Canvas of={UniverseNavigationStories.Default} />
+
+### Mobile Ansicht
+<Canvas of={UniverseNavigationStories.Mobile} />
+
+### Ohne Benachrichtigungen
+Wird angezeigt, wenn das `notifications` Objekt in der API-Antwort fehlt.
+<Canvas of={UniverseNavigationStories.NoNotifications} />
+
+### Null Benachrichtigungen
+Wird angezeigt, wenn `count` auf 0 gesetzt ist. Das Badge sollte ausgeblendet sein.
+<Canvas of={UniverseNavigationStories.ZeroNotifications} />
+
+### Eigenes Logo
+Beispiel mit einem externen SVG-Logo.
+<Canvas of={UniverseNavigationStories.CustomLogo} />
