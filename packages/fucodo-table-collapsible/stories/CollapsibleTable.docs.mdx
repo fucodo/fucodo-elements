@@ -1,0 +1,70 @@
+import { Meta, Title, Subtitle, Primary, ArgTypes, Stories, Source } from '@storybook/addon-docs/blocks';
+import * as CollapsibleTableStories from './CollapsibleTable.stories.js';
+
+<Meta of={CollapsibleTableStories} />
+
+<Title>fucodo-table-collapsible</Title>
+<Subtitle>A custom element that adds collapsible group functionality to standard HTML tables</Subtitle>
+
+## Features
+
+- **`data-group="Name"`** — Turns a `<tbody>` into a group with a clickable header.
+- **`data-open="true|false"`** — Optional initial state (defaults to `true`).
+- **Automatic calculation** — Row and column counts are determined automatically; no manual JS intervention in the table structure is required.
+- **Count badges** — Displays the number of rows within each group in the header.
+- **Accessibility** — Keyboard support (Enter/Space) and ARIA attributes (`aria-expanded`, `role="button"`) are handled out-of-the-box.
+- **Custom Event** — Dispatches `ct-toggle` with `{ group, open }` when a group's state changes.
+- **Polished UI** — Includes chevron animations, hover states, and respects `prefers-reduced-motion`.
+- **Easy Styling** — Styles are injected as a `<style>` tag (no Shadow DOM), allowing for full external CSS customization.
+
+## Usage
+
+Simply wrap your HTML table with the `<fucodo-table-collapsible>` element. Use `<tbody>` tags with the `data-group` attribute to define your groups.
+
+```html
+<fucodo-table-collapsible>
+  <table>
+    <thead>
+      <tr>
+        <th>Project</th>
+        <th>Status</th>
+        <th>Assignee</th>
+        <th>Due Date</th>
+      </tr>
+    </thead>
+
+    <tbody data-group="Frontend" data-open="true">
+      <tr><td>Login Page</td><td>✅ Done</td><td>Kay</td><td>2026-06-01</td></tr>
+      <tr><td>Dashboard Layout</td><td>🔄 In Progress</td><td>Mia</td><td>2026-06-15</td></tr>
+    </tbody>
+
+    <tbody data-group="Backend">
+      <tr><td>REST API</td><td>✅ Done</td><td>Ben</td><td>2026-05-28</td></tr>
+      <tr><td>Auth Service</td><td>🔄 In Progress</td><td>Lea</td><td>2026-06-12</td></tr>
+    </tbody>
+  </table>
+</fucodo-table-collapsible>
+```
+
+## Interactive Example
+
+<Primary />
+
+## Events
+
+The component dispatches a `ct-toggle` event whenever a group is collapsed or expanded.
+
+```javascript
+document.querySelector('fucodo-table-collapsible').addEventListener('ct-toggle', (event) => {
+  console.log('Group:', event.detail.group); // Name of the group
+  console.log('Is open:', event.detail.open); // Boolean state
+});
+```
+
+## Styling
+
+Since the component does **not** use Shadow DOM, you can easily override styles using standard CSS selectors. The internal styles are scoped to the `fucodo-table-collapsible` tag.
+
+## All Stories
+
+<Stories includePrimary={false} />

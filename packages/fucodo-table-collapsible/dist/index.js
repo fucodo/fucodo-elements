@@ -1,0 +1,201 @@
+(() => {
+  // packages/fucodo-table-collapsible/style.scss
+  var style_default = `@charset "UTF-8";
+fucodo-table-collapsible {
+  display: block;
+}
+
+fucodo-table-collapsible table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+fucodo-table-collapsible thead tr {
+  background: #fafaf9;
+  border-bottom: 2px solid #e7e5e4;
+}
+
+fucodo-table-collapsible th {
+  padding: 0.625rem 1rem;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #78716c;
+  white-space: nowrap;
+}
+
+/* \u2500\u2500 Group header row \u2500\u2500 */
+fucodo-table-collapsible .ct-group-header td {
+  padding: 0.5rem 1rem;
+  background: #f5f5f4;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #44403c;
+  border-top: 1px solid #e7e5e4;
+  border-bottom: 1px solid #e7e5e4;
+  cursor: pointer;
+  user-select: none;
+}
+
+fucodo-table-collapsible .ct-group-header:hover td {
+  background: #ece9e6;
+}
+
+fucodo-table-collapsible .ct-group-header .ct-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+fucodo-table-collapsible .ct-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  transition: transform 0.18s ease;
+  color: #a8a29e;
+  flex-shrink: 0;
+}
+
+fucodo-table-collapsible .ct-group-header[aria-expanded=true] .ct-chevron {
+  transform: rotate(90deg);
+}
+
+fucodo-table-collapsible .ct-label {
+  flex: 1;
+}
+
+fucodo-table-collapsible .ct-count {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #a8a29e;
+  background: #e7e5e4;
+  border-radius: 999px;
+  padding: 0.1em 0.55em;
+  letter-spacing: 0.01em;
+}
+
+/* \u2500\u2500 Data rows \u2500\u2500 */
+fucodo-table-collapsible tbody[data-group] tr:not(.ct-group-header) td {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid #f5f5f4;
+  color: #292524;
+}
+
+fucodo-table-collapsible tbody[data-group] tr:not(.ct-group-header):last-child td {
+  border-bottom: none;
+}
+
+fucodo-table-collapsible tbody[data-group] tr:not(.ct-group-header):hover td {
+  background: #fafaf9;
+}
+
+/* \u2500\u2500 Collapse animation \u2500\u2500 */
+fucodo-table-collapsible tbody[data-group] tr.ct-data-row {
+  transition: opacity 0.15s ease;
+}
+
+fucodo-table-collapsible tbody[data-group] tr.ct-data-row.ct-hidden {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  fucodo-table-collapsible .ct-chevron {
+    transition: none;
+  }
+}`;
+
+  // packages/fucodo-table-collapsible/index.js
+  var CollapsibleTable = class extends HTMLElement {
+    // ─── Lifecycle ────────────────────────────────────────────────────────────
+    connectedCallback() {
+      this._injectStyles();
+      this._buildGroupRows();
+      this._bindEvents();
+    }
+    // ─── Style injection (scoped to the host element) ─────────────────────────
+    _injectStyles() {
+      if (this.querySelector("style[data-ct]")) return;
+      const style = document.createElement("style");
+      style.setAttribute("data-ct", "");
+      style.textContent = style_default.toString();
+      this.prepend(style);
+    }
+    // ─── Build group header rows ───────────────────────────────────────────────
+    _buildGroupRows() {
+      const groups = this.querySelectorAll("tbody[data-group]");
+      groups.forEach((tbody) => {
+        const label = tbody.getAttribute("data-group");
+        const attr = tbody.getAttribute("data-open");
+        const isOpen = attr === "true";
+        const dataRows = [...tbody.querySelectorAll("tr")];
+        const colCount = this._colCount();
+        dataRows.forEach((r) => r.classList.add("ct-data-row"));
+        const headerRow = document.createElement("tr");
+        headerRow.classList.add("ct-group-header");
+        headerRow.setAttribute("role", "button");
+        headerRow.setAttribute("tabindex", "0");
+        headerRow.setAttribute("aria-expanded", String(isOpen));
+        headerRow.setAttribute("data-target", label);
+        const td = document.createElement("td");
+        td.setAttribute("colspan", colCount);
+        td.innerHTML = `
+        <span class="ct-inner">
+          <span class="ct-chevron" aria-hidden="true">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 2L7 5L3 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="ct-label">${label}</span>
+          <span class="ct-count">${dataRows.length}</span>
+        </span>
+      `;
+        headerRow.appendChild(td);
+        tbody.insertBefore(headerRow, tbody.firstChild);
+        if (!isOpen) {
+          dataRows.forEach((r) => r.classList.add("ct-hidden"));
+          headerRow.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+    // ─── Events ───────────────────────────────────────────────────────────────
+    _bindEvents() {
+      this.addEventListener("click", (e) => {
+        const header = e.target.closest(".ct-group-header");
+        if (header) this._toggle(header);
+      });
+      this.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          const header = e.target.closest(".ct-group-header");
+          if (header) {
+            e.preventDefault();
+            this._toggle(header);
+          }
+        }
+      });
+    }
+    _toggle(headerRow) {
+      const isOpen = headerRow.getAttribute("aria-expanded") === "true";
+      const tbody = headerRow.closest("tbody");
+      const rows = [...tbody.querySelectorAll(".ct-data-row")];
+      rows.forEach((r) => r.classList.toggle("ct-hidden", isOpen));
+      headerRow.setAttribute("aria-expanded", String(!isOpen));
+      this.dispatchEvent(new CustomEvent("ct-toggle", {
+        bubbles: true,
+        detail: { group: tbody.getAttribute("data-group"), open: !isOpen }
+      }));
+    }
+    // ─── Helpers ──────────────────────────────────────────────────────────────
+    _colCount() {
+      const firstRow = this.querySelector("thead tr") || this.querySelector("tr");
+      return firstRow ? firstRow.children.length : 1;
+    }
+  };
+  if (!customElements.get("fucodo-table-collapsible")) {
+    customElements.define("fucodo-table-collapsible", CollapsibleTable);
+  }
+})();
