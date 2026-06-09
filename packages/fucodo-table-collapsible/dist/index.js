@@ -1,7 +1,6 @@
 (() => {
   // packages/fucodo-table-collapsible/style.scss
-  var style_default = `@charset "UTF-8";
-fucodo-table-collapsible {
+  var style_default = `fucodo-table-collapsible {
   display: block;
 }
 
@@ -11,43 +10,10 @@ fucodo-table-collapsible table {
   font-size: 0.875rem;
 }
 
-fucodo-table-collapsible thead tr {
-  background: #fafaf9;
-  border-bottom: 2px solid #e7e5e4;
-}
-
-fucodo-table-collapsible th {
-  padding: 0.625rem 1rem;
-  text-align: left;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #78716c;
-  white-space: nowrap;
-}
-
-/* \u2500\u2500 Group header row \u2500\u2500 */
+/* \\u2500\\u2500 Group header row \\u2500\\u2500 */
 fucodo-table-collapsible .ct-group-header td {
-  padding: 0.5rem 1rem;
-  background: #f5f5f4;
-  font-weight: 600;
-  font-size: 0.8rem;
-  color: #44403c;
-  border-top: 1px solid #e7e5e4;
-  border-bottom: 1px solid #e7e5e4;
   cursor: pointer;
   user-select: none;
-}
-
-fucodo-table-collapsible .ct-group-header:hover td {
-  background: #ece9e6;
-}
-
-fucodo-table-collapsible .ct-group-header .ct-inner {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
 fucodo-table-collapsible .ct-chevron {
@@ -65,10 +31,6 @@ fucodo-table-collapsible .ct-group-header[aria-expanded=true] .ct-chevron {
   transform: rotate(90deg);
 }
 
-fucodo-table-collapsible .ct-label {
-  flex: 1;
-}
-
 fucodo-table-collapsible .ct-count {
   font-size: 0.7rem;
   font-weight: 500;
@@ -79,22 +41,7 @@ fucodo-table-collapsible .ct-count {
   letter-spacing: 0.01em;
 }
 
-/* \u2500\u2500 Data rows \u2500\u2500 */
-fucodo-table-collapsible tbody[data-group] tr:not(.ct-group-header) td {
-  padding: 0.6rem 1rem;
-  border-bottom: 1px solid #f5f5f4;
-  color: #292524;
-}
-
-fucodo-table-collapsible tbody[data-group] tr:not(.ct-group-header):last-child td {
-  border-bottom: none;
-}
-
-fucodo-table-collapsible tbody[data-group] tr:not(.ct-group-header):hover td {
-  background: #fafaf9;
-}
-
-/* \u2500\u2500 Collapse animation \u2500\u2500 */
+/* \\u2500\\u2500 Collapse animation \\u2500\\u2500 */
 fucodo-table-collapsible tbody[data-group] tr.ct-data-row {
   transition: opacity 0.15s ease;
 }
@@ -195,7 +142,5 @@ fucodo-table-collapsible tbody[data-group] tr.ct-data-row.ct-hidden {
       return firstRow ? firstRow.children.length : 1;
     }
   };
-  if (!customElements.get("fucodo-table-collapsible")) {
-    customElements.define("fucodo-table-collapsible", CollapsibleTable);
-  }
+  customElements.define("fucodo-table-collapsible", CollapsibleTable);
 })();
