@@ -21,7 +21,6 @@
     "@storybook/addon-docs": "^10.4.6",
     "@storybook/html": "^10.4.6",
     "@storybook/web-components-vite": "^10.4.6",
-    "esbuild": "^0.25.9",
     "esbuild-sass-plugin": "^3.3.1",
     "lit": "^3.3.1",
     "storybook": "^10.4.6"

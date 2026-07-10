@@ -347,7 +347,7 @@ svg {
   // node_modules/@lit/reactive-element/css-tag.js
   var t = globalThis;
   var e = t.ShadowRoot && (void 0 === t.ShadyCSS || t.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype;
-  var s = Symbol();
+  var s = /* @__PURE__ */ Symbol();
   var o = /* @__PURE__ */ new WeakMap();
   var n = class {
     constructor(t3, e4, o5) {
@@ -369,7 +369,7 @@ svg {
   };
   var r = (t3) => new n("string" == typeof t3 ? t3 : t3 + "", void 0, s);
   var S = (s4, o5) => {
-    if (e) s4.adoptedStyleSheets = o5.map(((t3) => t3 instanceof CSSStyleSheet ? t3 : t3.styleSheet));
+    if (e) s4.adoptedStyleSheets = o5.map((t3) => t3 instanceof CSSStyleSheet ? t3 : t3.styleSheet);
     else for (const e4 of o5) {
       const o6 = document.createElement("style"), n4 = t.litNonce;
       void 0 !== n4 && o6.setAttribute("nonce", n4), o6.textContent = e4.cssText, s4.appendChild(o6);
@@ -419,7 +419,7 @@ svg {
   } };
   var f = (t3, s4) => !i2(t3, s4);
   var b = { attribute: true, type: String, converter: u, reflect: false, useDefault: false, hasChanged: f };
-  Symbol.metadata ??= Symbol("metadata"), a.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
+  Symbol.metadata ??= /* @__PURE__ */ Symbol("metadata"), a.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
   var y = class extends HTMLElement {
     static addInitializer(t3) {
       this._$Ei(), (this.l ??= []).push(t3);
@@ -429,7 +429,7 @@ svg {
     }
     static createProperty(t3, s4 = b) {
       if (s4.state && (s4.attribute = false), this._$Ei(), this.prototype.hasOwnProperty(t3) && ((s4 = Object.create(s4)).wrapped = true), this.elementProperties.set(t3, s4), !s4.noAccessor) {
-        const i5 = Symbol(), h3 = this.getPropertyDescriptor(t3, i5, s4);
+        const i5 = /* @__PURE__ */ Symbol(), h3 = this.getPropertyDescriptor(t3, i5, s4);
         void 0 !== h3 && e2(this.prototype, t3, h3);
       }
     }
@@ -486,7 +486,7 @@ svg {
       super(), this._$Ep = void 0, this.isUpdatePending = false, this.hasUpdated = false, this._$Em = null, this._$Ev();
     }
     _$Ev() {
-      this._$ES = new Promise(((t3) => this.enableUpdating = t3)), this._$AL = /* @__PURE__ */ new Map(), this._$E_(), this.requestUpdate(), this.constructor.l?.forEach(((t3) => t3(this)));
+      this._$ES = new Promise((t3) => this.enableUpdating = t3), this._$AL = /* @__PURE__ */ new Map(), this._$E_(), this.requestUpdate(), this.constructor.l?.forEach((t3) => t3(this));
     }
     addController(t3) {
       (this._$EO ??= /* @__PURE__ */ new Set()).add(t3), void 0 !== this.renderRoot && this.isConnected && t3.hostConnected?.();
@@ -504,12 +504,12 @@ svg {
       return S(t3, this.constructor.elementStyles), t3;
     }
     connectedCallback() {
-      this.renderRoot ??= this.createRenderRoot(), this.enableUpdating(true), this._$EO?.forEach(((t3) => t3.hostConnected?.()));
+      this.renderRoot ??= this.createRenderRoot(), this.enableUpdating(true), this._$EO?.forEach((t3) => t3.hostConnected?.());
     }
     enableUpdating(t3) {
     }
     disconnectedCallback() {
-      this._$EO?.forEach(((t3) => t3.hostDisconnected?.()));
+      this._$EO?.forEach((t3) => t3.hostDisconnected?.());
     }
     attributeChangedCallback(t3, s4, i5) {
       this._$AK(t3, i5);
@@ -530,10 +530,10 @@ svg {
         this[e4] = r4 ?? this._$Ej?.get(e4) ?? r4, this._$Em = null;
       }
     }
-    requestUpdate(t3, s4, i5) {
+    requestUpdate(t3, s4, i5, e4 = false, h3) {
       if (void 0 !== t3) {
-        const e4 = this.constructor, h3 = this[t3];
-        if (i5 ??= e4.getPropertyOptions(t3), !((i5.hasChanged ?? f)(h3, s4) || i5.useDefault && i5.reflect && h3 === this._$Ej?.get(t3) && !this.hasAttribute(e4._$Eu(t3, i5)))) return;
+        const r4 = this.constructor;
+        if (false === e4 && (h3 = this[t3]), i5 ??= r4.getPropertyOptions(t3), !((i5.hasChanged ?? f)(h3, s4) || i5.useDefault && i5.reflect && h3 === this._$Ej?.get(t3) && !this.hasAttribute(r4._$Eu(t3, i5)))) return;
         this.C(t3, s4, i5);
       }
       false === this.isUpdatePending && (this._$ES = this._$EP());
@@ -570,7 +570,7 @@ svg {
       let t3 = false;
       const s4 = this._$AL;
       try {
-        t3 = this.shouldUpdate(s4), t3 ? (this.willUpdate(s4), this._$EO?.forEach(((t4) => t4.hostUpdate?.())), this.update(s4)) : this._$EM();
+        t3 = this.shouldUpdate(s4), t3 ? (this.willUpdate(s4), this._$EO?.forEach((t4) => t4.hostUpdate?.()), this.update(s4)) : this._$EM();
       } catch (s5) {
         throw t3 = false, this._$EM(), s5;
       }
@@ -579,7 +579,7 @@ svg {
     willUpdate(t3) {
     }
     _$AE(t3) {
-      this._$EO?.forEach(((t4) => t4.hostUpdated?.())), this.hasUpdated || (this.hasUpdated = true, this.firstUpdated(t3)), this.updated(t3);
+      this._$EO?.forEach((t4) => t4.hostUpdated?.()), this.hasUpdated || (this.hasUpdated = true, this.firstUpdated(t3)), this.updated(t3);
     }
     _$EM() {
       this._$AL = /* @__PURE__ */ new Map(), this.isUpdatePending = false;
@@ -594,105 +594,106 @@ svg {
       return true;
     }
     update(t3) {
-      this._$Eq &&= this._$Eq.forEach(((t4) => this._$ET(t4, this[t4]))), this._$EM();
+      this._$Eq &&= this._$Eq.forEach((t4) => this._$ET(t4, this[t4])), this._$EM();
     }
     updated(t3) {
     }
     firstUpdated(t3) {
     }
   };
-  y.elementStyles = [], y.shadowRootOptions = { mode: "open" }, y[d("elementProperties")] = /* @__PURE__ */ new Map(), y[d("finalized")] = /* @__PURE__ */ new Map(), p?.({ ReactiveElement: y }), (a.reactiveElementVersions ??= []).push("2.1.1");
+  y.elementStyles = [], y.shadowRootOptions = { mode: "open" }, y[d("elementProperties")] = /* @__PURE__ */ new Map(), y[d("finalized")] = /* @__PURE__ */ new Map(), p?.({ ReactiveElement: y }), (a.reactiveElementVersions ??= []).push("2.1.2");
 
   // node_modules/lit-html/lit-html.js
   var t2 = globalThis;
-  var i3 = t2.trustedTypes;
-  var s2 = i3 ? i3.createPolicy("lit-html", { createHTML: (t3) => t3 }) : void 0;
-  var e3 = "$lit$";
-  var h2 = `lit$${Math.random().toFixed(9).slice(2)}$`;
-  var o3 = "?" + h2;
-  var n3 = `<${o3}>`;
-  var r3 = document;
-  var l2 = () => r3.createComment("");
-  var c3 = (t3) => null === t3 || "object" != typeof t3 && "function" != typeof t3;
-  var a2 = Array.isArray;
-  var u2 = (t3) => a2(t3) || "function" == typeof t3?.[Symbol.iterator];
-  var d2 = "[ 	\n\f\r]";
-  var f2 = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g;
-  var v = /-->/g;
-  var _ = />/g;
-  var m = RegExp(`>|${d2}(?:([^\\s"'>=/]+)(${d2}*=${d2}*(?:[^ 	
+  var i3 = (t3) => t3;
+  var s2 = t2.trustedTypes;
+  var e3 = s2 ? s2.createPolicy("lit-html", { createHTML: (t3) => t3 }) : void 0;
+  var h2 = "$lit$";
+  var o3 = `lit$${Math.random().toFixed(9).slice(2)}$`;
+  var n3 = "?" + o3;
+  var r3 = `<${n3}>`;
+  var l2 = document;
+  var c3 = () => l2.createComment("");
+  var a2 = (t3) => null === t3 || "object" != typeof t3 && "function" != typeof t3;
+  var u2 = Array.isArray;
+  var d2 = (t3) => u2(t3) || "function" == typeof t3?.[Symbol.iterator];
+  var f2 = "[ 	\n\f\r]";
+  var v = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g;
+  var _ = /-->/g;
+  var m = />/g;
+  var p2 = RegExp(`>|${f2}(?:([^\\s"'>=/]+)(${f2}*=${f2}*(?:[^ 	
 \f\r"'\`<>=]|("|')|))|$)`, "g");
-  var p2 = /'/g;
-  var g = /"/g;
-  var $ = /^(?:script|style|textarea|title)$/i;
-  var y2 = (t3) => (i5, ...s4) => ({ _$litType$: t3, strings: i5, values: s4 });
-  var x = y2(1);
-  var b2 = y2(2);
-  var w = y2(3);
-  var T = Symbol.for("lit-noChange");
-  var E = Symbol.for("lit-nothing");
-  var A = /* @__PURE__ */ new WeakMap();
-  var C = r3.createTreeWalker(r3, 129);
-  function P(t3, i5) {
-    if (!a2(t3) || !t3.hasOwnProperty("raw")) throw Error("invalid template strings array");
-    return void 0 !== s2 ? s2.createHTML(i5) : i5;
+  var g = /'/g;
+  var $ = /"/g;
+  var y2 = /^(?:script|style|textarea|title)$/i;
+  var x = (t3) => (i5, ...s4) => ({ _$litType$: t3, strings: i5, values: s4 });
+  var b2 = x(1);
+  var w = x(2);
+  var T = x(3);
+  var E = /* @__PURE__ */ Symbol.for("lit-noChange");
+  var A = /* @__PURE__ */ Symbol.for("lit-nothing");
+  var C = /* @__PURE__ */ new WeakMap();
+  var P = l2.createTreeWalker(l2, 129);
+  function V(t3, i5) {
+    if (!u2(t3) || !t3.hasOwnProperty("raw")) throw Error("invalid template strings array");
+    return void 0 !== e3 ? e3.createHTML(i5) : i5;
   }
-  var V = (t3, i5) => {
-    const s4 = t3.length - 1, o5 = [];
-    let r4, l3 = 2 === i5 ? "<svg>" : 3 === i5 ? "<math>" : "", c4 = f2;
+  var N = (t3, i5) => {
+    const s4 = t3.length - 1, e4 = [];
+    let n4, l3 = 2 === i5 ? "<svg>" : 3 === i5 ? "<math>" : "", c4 = v;
     for (let i6 = 0; i6 < s4; i6++) {
       const s5 = t3[i6];
-      let a3, u3, d3 = -1, y3 = 0;
-      for (; y3 < s5.length && (c4.lastIndex = y3, u3 = c4.exec(s5), null !== u3); ) y3 = c4.lastIndex, c4 === f2 ? "!--" === u3[1] ? c4 = v : void 0 !== u3[1] ? c4 = _ : void 0 !== u3[2] ? ($.test(u3[2]) && (r4 = RegExp("</" + u3[2], "g")), c4 = m) : void 0 !== u3[3] && (c4 = m) : c4 === m ? ">" === u3[0] ? (c4 = r4 ?? f2, d3 = -1) : void 0 === u3[1] ? d3 = -2 : (d3 = c4.lastIndex - u3[2].length, a3 = u3[1], c4 = void 0 === u3[3] ? m : '"' === u3[3] ? g : p2) : c4 === g || c4 === p2 ? c4 = m : c4 === v || c4 === _ ? c4 = f2 : (c4 = m, r4 = void 0);
-      const x2 = c4 === m && t3[i6 + 1].startsWith("/>") ? " " : "";
-      l3 += c4 === f2 ? s5 + n3 : d3 >= 0 ? (o5.push(a3), s5.slice(0, d3) + e3 + s5.slice(d3) + h2 + x2) : s5 + h2 + (-2 === d3 ? i6 : x2);
+      let a3, u3, d3 = -1, f3 = 0;
+      for (; f3 < s5.length && (c4.lastIndex = f3, u3 = c4.exec(s5), null !== u3); ) f3 = c4.lastIndex, c4 === v ? "!--" === u3[1] ? c4 = _ : void 0 !== u3[1] ? c4 = m : void 0 !== u3[2] ? (y2.test(u3[2]) && (n4 = RegExp("</" + u3[2], "g")), c4 = p2) : void 0 !== u3[3] && (c4 = p2) : c4 === p2 ? ">" === u3[0] ? (c4 = n4 ?? v, d3 = -1) : void 0 === u3[1] ? d3 = -2 : (d3 = c4.lastIndex - u3[2].length, a3 = u3[1], c4 = void 0 === u3[3] ? p2 : '"' === u3[3] ? $ : g) : c4 === $ || c4 === g ? c4 = p2 : c4 === _ || c4 === m ? c4 = v : (c4 = p2, n4 = void 0);
+      const x2 = c4 === p2 && t3[i6 + 1].startsWith("/>") ? " " : "";
+      l3 += c4 === v ? s5 + r3 : d3 >= 0 ? (e4.push(a3), s5.slice(0, d3) + h2 + s5.slice(d3) + o3 + x2) : s5 + o3 + (-2 === d3 ? i6 : x2);
     }
-    return [P(t3, l3 + (t3[s4] || "<?>") + (2 === i5 ? "</svg>" : 3 === i5 ? "</math>" : "")), o5];
+    return [V(t3, l3 + (t3[s4] || "<?>") + (2 === i5 ? "</svg>" : 3 === i5 ? "</math>" : "")), e4];
   };
-  var N = class _N {
-    constructor({ strings: t3, _$litType$: s4 }, n4) {
+  var S2 = class _S {
+    constructor({ strings: t3, _$litType$: i5 }, e4) {
       let r4;
       this.parts = [];
-      let c4 = 0, a3 = 0;
-      const u3 = t3.length - 1, d3 = this.parts, [f3, v2] = V(t3, s4);
-      if (this.el = _N.createElement(f3, n4), C.currentNode = this.el.content, 2 === s4 || 3 === s4) {
+      let l3 = 0, a3 = 0;
+      const u3 = t3.length - 1, d3 = this.parts, [f3, v2] = N(t3, i5);
+      if (this.el = _S.createElement(f3, e4), P.currentNode = this.el.content, 2 === i5 || 3 === i5) {
         const t4 = this.el.content.firstChild;
         t4.replaceWith(...t4.childNodes);
       }
-      for (; null !== (r4 = C.nextNode()) && d3.length < u3; ) {
+      for (; null !== (r4 = P.nextNode()) && d3.length < u3; ) {
         if (1 === r4.nodeType) {
-          if (r4.hasAttributes()) for (const t4 of r4.getAttributeNames()) if (t4.endsWith(e3)) {
-            const i5 = v2[a3++], s5 = r4.getAttribute(t4).split(h2), e4 = /([.?@])?(.*)/.exec(i5);
-            d3.push({ type: 1, index: c4, name: e4[2], strings: s5, ctor: "." === e4[1] ? H : "?" === e4[1] ? I : "@" === e4[1] ? L : k }), r4.removeAttribute(t4);
-          } else t4.startsWith(h2) && (d3.push({ type: 6, index: c4 }), r4.removeAttribute(t4));
-          if ($.test(r4.tagName)) {
-            const t4 = r4.textContent.split(h2), s5 = t4.length - 1;
-            if (s5 > 0) {
-              r4.textContent = i3 ? i3.emptyScript : "";
-              for (let i5 = 0; i5 < s5; i5++) r4.append(t4[i5], l2()), C.nextNode(), d3.push({ type: 2, index: ++c4 });
-              r4.append(t4[s5], l2());
+          if (r4.hasAttributes()) for (const t4 of r4.getAttributeNames()) if (t4.endsWith(h2)) {
+            const i6 = v2[a3++], s4 = r4.getAttribute(t4).split(o3), e5 = /([.?@])?(.*)/.exec(i6);
+            d3.push({ type: 1, index: l3, name: e5[2], strings: s4, ctor: "." === e5[1] ? I : "?" === e5[1] ? L : "@" === e5[1] ? z : H }), r4.removeAttribute(t4);
+          } else t4.startsWith(o3) && (d3.push({ type: 6, index: l3 }), r4.removeAttribute(t4));
+          if (y2.test(r4.tagName)) {
+            const t4 = r4.textContent.split(o3), i6 = t4.length - 1;
+            if (i6 > 0) {
+              r4.textContent = s2 ? s2.emptyScript : "";
+              for (let s4 = 0; s4 < i6; s4++) r4.append(t4[s4], c3()), P.nextNode(), d3.push({ type: 2, index: ++l3 });
+              r4.append(t4[i6], c3());
             }
           }
-        } else if (8 === r4.nodeType) if (r4.data === o3) d3.push({ type: 2, index: c4 });
+        } else if (8 === r4.nodeType) if (r4.data === n3) d3.push({ type: 2, index: l3 });
         else {
           let t4 = -1;
-          for (; -1 !== (t4 = r4.data.indexOf(h2, t4 + 1)); ) d3.push({ type: 7, index: c4 }), t4 += h2.length - 1;
+          for (; -1 !== (t4 = r4.data.indexOf(o3, t4 + 1)); ) d3.push({ type: 7, index: l3 }), t4 += o3.length - 1;
         }
-        c4++;
+        l3++;
       }
     }
     static createElement(t3, i5) {
-      const s4 = r3.createElement("template");
+      const s4 = l2.createElement("template");
       return s4.innerHTML = t3, s4;
     }
   };
-  function S2(t3, i5, s4 = t3, e4) {
-    if (i5 === T) return i5;
+  function M(t3, i5, s4 = t3, e4) {
+    if (i5 === E) return i5;
     let h3 = void 0 !== e4 ? s4._$Co?.[e4] : s4._$Cl;
-    const o5 = c3(i5) ? void 0 : i5._$litDirective$;
-    return h3?.constructor !== o5 && (h3?._$AO?.(false), void 0 === o5 ? h3 = void 0 : (h3 = new o5(t3), h3._$AT(t3, s4, e4)), void 0 !== e4 ? (s4._$Co ??= [])[e4] = h3 : s4._$Cl = h3), void 0 !== h3 && (i5 = S2(t3, h3._$AS(t3, i5.values), h3, e4)), i5;
+    const o5 = a2(i5) ? void 0 : i5._$litDirective$;
+    return h3?.constructor !== o5 && (h3?._$AO?.(false), void 0 === o5 ? h3 = void 0 : (h3 = new o5(t3), h3._$AT(t3, s4, e4)), void 0 !== e4 ? (s4._$Co ??= [])[e4] = h3 : s4._$Cl = h3), void 0 !== h3 && (i5 = M(t3, h3._$AS(t3, i5.values), h3, e4)), i5;
   }
-  var M = class {
+  var R = class {
     constructor(t3, i5) {
       this._$AV = [], this._$AN = void 0, this._$AD = t3, this._$AM = i5;
     }
@@ -703,29 +704,29 @@ svg {
       return this._$AM._$AU;
     }
     u(t3) {
-      const { el: { content: i5 }, parts: s4 } = this._$AD, e4 = (t3?.creationScope ?? r3).importNode(i5, true);
-      C.currentNode = e4;
-      let h3 = C.nextNode(), o5 = 0, n4 = 0, l3 = s4[0];
-      for (; void 0 !== l3; ) {
-        if (o5 === l3.index) {
+      const { el: { content: i5 }, parts: s4 } = this._$AD, e4 = (t3?.creationScope ?? l2).importNode(i5, true);
+      P.currentNode = e4;
+      let h3 = P.nextNode(), o5 = 0, n4 = 0, r4 = s4[0];
+      for (; void 0 !== r4; ) {
+        if (o5 === r4.index) {
           let i6;
-          2 === l3.type ? i6 = new R(h3, h3.nextSibling, this, t3) : 1 === l3.type ? i6 = new l3.ctor(h3, l3.name, l3.strings, this, t3) : 6 === l3.type && (i6 = new z(h3, this, t3)), this._$AV.push(i6), l3 = s4[++n4];
+          2 === r4.type ? i6 = new k(h3, h3.nextSibling, this, t3) : 1 === r4.type ? i6 = new r4.ctor(h3, r4.name, r4.strings, this, t3) : 6 === r4.type && (i6 = new Z(h3, this, t3)), this._$AV.push(i6), r4 = s4[++n4];
         }
-        o5 !== l3?.index && (h3 = C.nextNode(), o5++);
+        o5 !== r4?.index && (h3 = P.nextNode(), o5++);
       }
-      return C.currentNode = r3, e4;
+      return P.currentNode = l2, e4;
     }
     p(t3) {
       let i5 = 0;
       for (const s4 of this._$AV) void 0 !== s4 && (void 0 !== s4.strings ? (s4._$AI(t3, s4, i5), i5 += s4.strings.length - 2) : s4._$AI(t3[i5])), i5++;
     }
   };
-  var R = class _R {
+  var k = class _k {
     get _$AU() {
       return this._$AM?._$AU ?? this._$Cv;
     }
     constructor(t3, i5, s4, e4) {
-      this.type = 2, this._$AH = E, this._$AN = void 0, this._$AA = t3, this._$AB = i5, this._$AM = s4, this.options = e4, this._$Cv = e4?.isConnected ?? true;
+      this.type = 2, this._$AH = A, this._$AN = void 0, this._$AA = t3, this._$AB = i5, this._$AM = s4, this.options = e4, this._$Cv = e4?.isConnected ?? true;
     }
     get parentNode() {
       let t3 = this._$AA.parentNode;
@@ -739,7 +740,7 @@ svg {
       return this._$AB;
     }
     _$AI(t3, i5 = this) {
-      t3 = S2(this, t3, i5), c3(t3) ? t3 === E || null == t3 || "" === t3 ? (this._$AH !== E && this._$AR(), this._$AH = E) : t3 !== this._$AH && t3 !== T && this._(t3) : void 0 !== t3._$litType$ ? this.$(t3) : void 0 !== t3.nodeType ? this.T(t3) : u2(t3) ? this.k(t3) : this._(t3);
+      t3 = M(this, t3, i5), a2(t3) ? t3 === A || null == t3 || "" === t3 ? (this._$AH !== A && this._$AR(), this._$AH = A) : t3 !== this._$AH && t3 !== E && this._(t3) : void 0 !== t3._$litType$ ? this.$(t3) : void 0 !== t3.nodeType ? this.T(t3) : d2(t3) ? this.k(t3) : this._(t3);
     }
     O(t3) {
       return this._$AA.parentNode.insertBefore(t3, this._$AB);
@@ -748,38 +749,38 @@ svg {
       this._$AH !== t3 && (this._$AR(), this._$AH = this.O(t3));
     }
     _(t3) {
-      this._$AH !== E && c3(this._$AH) ? this._$AA.nextSibling.data = t3 : this.T(r3.createTextNode(t3)), this._$AH = t3;
+      this._$AH !== A && a2(this._$AH) ? this._$AA.nextSibling.data = t3 : this.T(l2.createTextNode(t3)), this._$AH = t3;
     }
     $(t3) {
-      const { values: i5, _$litType$: s4 } = t3, e4 = "number" == typeof s4 ? this._$AC(t3) : (void 0 === s4.el && (s4.el = N.createElement(P(s4.h, s4.h[0]), this.options)), s4);
+      const { values: i5, _$litType$: s4 } = t3, e4 = "number" == typeof s4 ? this._$AC(t3) : (void 0 === s4.el && (s4.el = S2.createElement(V(s4.h, s4.h[0]), this.options)), s4);
       if (this._$AH?._$AD === e4) this._$AH.p(i5);
       else {
-        const t4 = new M(e4, this), s5 = t4.u(this.options);
+        const t4 = new R(e4, this), s5 = t4.u(this.options);
         t4.p(i5), this.T(s5), this._$AH = t4;
       }
     }
     _$AC(t3) {
-      let i5 = A.get(t3.strings);
-      return void 0 === i5 && A.set(t3.strings, i5 = new N(t3)), i5;
+      let i5 = C.get(t3.strings);
+      return void 0 === i5 && C.set(t3.strings, i5 = new S2(t3)), i5;
     }
     k(t3) {
-      a2(this._$AH) || (this._$AH = [], this._$AR());
+      u2(this._$AH) || (this._$AH = [], this._$AR());
       const i5 = this._$AH;
       let s4, e4 = 0;
-      for (const h3 of t3) e4 === i5.length ? i5.push(s4 = new _R(this.O(l2()), this.O(l2()), this, this.options)) : s4 = i5[e4], s4._$AI(h3), e4++;
+      for (const h3 of t3) e4 === i5.length ? i5.push(s4 = new _k(this.O(c3()), this.O(c3()), this, this.options)) : s4 = i5[e4], s4._$AI(h3), e4++;
       e4 < i5.length && (this._$AR(s4 && s4._$AB.nextSibling, e4), i5.length = e4);
     }
-    _$AR(t3 = this._$AA.nextSibling, i5) {
-      for (this._$AP?.(false, true, i5); t3 !== this._$AB; ) {
-        const i6 = t3.nextSibling;
-        t3.remove(), t3 = i6;
+    _$AR(t3 = this._$AA.nextSibling, s4) {
+      for (this._$AP?.(false, true, s4); t3 !== this._$AB; ) {
+        const s5 = i3(t3).nextSibling;
+        i3(t3).remove(), t3 = s5;
       }
     }
     setConnected(t3) {
       void 0 === this._$AM && (this._$Cv = t3, this._$AP?.(t3));
     }
   };
-  var k = class {
+  var H = class {
     get tagName() {
       return this.element.tagName;
     }
@@ -787,53 +788,53 @@ svg {
       return this._$AM._$AU;
     }
     constructor(t3, i5, s4, e4, h3) {
-      this.type = 1, this._$AH = E, this._$AN = void 0, this.element = t3, this.name = i5, this._$AM = e4, this.options = h3, s4.length > 2 || "" !== s4[0] || "" !== s4[1] ? (this._$AH = Array(s4.length - 1).fill(new String()), this.strings = s4) : this._$AH = E;
+      this.type = 1, this._$AH = A, this._$AN = void 0, this.element = t3, this.name = i5, this._$AM = e4, this.options = h3, s4.length > 2 || "" !== s4[0] || "" !== s4[1] ? (this._$AH = Array(s4.length - 1).fill(new String()), this.strings = s4) : this._$AH = A;
     }
     _$AI(t3, i5 = this, s4, e4) {
       const h3 = this.strings;
       let o5 = false;
-      if (void 0 === h3) t3 = S2(this, t3, i5, 0), o5 = !c3(t3) || t3 !== this._$AH && t3 !== T, o5 && (this._$AH = t3);
+      if (void 0 === h3) t3 = M(this, t3, i5, 0), o5 = !a2(t3) || t3 !== this._$AH && t3 !== E, o5 && (this._$AH = t3);
       else {
         const e5 = t3;
         let n4, r4;
-        for (t3 = h3[0], n4 = 0; n4 < h3.length - 1; n4++) r4 = S2(this, e5[s4 + n4], i5, n4), r4 === T && (r4 = this._$AH[n4]), o5 ||= !c3(r4) || r4 !== this._$AH[n4], r4 === E ? t3 = E : t3 !== E && (t3 += (r4 ?? "") + h3[n4 + 1]), this._$AH[n4] = r4;
+        for (t3 = h3[0], n4 = 0; n4 < h3.length - 1; n4++) r4 = M(this, e5[s4 + n4], i5, n4), r4 === E && (r4 = this._$AH[n4]), o5 ||= !a2(r4) || r4 !== this._$AH[n4], r4 === A ? t3 = A : t3 !== A && (t3 += (r4 ?? "") + h3[n4 + 1]), this._$AH[n4] = r4;
       }
       o5 && !e4 && this.j(t3);
     }
     j(t3) {
-      t3 === E ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t3 ?? "");
+      t3 === A ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t3 ?? "");
     }
   };
-  var H = class extends k {
+  var I = class extends H {
     constructor() {
       super(...arguments), this.type = 3;
     }
     j(t3) {
-      this.element[this.name] = t3 === E ? void 0 : t3;
+      this.element[this.name] = t3 === A ? void 0 : t3;
     }
   };
-  var I = class extends k {
+  var L = class extends H {
     constructor() {
       super(...arguments), this.type = 4;
     }
     j(t3) {
-      this.element.toggleAttribute(this.name, !!t3 && t3 !== E);
+      this.element.toggleAttribute(this.name, !!t3 && t3 !== A);
     }
   };
-  var L = class extends k {
+  var z = class extends H {
     constructor(t3, i5, s4, e4, h3) {
       super(t3, i5, s4, e4, h3), this.type = 5;
     }
     _$AI(t3, i5 = this) {
-      if ((t3 = S2(this, t3, i5, 0) ?? E) === T) return;
-      const s4 = this._$AH, e4 = t3 === E && s4 !== E || t3.capture !== s4.capture || t3.once !== s4.once || t3.passive !== s4.passive, h3 = t3 !== E && (s4 === E || e4);
+      if ((t3 = M(this, t3, i5, 0) ?? A) === E) return;
+      const s4 = this._$AH, e4 = t3 === A && s4 !== A || t3.capture !== s4.capture || t3.once !== s4.once || t3.passive !== s4.passive, h3 = t3 !== A && (s4 === A || e4);
       e4 && this.element.removeEventListener(this.name, this, s4), h3 && this.element.addEventListener(this.name, this, t3), this._$AH = t3;
     }
     handleEvent(t3) {
       "function" == typeof this._$AH ? this._$AH.call(this.options?.host ?? this.element, t3) : this._$AH.handleEvent(t3);
     }
   };
-  var z = class {
+  var Z = class {
     constructor(t3, i5, s4) {
       this.element = t3, this.type = 6, this._$AN = void 0, this._$AM = i5, this.options = s4;
     }
@@ -841,17 +842,17 @@ svg {
       return this._$AM._$AU;
     }
     _$AI(t3) {
-      S2(this, t3);
+      M(this, t3);
     }
   };
-  var j = t2.litHtmlPolyfillSupport;
-  j?.(N, R), (t2.litHtmlVersions ??= []).push("3.3.1");
-  var B = (t3, i5, s4) => {
+  var B = t2.litHtmlPolyfillSupport;
+  B?.(S2, k), (t2.litHtmlVersions ??= []).push("3.3.3");
+  var D = (t3, i5, s4) => {
     const e4 = s4?.renderBefore ?? i5;
     let h3 = e4._$litPart$;
     if (void 0 === h3) {
       const t4 = s4?.renderBefore ?? null;
-      e4._$litPart$ = h3 = new R(i5.insertBefore(l2(), t4), t4, void 0, s4 ?? {});
+      e4._$litPart$ = h3 = new k(i5.insertBefore(c3(), t4), t4, void 0, s4 ?? {});
     }
     return h3._$AI(t3), h3;
   };
@@ -868,7 +869,7 @@ svg {
     }
     update(t3) {
       const r4 = this.render();
-      this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(t3), this._$Do = B(r4, this.renderRoot, this.renderOptions);
+      this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(t3), this._$Do = D(r4, this.renderRoot, this.renderOptions);
     }
     connectedCallback() {
       super.connectedCallback(), this._$Do?.setConnected(true);
@@ -877,13 +878,13 @@ svg {
       super.disconnectedCallback(), this._$Do?.setConnected(false);
     }
     render() {
-      return T;
+      return E;
     }
   };
   i4._$litElement$ = true, i4["finalized"] = true, s3.litElementHydrateSupport?.({ LitElement: i4 });
   var o4 = s3.litElementPolyfillSupport;
   o4?.({ LitElement: i4 });
-  (s3.litElementVersions ??= []).push("4.2.1");
+  (s3.litElementVersions ??= []).push("4.2.2");
 
   // packages/fucodo-chart-roadmap-2/index.js
   var MS_DAY = 864e5;
@@ -1263,7 +1264,7 @@ svg {
       const svgW = this._svgWidth;
       const svgH = this._svgBodyHeight;
       this._buildColCache();
-      return x`
+      return b2`
       ${this._renderToolbar()}
 
       <div class="gantt-wrap">
@@ -1318,16 +1319,16 @@ svg {
     }
     // ── Toolbar ──────────────────────────────────────────────────────────────
     _renderToolbar() {
-      if (!this.viewModeSelect && !this.todayButton) return E;
-      return x`
+      if (!this.viewModeSelect && !this.todayButton) return A;
+      return b2`
       <div class="toolbar">
-        ${this.viewModeSelect ? VIEW_MODES.map((m2) => x`
+        ${this.viewModeSelect ? VIEW_MODES.map((m2) => b2`
           <button class="vm-btn ${this.viewMode === m2 ? "active" : ""}"
                   @click="${() => this._setViewMode(m2)}">${m2}</button>
-        `) : E}
-        ${this.todayButton ? x`
+        `) : A}
+        ${this.todayButton ? b2`
           <button class="today-btn" @click="${() => this._scrollToToday(true)}">Today ↗</button>
-        ` : E}
+        ` : A}
       </div>
     `;
     }
@@ -1340,7 +1341,7 @@ svg {
         const cx = 12, cy = row.y + hg / 2;
         const sz = 5;
         const chevron = collapsed ? `M${cx - sz / 2},${cy - sz} L${cx + sz / 2},${cy} L${cx - sz / 2},${cy + sz}` : `M${cx - sz},${cy - sz / 2} L${cx},${cy + sz / 2} L${cx + sz},${cy - sz / 2}`;
-        return b2`
+        return w`
         <rect class="group-header-row"
               x="0" y="${row.y}" width="${w2}" height="${hg}"
               @click="${() => this._toggleGroup(row.group)}" />
@@ -1355,7 +1356,7 @@ svg {
       }
       const t3 = row.task;
       const dots = (s4, max) => s4.length > max ? s4.slice(0, max - 1) + "\u2026" : s4;
-      return b2`
+      return w`
       <rect class="task-row-bg" fill="transparent"
             x="0" y="${row.y}" width="${w2}" height="${rh}" />
       <text class="task-label" x="20" y="${row.y + rh / 2}">
@@ -1375,7 +1376,7 @@ svg {
       const upperItems = [];
       let ux = 0;
       for (const span of upperSpans) {
-        upperItems.push(b2`
+        upperItems.push(w`
         <text class="header-upper-text"
               x="${ux + span.colSpan * colW / 2}"
               y="${upperH / 2 + 1}"
@@ -1389,13 +1390,13 @@ svg {
       `);
         ux += span.colSpan * colW;
       }
-      const divider = b2`
+      const divider = w`
       <line class="header-sep" x1="0" y1="${upperH}" x2="${cols.length * colW}" y2="${upperH}" />
     `;
       const lowerItems = cols.map((col, i5) => {
         const x2 = i5 * colW;
         const isToday = isSameDay(col.date, /* @__PURE__ */ new Date());
-        return b2`
+        return w`
         <text class="header-lower-text"
               x="${x2 + colW / 2}"
               y="${upperH + lowerH / 2 + 1}"
@@ -1409,11 +1410,11 @@ svg {
               x2="${x2 + colW}" y2="${headerH}" />
       `;
       });
-      return b2`${upperItems}${divider}${lowerItems}`;
+      return w`${upperItems}${divider}${lowerItems}`;
     }
     // ── SVG defs (clip paths for bar labels) ─────────────────────────────────
     _renderDefs(taskMap) {
-      return b2`
+      return w`
       <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4"
               markerWidth="6" markerHeight="6" orient="auto">
         <path class="dep-arrowhead" d="M0,0 L0,8 L8,4 z" />
@@ -1433,32 +1434,32 @@ svg {
         const isT = isSameDay(col.date, today);
         const isWE = vdef.isWeekend(col);
         const isH = holidays.has(fd);
-        if (isT) return b2`<rect class="today-col"   x="${x2}" y="0" width="${colW}" height="${svgH}" />`;
-        if (isH) return b2`<rect class="holiday-col" x="${x2}" y="0" width="${colW}" height="${svgH}" />`;
-        if (isWE) return b2`<rect class="weekend-col" x="${x2}" y="0" width="${colW}" height="${svgH}" />`;
-        return E;
+        if (isT) return w`<rect class="today-col"   x="${x2}" y="0" width="${colW}" height="${svgH}" />`;
+        if (isH) return w`<rect class="holiday-col" x="${x2}" y="0" width="${colW}" height="${svgH}" />`;
+        if (isWE) return w`<rect class="weekend-col" x="${x2}" y="0" width="${colW}" height="${svgH}" />`;
+        return A;
       });
       const vLines = cols.map((col, i5) => {
         const x2 = (i5 + 1) * colW;
-        return b2`<line stroke="var(--fc-border)" stroke-width="0.5"
+        return w`<line stroke="var(--fc-border)" stroke-width="0.5"
                        x1="${x2}" y1="0" x2="${x2}" y2="${svgH}" />`;
       });
       const hLines = rows.map((r4) => {
         const h3 = r4.type === "group" ? this.groupHeaderHeight : this.rowHeight;
         const y3 = r4.y + h3;
-        return b2`<line stroke="var(--fc-border)" stroke-width="0.5"
+        return w`<line stroke="var(--fc-border)" stroke-width="0.5"
                        x1="0" y1="${y3}" x2="${svgW}" y2="${y3}" />`;
       });
-      return b2`${colBgs}${vLines}${hLines}`;
+      return w`${colBgs}${vLines}${hLines}`;
     }
     // ── Row backgrounds (for hover highlight) ────────────────────────────────
     _renderRowBackgrounds(rows, svgW) {
       return rows.map((r4) => {
         if (r4.type === "group") {
-          return b2`<rect fill="var(--fc-group-bg)"
+          return w`<rect fill="var(--fc-group-bg)"
                          x="0" y="${r4.y}" width="${svgW}" height="${this.groupHeaderHeight}" />`;
         }
-        return b2`<rect class="task-row-bg" fill="transparent"
+        return w`<rect class="task-row-bg" fill="transparent"
                        x="0" y="${r4.y}" width="${svgW}" height="${this.rowHeight}" />`;
       });
     }
@@ -1488,7 +1489,7 @@ svg {
       const clipW = w2 - 10;
       const handleW = Math.min(8, w2 * 0.15);
       const dots = (s4, approxChars) => s4.length > approxChars ? s4.slice(0, approxChars - 1) + "\u2026" : s4;
-      return b2`
+      return w`
       <g class="bar-group ${this.readonly ? "readonly" : ""}"
          data-task-id="${t3.id}"
          @pointerenter="${(e4) => this._showTooltip(e4, t3)}"
@@ -1502,21 +1503,21 @@ svg {
               fill="${colour}" />
 
         <!-- Progress fill -->
-        ${progress > 0 ? b2`
+        ${progress > 0 ? w`
           <rect class="bar-progress"
                 x="${x2}" y="${y3}" width="${progressW}" height="${barH}"
                 rx="${rx}" ry="${rx}"
                 fill="${colourDark}" />
-        ` : E}
+        ` : A}
 
         <!-- Progress pill clip right -->
-        ${progress > 0 && progress < 100 ? b2`
+        ${progress > 0 && progress < 100 ? w`
           <rect x="${x2 + progressW - rx}" y="${y3}" width="${rx}" height="${barH}"
                 fill="${colourDark}" opacity="0.38" />
-        ` : E}
+        ` : A}
 
         <!-- Bar label -->
-        ${w2 > 30 ? b2`
+        ${w2 > 30 ? w`
           <text class="bar-label"
                 x="${labelX}" y="${y3 + barH / 2}"
                 clip-path="url(#clip-${t3.id})">
@@ -1525,27 +1526,27 @@ svg {
           <clipPath id="clip-${t3.id}">
             <rect x="${x2 + 4}" y="${y3}" width="${Math.max(0, w2 - 14)}" height="${barH}" />
           </clipPath>
-        ` : E}
+        ` : A}
 
         <!-- Resize handle (right edge) — only when not readonly -->
-        ${!this.readonly ? b2`
+        ${!this.readonly ? w`
           <rect class="resize-handle"
                 data-task-id="${t3.id}" data-action="resize-end"
                 x="${x2 + w2 - handleW}" y="${y3}"
                 width="${handleW}" height="${barH}"
                 fill="transparent"
                 rx="${rx}" />
-        ` : E}
+        ` : A}
 
         <!-- Progress drag handle — optional -->
-        ${this.progressDraggable && !this.readonly ? b2`
+        ${this.progressDraggable && !this.readonly ? w`
           <circle class="resize-handle-progress"
                   data-task-id="${t3.id}" data-action="progress"
                   cx="${x2 + progressW}" cy="${y3 + barH}"
                   r="5"
                   fill="${colour}"
                   stroke="#fff" stroke-width="1.5" />
-        ` : E}
+        ` : A}
       </g>
     `;
     }
@@ -1569,7 +1570,7 @@ svg {
                                L ${fromX + curve} ${fromY} 
                                C ${fromX + curve * 2} ${fromY} ${toX - curve * 2} ${toY} ${toX - curve} ${toY} 
                                L ${toX} ${toY}`;
-          out.push(b2`
+          out.push(w`
           <path class="dep-arrow"
                 d="${path}"
                 marker-end="url(#arr)" />
@@ -1581,27 +1582,27 @@ svg {
     // ── Today line ────────────────────────────────────────────────────────────
     _renderTodayLine(svgH) {
       const today = /* @__PURE__ */ new Date();
-      if (today < this._ganttStart || today > this._ganttEnd) return E;
+      if (today < this._ganttStart || today > this._ganttEnd) return A;
       const x2 = this._dateToX(today);
-      return b2`
+      return w`
       <line class="today-line" x1="${x2}" y1="0" x2="${x2}" y2="${svgH}" />
       <text class="today-label" x="${x2 + 4}" y="10">today</text>
     `;
     }
     // ── Tooltip ──────────────────────────────────────────────────────────────
     _renderTooltip() {
-      if (!this._tooltip) return E;
+      if (!this._tooltip) return A;
       const { task, x: x2, y: y3 } = this._tooltip;
       const prog = Math.round(task.progress || 0);
       const dur = diffDays(task._start, addDays(task._end, 1));
-      return x`
+      return b2`
       <div class="tooltip"
            style="left:${x2}px; top:${y3}px">
         <div class="tooltip-title">${task.name}</div>
         <div class="tooltip-row"><span>Start</span><span>${formatDate(task._start)}</span></div>
         <div class="tooltip-row"><span>End</span>  <span>${formatDate(task._end)}</span></div>
         <div class="tooltip-row"><span>Duration</span><span>${dur}d</span></div>
-        ${task.group ? x`<div class="tooltip-row"><span>Group</span><span>${task.group}</span></div>` : E}
+        ${task.group ? b2`<div class="tooltip-row"><span>Group</span><span>${task.group}</span></div>` : A}
         <div class="tooltip-progress-bar">
           <div class="tooltip-progress-fill" style="width:${prog}%"></div>
         </div>
