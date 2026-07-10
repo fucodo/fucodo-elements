@@ -1,0 +1,19 @@
+{
+  "name": "fucodo.json-number",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fucodo/fucodo.json-number.git"
+  },
+  "author": "fucodo GmbH",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fucodo/fucodo.json-number/issues"
+  },
+  "homepage": "https://github.com/fucodo/fucodo.json-number#readme",
+  "description": ""
+}
