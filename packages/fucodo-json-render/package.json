@@ -1,0 +1,22 @@
+{
+  "name": "fucodo.json-render",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fucodo/fucodo.json-render.git"
+  },
+  "author": "fucodo GmbH",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fucodo/fucodo.json-render/issues"
+  },
+  "homepage": "https://github.com/fucodo/fucodo.json-render#readme",
+  "description": "",
+  "dependencies": {
+    "handlebars": "^4.7"
+  }
+}

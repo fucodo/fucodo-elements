@@ -1,0 +1,44 @@
+import { Meta, Title, Subtitle, Description, Primary, Stories } from '@storybook/addon-docs/blocks';
+import * as JsonFetchStories from './JsonFetch.stories.js';
+
+<Meta of={JsonFetchStories} />
+
+<Title />
+<Subtitle>Web Component: <code>&lt;fucodo-json-fetch&gt;</code></Subtitle>
+
+<Description>
+`fucodo-json-fetch` is a declarative web component that fetches JSON data and dispatches it to its child components. 
+It is specifically designed to work seamlessly with `fucodo-json-render`.
+
+- **Declarative**: Just set the `src` attribute.
+- **Nesting Safe**: Isolation logic ensures nested fetchers don't leak data to the wrong renderers.
+- **Event-driven**: Uses `json-data` and `json-error` custom events.
+</Description>
+
+### Basic Usage
+
+```html
+<fucodo-json-fetch src="https://api.example.com/data.json">
+  <fucodo-json-render>
+    <template>
+      <!-- Your Handlebars template here -->
+    </template>
+  </fucodo-json-render>
+</fucodo-json-fetch>
+```
+
+### Attributes
+
+| Attribute | Description |
+|-----------|-------------|
+| `src`     | The URL of the JSON resource to fetch. |
+
+### Events Dispatched
+
+- `json-data`: Dispatched when data is successfully fetched. `event.detail.data` contains the JSON response.
+- `json-error`: Dispatched when the fetch fails. `event.detail.error` contains the error object.
+
+### Stories
+
+<Primary />
+<Stories includePrimary={false} />

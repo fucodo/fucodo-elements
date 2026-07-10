@@ -1,0 +1,43 @@
+import { Meta, Title, Subtitle, Description, Primary, Stories } from '@storybook/addon-docs/blocks';
+import * as JsonRenderStories from './JsonRender.stories.js';
+
+<Meta of={JsonRenderStories} />
+
+<Title />
+<Subtitle>Web Component: <code>&lt;fucodo-json-render&gt;</code></Subtitle>
+
+<Description>
+`fucodo-json-render` is a web component that renders JSON data using a Handlebars template. 
+It listens for `json-data` and `json-error` events to update its content.
+
+Key features:
+- **Handlebars Templates**: Uses Handlebars for powerful templating.
+- **Declarative Template**: Define the template inside a `template` tag.
+- **Auto-cleaning**: Removes the source `template` tag after compilation.
+</Description>
+
+### Usage
+
+The component expects a `template` tag as a child. When it receives a `json-data` event, it renders the template with the data wrapped as `{ items: data }`.
+
+```html
+<fucodo-json-render>
+  <template>
+    <ul>
+      {{#each items}}
+        <li>{{this.name}}</li>
+      {{/each}}
+    </ul>
+  </template>
+</fucodo-json-render>
+```
+
+### Events Listened To
+
+- `json-data`: Updates the component's inner HTML by rendering the template with `event.detail.data`.
+- `json-error`: Displays a "Failed to load data" error message.
+
+### Stories
+
+<Primary />
+<Stories includePrimary={false} />
