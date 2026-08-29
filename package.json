@@ -33,5 +33,10 @@
     "path": "^0.12.7",
     "remark-gfm": "^4.0.1",
     "vanilla-tilt": "^1.8.1"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "fsevents@2.3.3": true,
+    "@parcel/watcher@2.6.0": true
   }
 }
