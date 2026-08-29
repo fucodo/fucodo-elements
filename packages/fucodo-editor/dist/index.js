@@ -3272,6 +3272,7 @@
     article: true,
     aside: true,
     blockquote: true,
+    body: true,
     canvas: true,
     dd: true,
     div: true,
@@ -6995,6 +6996,8 @@
     };
   }
   function scrollRectIntoView(view, rect, startDOM) {
+    if (!nonZero(rect) && rect.left == 0)
+      return;
     let scrollThreshold = view.someProp("scrollThreshold") || 0, scrollMargin = view.someProp("scrollMargin") || 5;
     let doc3 = view.dom.ownerDocument;
     for (let parent = startDOM || view.dom; ; ) {
@@ -7464,7 +7467,7 @@
     // When parsing in-editor content (in domchange.js), we allow
     // descriptions to determine the parse rules that should be used to
     // parse them.
-    parseRule() {
+    parseRule(addedNodes) {
       return null;
     }
     // Used by the editor's event handler to ignore events that come
@@ -7839,7 +7842,8 @@
           wrap2.appendChild(dom);
           dom = wrap2;
         }
-        dom.contentEditable = "false";
+        if (!dom.hasAttribute("contenteditable"))
+          dom.contentEditable = "false";
         dom.classList.add("ProseMirror-widget");
       }
       super(parent, [], dom, null);
@@ -7998,7 +8002,7 @@
       else
         return new _NodeViewDesc(parent, node, outerDeco, innerDeco, dom, contentDOM || null, nodeDOM);
     }
-    parseRule() {
+    parseRule(addedNodes) {
       if (this.node.type.spec.reparseInView)
         return null;
       let rule = { node: this.node.type.name, attrs: this.node.attrs };
@@ -8016,8 +8020,13 @@
             break;
           }
         }
-        if (!rule.contentElement)
-          rule.getContent = () => Fragment.empty;
+        if (!rule.contentElement) {
+          let found2 = addedNodes && addedNodes.find((n4) => n4.nodeType == 1 && addedNodes.indexOf(n4.parentNode) < 0 && this.dom.contains(n4));
+          if (found2)
+            rule.contentElement = found2;
+          else
+            rule.getContent = () => Fragment.empty;
+        }
       }
       return rule;
     }
@@ -9496,8 +9505,14 @@
     let trustedTypes = window.trustedTypes;
     if (!trustedTypes)
       return html;
-    if (!_policy)
-      _policy = trustedTypes.defaultPolicy || trustedTypes.createPolicy("ProseMirrorClipboard", { createHTML: (s4) => s4 });
+    if (!_policy) {
+      if (_policy = trustedTypes.defaultPolicy)
+        try {
+          return _policy.createHTML(html);
+        } catch (_a2) {
+        }
+      _policy = trustedTypes.createPolicy("ProseMirrorClipboard", { createHTML: (s4) => s4 });
+    }
     return _policy.createHTML(html);
   }
   function readHTML(html) {
@@ -9547,6 +9562,11 @@
       let type = schema2.nodes[array[i6]];
       if (!type || type.hasRequiredAttrs())
         break;
+      try {
+        type.checkAttrs(array[i6 + 1]);
+      } catch (e4) {
+        break;
+      }
       content = Fragment.from(type.create(array[i6 + 1], content));
       openStart++;
       openEnd++;
@@ -10304,7 +10324,7 @@
   };
   handlers.beforeinput = (view, _event) => {
     let event = _event;
-    if (chrome && android && event.inputType == "deleteContentBackward") {
+    if (android && event.inputType == "deleteContentBackward") {
       view.domObserver.flushSoon();
       let { domChangeCount } = view.input;
       setTimeout(() => {
@@ -11289,7 +11309,7 @@
       }
     }
   }
-  function parseBetween(view, from_, to_) {
+  function parseBetween(view, from_, to_, addedNodes) {
     let { node: parent, fromOffset, toOffset, from: from2, to } = view.docView.parseRange(from_, to_);
     let domSel = view.domSelectionRange();
     let find2;
@@ -11321,7 +11341,7 @@
       to: toOffset,
       preserveWhitespace: $from.parent.type.whitespace == "pre" ? "full" : true,
       findPositions: find2,
-      ruleFromNode,
+      ruleFromNode: ruleFromNode(addedNodes),
       context: $from
     });
     if (find2 && find2[0].pos != null) {
@@ -11332,10 +11352,10 @@
     }
     return { doc: doc3, sel, from: from2, to };
   }
-  function ruleFromNode(dom) {
+  var ruleFromNode = (added) => (dom) => {
     let desc = dom.pmViewDesc;
     if (desc) {
-      return desc.parseRule();
+      return desc.parseRule(added);
     } else if (dom.nodeName == "BR" && dom.parentNode) {
       if (safari && /^(ul|ol)$/i.test(dom.parentNode.nodeName)) {
         let skip = document.createElement("div");
@@ -11348,7 +11368,7 @@
       return { ignore: true };
     }
     return null;
-  }
+  };
   var isInline = /^(a|abbr|acronym|b|bd[io]|big|br|button|cite|code|data(list)?|del|dfn|em|i|img|ins|kbd|label|map|mark|meter|output|q|ruby|s|samp|small|span|strong|su[bp]|time|u|tt|var)$/i;
   function readDOMChange(view, from2, to, typeOver, addedNodes) {
     let compositionID = view.input.compositionPendingChanges || (view.composing ? view.input.compositionID : 0);
@@ -11375,7 +11395,7 @@
     from2 = $before.before(shared + 1);
     to = view.state.doc.resolve(to).after(shared + 1);
     let sel = view.state.selection;
-    let parse = parseBetween(view, from2, to);
+    let parse = parseBetween(view, from2, to, addedNodes);
     let doc3 = view.state.doc, compare = doc3.slice(parse.from, parse.to);
     let preferredPos, preferredSide;
     if (view.input.lastKeyCode === 8 && Date.now() - 100 < view.input.lastKeyCodeTime) {
@@ -12576,16 +12596,20 @@
   };
   function splitBlockAs(splitNode) {
     return (state, dispatch) => {
-      let { $from, $to } = state.selection;
       if (state.selection instanceof NodeSelection && state.selection.node.isBlock) {
-        if (!$from.parentOffset || !canSplit(state.doc, $from.pos))
+        let { $from: $from2 } = state.selection;
+        if (!$from2.parentOffset || !canSplit(state.doc, $from2.pos))
           return false;
         if (dispatch)
-          dispatch(state.tr.split($from.pos).scrollIntoView());
+          dispatch(state.tr.split($from2.pos).scrollIntoView());
         return true;
       }
-      if (!$from.depth)
+      if (!state.selection.$from.depth)
         return false;
+      let tr2 = state.tr;
+      if (!state.selection.empty && (state.selection instanceof TextSelection || state.selection instanceof AllSelection))
+        tr2.deleteSelection();
+      let { $from } = tr2.selection, mapFrom = tr2.steps.length;
       let types = [];
       let splitDepth, deflt, atEnd = false, atStart = false;
       for (let d3 = $from.depth; ; d3--) {
@@ -12594,7 +12618,7 @@
           atEnd = $from.end(d3) == $from.pos + ($from.depth - d3);
           atStart = $from.start(d3) == $from.pos - ($from.depth - d3);
           deflt = defaultBlockAt($from.node(d3 - 1).contentMatchAt($from.indexAfter(d3 - 1)));
-          let splitType = splitNode && splitNode($to.parent, atEnd, $from);
+          let splitType = splitNode && splitNode($from.parent, atEnd, $from);
           types.unshift(splitType || (atEnd && deflt ? { type: deflt } : null));
           splitDepth = d3;
           break;
@@ -12604,10 +12628,7 @@
           types.unshift(null);
         }
       }
-      let tr2 = state.tr;
-      if (state.selection instanceof TextSelection || state.selection instanceof AllSelection)
-        tr2.deleteSelection();
-      let splitPos = tr2.mapping.map($from.pos);
+      let splitPos = $from.pos;
       let can = canSplit(tr2.doc, splitPos, types.length, types);
       if (!can) {
         types[0] = deflt ? { type: deflt } : null;
@@ -12617,9 +12638,10 @@
         return false;
       tr2.split(splitPos, types.length, types);
       if (!atEnd && atStart && $from.node(splitDepth).type != deflt) {
-        let first2 = tr2.mapping.map($from.before(splitDepth)), $first = tr2.doc.resolve(first2);
+        let mapping = tr2.mapping.slice(mapFrom);
+        let first2 = mapping.map($from.before(splitDepth)), $first = tr2.doc.resolve(first2);
         if (deflt && $from.node(splitDepth - 1).canReplaceWith($first.index(), $first.index() + 1, deflt))
-          tr2.setNodeMarkup(tr2.mapping.map($from.before(splitDepth)), deflt);
+          tr2.setNodeMarkup(mapping.map($from.before(splitDepth)), deflt);
       }
       if (dispatch)
         dispatch(tr2.scrollIntoView());
@@ -22058,7 +22080,8 @@ img.ProseMirror-separator {
       }
       if (code3 === 92 && pos + 1 < max) {
         if (str.charCodeAt(pos + 1) === 32) {
-          break;
+          pos++;
+          continue;
         }
         pos += 2;
         continue;
@@ -22574,7 +22597,8 @@ img.ProseMirror-separator {
       if (blockTokens[j].type !== "inline" || !state.md.linkify.pretest(blockTokens[j].content)) {
         continue;
       }
-      let tokens = blockTokens[j].children;
+      const tokens = blockTokens[j].children;
+      const replacements = [];
       let htmlLinkLevel = 0;
       for (let i6 = tokens.length - 1; i6 >= 0; i6--) {
         const currentToken = tokens[i6];
@@ -22649,8 +22673,30 @@ img.ProseMirror-separator {
             token.level = level;
             nodes.push(token);
           }
-          blockTokens[j].children = tokens = arrayReplaceAt(tokens, i6, nodes);
+          replacements.push({ index: i6, nodes });
         }
+      }
+      if (replacements.length > 0) {
+        let newTokensLength = tokens.length;
+        for (const replacement of replacements) {
+          newTokensLength += replacement.nodes.length - 1;
+        }
+        const newTokens = new Array(newTokensLength);
+        let replacementIndex = 0;
+        let newTokenIndex = 0;
+        replacements.reverse();
+        for (let i6 = 0; i6 < tokens.length; i6++) {
+          const replacement = replacements[replacementIndex];
+          if (replacement?.index === i6) {
+            for (const node of replacement.nodes) {
+              newTokens[newTokenIndex++] = node;
+            }
+            replacementIndex++;
+          } else {
+            newTokens[newTokenIndex++] = tokens[i6];
+          }
+        }
+        blockTokens[j].children = newTokens;
       }
     }
   }
@@ -24019,7 +24065,7 @@ img.ProseMirror-separator {
     [/^<(script|pre|style|textarea)(?=(\s|>|$))/i, /<\/(script|pre|style|textarea)>/i, true],
     [/^<!--/, /-->/, true],
     [/^<\?/, /\?>/, true],
-    [/^<![A-Z]/, />/, true],
+    [/^<![A-Za-z]/, />/, true],
     [/^<!\[CDATA\[/, /\]\]>/, true],
     [new RegExp("^</?(" + html_blocks_default.join("|") + ")(?=(\\s|/?>|$))", "i"), /^$/, true],
     [new RegExp(HTML_OPEN_CLOSE_TAG_RE.source + "\\s*$"), /^$/, false]
@@ -24432,7 +24478,12 @@ img.ProseMirror-separator {
   }
 
   // node_modules/markdown-it/lib/rules_inline/linkify.mjs
-  var SCHEME_RE = /(?:^|[^a-z0-9.+-])([a-z][a-z0-9.+-]*)$/i;
+  function isAsciiAlpha(code3) {
+    return code3 >= 65 && code3 <= 90 || code3 >= 97 && code3 <= 122;
+  }
+  function isSchemeChar(code3) {
+    return code3 >= 65 && code3 <= 90 || code3 >= 97 && code3 <= 122 || code3 >= 48 && code3 <= 57 || code3 === 43 || code3 === 45 || code3 === 46;
+  }
   function linkify2(state, silent) {
     if (!state.md.options.linkify) return false;
     if (state.linkLevel > 0) return false;
@@ -24442,13 +24493,17 @@ img.ProseMirror-separator {
     if (state.src.charCodeAt(pos) !== 58) return false;
     if (state.src.charCodeAt(pos + 1) !== 47) return false;
     if (state.src.charCodeAt(pos + 2) !== 47) return false;
-    const match2 = state.pending.match(SCHEME_RE);
-    if (!match2) return false;
-    const proto = match2[1];
-    const link2 = state.md.linkify.matchAtStart(state.src.slice(pos - proto.length));
+    const protoMin = pos - Math.min(10, state.pending.length, pos);
+    let protoStart = pos;
+    while (protoStart > protoMin && isSchemeChar(state.src.charCodeAt(protoStart - 1))) {
+      protoStart--;
+    }
+    if (protoStart === pos || !isAsciiAlpha(state.src.charCodeAt(protoStart))) return false;
+    const protoLength = pos - protoStart;
+    const link2 = state.md.linkify.matchAtStart(state.src.slice(protoStart));
     if (!link2) return false;
     let url = link2.url;
-    if (url.length <= proto.length) return false;
+    if (url.length <= protoLength) return false;
     let urlEnd = url.length;
     while (urlEnd > 0 && url.charCodeAt(urlEnd - 1) === 42) {
       urlEnd--;
@@ -24459,7 +24514,7 @@ img.ProseMirror-separator {
     const fullUrl = state.md.normalizeLink(url);
     if (!state.md.validateLink(fullUrl)) return false;
     if (!silent) {
-      state.pending = state.pending.slice(0, -proto.length);
+      state.pending = state.pending.slice(0, -protoLength);
       const token_o = state.push("link_open", "a", 1);
       token_o.attrs = [["href", fullUrl]];
       token_o.markup = "linkify";
@@ -24470,7 +24525,7 @@ img.ProseMirror-separator {
       token_c.markup = "linkify";
       token_c.info = "auto";
     }
-    state.pos += url.length - proto.length;
+    state.pos += url.length - protoLength;
     return true;
   }
 
@@ -26979,32 +27034,6 @@ img.ProseMirror-separator {
             let next = parent.child(index2 + 1);
             return m2.isInSet(next.marks) && (!next.isText || /\S/.test(next.text));
           });
-        let leading = trailing;
-        trailing = "";
-        if (node && node.isText && marks.some((mark) => {
-          let info = this.getMark(mark.type.name);
-          return info && info.expelEnclosingWhitespace && !mark.isInSet(active);
-        })) {
-          let [_2, lead, rest] = /^(\s*)(.*)$/m.exec(node.text);
-          if (lead) {
-            leading += lead;
-            node = rest ? node.withText(rest) : null;
-            if (!node)
-              marks = active;
-          }
-        }
-        if (node && node.isText && marks.some((mark) => {
-          let info = this.getMark(mark.type.name);
-          return info && info.expelEnclosingWhitespace && !this.isMarkAhead(parent, index2 + 1, mark);
-        })) {
-          let [_2, rest, trail] = /^(.*?)(\s*)$/m.exec(node.text);
-          if (trail) {
-            trailing = trail;
-            node = rest ? node.withText(rest) : null;
-            if (!node)
-              marks = active;
-          }
-        }
         let inner = marks.length ? marks[marks.length - 1] : null;
         let noEsc = inner && this.getMark(inner.type.name).escape === false;
         let len = marks.length - (noEsc ? 1 : 0);
@@ -27028,8 +27057,35 @@ img.ProseMirror-separator {
         let keep = 0;
         while (keep < Math.min(active.length, len) && marks[keep].eq(active[keep]))
           ++keep;
-        while (keep < active.length)
-          this.text(this.markString(active.pop(), false, parent, index2), false);
+        let leading = trailing;
+        trailing = "";
+        if (node && node.isText && marks.some((mark) => {
+          let info = this.getMark(mark.type.name);
+          return info && info.expelEnclosingWhitespace && !active.some((m2, i6) => i6 < keep && m2.eq(mark));
+        })) {
+          let [_2, lead, rest] = /^(\s*)(.*)$/m.exec(node.text);
+          if (lead) {
+            leading += lead;
+            node = rest ? node.withText(rest) : null;
+            if (!node)
+              marks = active;
+          }
+        }
+        if (node && node.isText && marks.some((mark) => {
+          let info = this.getMark(mark.type.name);
+          return info && info.expelEnclosingWhitespace && !this.isMarkAhead(parent, index2 + 1, mark);
+        })) {
+          let [_2, rest, trail] = /^(.*?)(\s*)$/m.exec(node.text);
+          if (trail) {
+            trailing = trail;
+            node = rest ? node.withText(rest) : null;
+            if (!node)
+              marks = active;
+          }
+        }
+        if (node || index2 == parent.childCount)
+          while (keep < active.length)
+            this.text(this.markString(active.pop(), false, parent, index2), false);
         if (leading)
           this.text(leading);
         if (node) {
@@ -27044,9 +27100,8 @@ img.ProseMirror-separator {
           else
             this.render(node, parent, index2);
           this.atBlockStart = false;
-        }
-        if ((node === null || node === void 0 ? void 0 : node.isText) && node.nodeSize > 0) {
-          this.atBlockStart = false;
+          if (node.isText && node.nodeSize > 0)
+            this.atBlockStart = false;
         }
       };
       parent.forEach(progress);
