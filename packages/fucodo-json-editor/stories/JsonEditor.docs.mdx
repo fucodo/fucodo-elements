@@ -1,0 +1,103 @@
+import { Meta, Title, Subtitle, Description, Primary, Source, Stories } from '@storybook/addon-docs/blocks';
+import * as JsonEditorStories from './JsonEditor.stories.js';
+
+<Meta of={JsonEditorStories} />
+
+<Title>JSON Editor</Title>
+<Subtitle>Web Component: <code>&lt;json-editor&gt;</code></Subtitle>
+
+<Description>
+`json-editor` is a progressive-enhancement wrapper around a JSON `<textarea>`.
+
+- **Without JS:** the `<textarea>` in the light DOM stays a plain, fully working form field.
+- **With JS:** a highlighted `<pre>` overlay sits exactly on top of the (transparent) textarea and adds
+  syntax highlighting, live JSON Schema validation, an error list, pretty-print on blur and minified
+  JSON on submit.
+</Description>
+
+## Usage
+
+The component needs a `<textarea>` as its light-DOM child. The schema is either fetched via
+`schema-src` or embedded as a `<script type="application/schema+json">` child.
+
+<Source
+  language="html"
+  code={`<json-editor schema-src="/schemas/person.schema.json">
+  <textarea name="payload">{"name":"Kay","role":"Developer"}</textarea>
+</json-editor>
+
+<json-editor>
+  <textarea name="payload">{"name":"Kay"}</textarea>
+  <script type="application/schema+json">
+    { "type": "object", "required": ["name"] }
+  </script>
+</json-editor>`}
+/>
+
+Inside a `<form>` the component binds to its own form only (`textarea.closest('form')`), so several
+editors can live on one page. On submit it validates and either blocks the submit and focuses the
+textarea, or minifies the value so the server receives compact JSON.
+
+## Interactive example
+
+<Primary />
+
+## Attributes
+
+| Attribute    | Default | Description                                        |
+|--------------|---------|----------------------------------------------------|
+| `schema-src` | –       | URL of a JSON Schema, loaded with `fetch`          |
+| `indent`     | `2`     | Indentation depth used by pretty-print             |
+| `invalid`    | –       | Set by the component while the value is invalid    |
+
+The host also mirrors Bootstrap's `is-valid` / `is-invalid` classes so the element fits into a
+`.was-validated` form.
+
+## JavaScript API
+
+| Member       | Description                                              |
+|--------------|----------------------------------------------------------|
+| `.value`     | get/set – raw textarea value (set re-formats + validates) |
+| `.format()`  | Pretty-print using `indent`                               |
+| `.minify()`  | Collapse to a single line (storage format)                |
+| `.validate()`| Force validation now, returns a `boolean`                 |
+
+## Events
+
+All events are dispatched on the `<json-editor>` element itself, so listeners are scoped per instance.
+
+| Event                   | Detail                | Fired when                          |
+|-------------------------|-----------------------|-------------------------------------|
+| `json-editor:valid`     | `{ value }`           | parsed JSON matches the schema      |
+| `json-editor:invalid`   | `{ errors: string[] }`| syntax error or schema violation    |
+| `json-editor:minified`  | `{ value }`           | `minify()` succeeded                |
+
+## Theming
+
+Colours and metrics are CSS custom properties set on the host — they inherit through the shadow
+boundary:
+
+- Layout: `--json-editor-height` (default `16rem`), `--json-editor-font`, `--json-editor-bg`,
+  `--json-editor-border`, `--json-editor-radius`, `--json-editor-padding-x`,
+  `--json-editor-padding-y`, `--json-editor-line-height`
+- Status: `--json-editor-fg`, `--json-editor-ok`, `--json-editor-error`,
+  `--json-editor-focus-color`, `--json-editor-focus-shadow`
+- Syntax: `--json-editor-key`, `--json-editor-string`, `--json-editor-number`,
+  `--json-editor-keyword`, `--json-editor-punct`
+
+Adding `class="form-control"` maps all of them onto the corresponding `--bs-*` Bootstrap variables.
+
+## Schema fixtures in Storybook
+
+Stories that use `schema-src` fetch `/schemas/person.schema.json`. Static assets for stories live in
+the repository-wide `stories/public/` directory (configured as `staticDirs` in `.storybook/main.js`)
+and are served from the site root — package folders are **not** served. The copy inside
+`packages/fucodo-json-editor/person.schema.json` belongs to the standalone `demo.html` and is
+shipped with the package; it is intentionally separate from the Storybook fixture.
+
+Stories that do not need to demonstrate loading behaviour use the inline
+`<script type="application/schema+json">` variant instead, which keeps them free of network requests.
+
+## All stories
+
+<Stories includePrimary={false} />

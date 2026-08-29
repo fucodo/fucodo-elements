@@ -1,0 +1,35 @@
+{
+  "name": "fucodo.json-editor",
+  "version": "0.1.0",
+  "description": "Progressive-enhancement web component for a JSON <textarea>: syntax highlighting, JSON Schema validation, pretty-print on blur, minified on save.",
+  "type": "module",
+  "main": "./src/json-editor.js",
+  "module": "./src/json-editor.js",
+  "exports": {
+    ".": "./src/json-editor.js",
+    "./highlight-json.js": "./src/highlight-json.js",
+    "./pretty-print.js": "./src/pretty-print.js"
+  },
+  "files": [
+    "src"
+  ],
+  "sideEffects": [
+    "./src/json-editor.js"
+  ],
+  "keywords": [
+    "web-component",
+    "custom-element",
+    "json",
+    "json-schema",
+    "textarea",
+    "syntax-highlighting",
+    "progressive-enhancement"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@cfworker/json-schema": "^4.1.1"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

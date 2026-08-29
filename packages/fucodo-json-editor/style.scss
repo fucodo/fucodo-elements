@@ -1,0 +1,201 @@
+:host {
+  display: block;
+  font-family: var(--json-editor-font, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  font-size: 0.9rem;
+  --json-editor-height: 16rem;
+  --json-editor-bg: #fff;
+  --json-editor-border: #ccc;
+  --json-editor-radius: 4px;
+  --json-editor-fg: #24292e;
+  --json-editor-error: #c0392b;
+  --json-editor-ok: #2e7d32;
+  --json-editor-focus-color: #86b7fe;
+  --json-editor-focus-shadow: rgba(13, 110, 253, 0.25);
+  --json-editor-padding-x: 0.6rem;
+  --json-editor-padding-y: 0.5rem;
+  --json-editor-line-height: 1.4;
+  --json-editor-key: #6f42c1;
+  --json-editor-string: #22863a;
+  --json-editor-number: #005cc5;
+  --json-editor-keyword: #d73a49;
+  --json-editor-punct: #24292e;
+}
+
+/* Bootstrap-Interop, siehe Kommentar oben am Modul. */
+:host(.form-control) {
+  font-family: var(--bs-body-font-family, var(--json-editor-font));
+  font-size: var(--bs-body-font-size, 1rem);
+  --json-editor-bg: var(--bs-body-bg, #fff);
+  --json-editor-border: var(--bs-border-color, #ced4da);
+  --json-editor-radius: var(--bs-border-radius, 0.375rem);
+  --json-editor-fg: var(--bs-body-color, #212529);
+  --json-editor-error: var(--bs-form-invalid-color, #dc3545);
+  --json-editor-ok: var(--bs-form-valid-color, #198754);
+  --json-editor-focus-color: #86b7fe;
+  --json-editor-focus-shadow: var(--bs-focus-ring-color, rgba(13, 110, 253, 0.25));
+  --json-editor-padding-x: 0.75rem;
+  --json-editor-padding-y: 0.375rem;
+  --json-editor-line-height: 1.5;
+
+  /* Bootstraps eigene .form-control-Regel (Light DOM) matcht den Host
+     direkt, da er selbst die Klasse trägt: Border, Padding, Hintergrund
+     und das is-valid/invalid-Icon würden also zusätzlich zur internen
+     .editor-Box auf dem Host selbst gemalt - zwei Rahmen übereinander,
+     leicht versetzt durch das zusätzliche Padding. Wir lassen die Optik
+     ausschließlich von .editor kommen und setzen die native Bootstrap-Box
+     auf dem Host zurück, damit beide Rahmen exakt zusammenfallen. */
+  border: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+  border-radius: 0 !important;
+}
+
+.editor {
+  display: flex;
+  flex-direction: column;
+  height: var(--json-editor-height);
+  background-color: var(--json-editor-bg);
+  border: 1px solid var(--json-editor-border);
+  border-radius: var(--json-editor-radius);
+  overflow: hidden;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.editor:focus-within {
+  border-color: var(--json-editor-focus-color);
+  box-shadow: 0 0 0 0.25rem var(--json-editor-focus-shadow);
+}
+:host([invalid]) .editor {
+  border-color: var(--json-editor-error);
+}
+
+/* Bootstraps .form-control.is-valid/.is-invalid setzt zusätzlich ein
+   padding-right für das native Icon - deckt der obige :host(.form-control)
+   Reset (padding: 0 !important) bereits mit ab. */
+
+/* Toolbar liegt innerhalb der Editor-Box, oberhalb des Codes - nicht darüber. */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.4rem;
+  border-bottom: 1px solid var(--json-editor-border);
+  background-color: color-mix(in srgb, var(--json-editor-fg) 4%, var(--json-editor-bg));
+  flex: none;
+}
+.toolbar button {
+  display: inline-flex;
+  align-items: center;
+  font: inherit;
+  font-size: 0.8rem;
+  line-height: 1;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid transparent;
+  border-radius: calc(var(--json-editor-radius) - 1px);
+  background: transparent;
+  color: var(--json-editor-fg);
+  cursor: pointer;
+}
+.toolbar button:hover {
+  background-color: color-mix(in srgb, var(--json-editor-fg) 8%, transparent);
+}
+.toolbar button:focus-visible {
+  outline: 2px solid var(--json-editor-focus-color);
+  outline-offset: -2px;
+}
+.toolbar .status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: var(--json-editor-fg);
+  opacity: 0.65;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.status-icon {
+  display: none;
+  flex: none;
+  line-height: 0;
+}
+.status-icon:not(:empty) {
+  display: inline-flex;
+}
+.status-icon svg {
+  display: block;
+  width: 0.9rem;
+  height: 0.9rem;
+}
+.status-text:empty {
+  display: none;
+}
+/* Entspricht optisch .valid-feedback / .invalid-feedback aus Bootstrap,
+   gespeist aus denselben --bs-form-valid-color / --bs-form-invalid-color
+   Variablen - siehe Modul-Kommentar zur Shadow-DOM-Einschränkung. */
+.toolbar .status.status-ok {
+  color: var(--json-editor-ok);
+  opacity: 1;
+}
+.toolbar .status.status-error {
+  color: var(--json-editor-error);
+  opacity: 1;
+}
+
+.code-area {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+/* Highlight-<pre> und textarea müssen pixelgenau übereinanderliegen:
+   identische Box-Metriken in einem gemeinsamen Regelblock. */
+.highlight,
+::slotted(textarea) {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  box-sizing: border-box;
+  padding: var(--json-editor-padding-y) var(--json-editor-padding-x);
+  border: 0;
+  border-radius: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: var(--json-editor-line-height);
+  tab-size: 2;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow: auto;
+}
+.highlight {
+  overflow: hidden;
+  pointer-events: none;
+  background: transparent;
+  color: var(--json-editor-fg);
+}
+.highlight code {
+  font: inherit;
+  white-space: inherit;
+}
+::slotted(textarea) {
+  background: transparent;
+  color: transparent;
+  caret-color: var(--json-editor-fg);
+  resize: none;
+  outline: none;
+}
+
+.tok-key { color: var(--json-editor-key); }
+.tok-string { color: var(--json-editor-string); }
+.tok-number { color: var(--json-editor-number); }
+.tok-boolean, .tok-null { color: var(--json-editor-keyword); }
+.tok-punct { color: var(--json-editor-punct); }
+
+.errors {
+  margin: 0.35rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.85rem;
+  color: var(--json-editor-error);
+}
+.errors:empty { display: none; }
+.errors li { padding: 0.15rem 0; }
