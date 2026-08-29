@@ -3,18 +3,25 @@
   "version": "0.1.0",
   "description": "Progressive-enhancement web component for a JSON <textarea>: syntax highlighting, JSON Schema validation, pretty-print on blur, minified on save.",
   "type": "module",
-  "main": "./src/json-editor.js",
-  "module": "./src/json-editor.js",
+  "main": "index.js",
+  "module": "index.js",
   "exports": {
-    ".": "./src/json-editor.js",
-    "./highlight-json.js": "./src/highlight-json.js",
-    "./pretty-print.js": "./src/pretty-print.js"
+    ".": "./index.js",
+    "./dist": "./dist/index.js",
+    "./highlight-json.js": "./highlight-json.js",
+    "./pretty-print.js": "./pretty-print.js"
   },
   "files": [
-    "src"
+    "index.js",
+    "highlight-json.js",
+    "pretty-print.js",
+    "style.scss",
+    "dist"
   ],
   "sideEffects": [
-    "./src/json-editor.js"
+    "./index.js",
+    "./dist/index.js",
+    "*.scss"
   ],
   "keywords": [
     "web-component",
