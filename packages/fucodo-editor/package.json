@@ -17,15 +17,15 @@
   "homepage": "https://github.com/fucodo/fucodo.editor#readme",
   "description": "",
   "dependencies": {
-    "@tiptap/core": "^2.10.3",
-    "@tiptap/extension-code-block": "^2.10.4",
-    "@tiptap/extension-image": "^2.10.4",
-    "@tiptap/extension-link": "^2.10.4",
-    "@tiptap/extension-task-item": "^2.10.3",
-    "@tiptap/extension-task-list": "^2.10.3",
-    "@tiptap/starter-kit": "^2.10.3",
+    "@tiptap/core": "^3.31.3",
+    "@tiptap/extension-code-block": "^3.31.3",
+    "@tiptap/extension-image": "^3.31.3",
+    "@tiptap/extension-link": "^3.31.3",
+    "@tiptap/extension-task-item": "^3.31.3",
+    "@tiptap/extension-task-list": "^3.31.3",
+    "@tiptap/starter-kit": "^3.31.3",
     "bootstrap-icons": "^1.11.3",
     "lit": "^3.2.1",
-    "tiptap-markdown": "^0.8.10"
+    "tiptap-markdown": "^0.9.0"
   }
 }
