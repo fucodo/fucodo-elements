@@ -1,0 +1,152 @@
+import { Meta, Title, Subtitle, Description, Primary, Source, Stories } from '@storybook/addon-docs/blocks';
+import * as JsonTreeEditorStories from './JsonTreeEditor.stories.js';
+
+<Meta of={JsonTreeEditorStories} />
+
+<Title>JSON Tree Editor</Title>
+<Subtitle>Web Component: <code>&lt;json-tree-editor&gt;</code></Subtitle>
+
+<Description>
+`json-tree-editor` is a schema-driven tree/table editor (key | value | type | actions) for a JSON
+`<textarea>` – the sibling of [`<json-editor>`](?path=/docs/apps-editors-json--docs) with the same look,
+the same custom-property conventions and the same Bootstrap interop.
+
+- **Without JS:** the `<textarea>` in the light DOM stays a plain, fully working form field.
+- **With JS:** values are edited as a tree. Which fields are offered and which input a value gets is
+  derived from the JSON Schema – **the schema is mandatory**. If it is missing or cannot be loaded,
+  the textarea stays visible and the component shows the error.
+</Description>
+
+## Usage
+
+The component needs a `<textarea>` as its light-DOM child. The schema is either fetched via
+`schema-src` or embedded as a `<script type="application/schema+json">` child.
+
+<Source
+  language="html"
+  code={`<json-tree-editor schema-src="/schemas/sso-applications.json">
+  <textarea name="payload">[]</textarea>
+</json-tree-editor>
+
+<json-tree-editor>
+  <textarea name="payload">[]</textarea>
+  <script type="application/schema+json">
+    { "type": "array", "items": { "type": "object" } }
+  </script>
+</json-tree-editor>`}
+/>
+
+An empty textarea is initialised with the schema default. Inside a `<form>` the component binds to its
+own form only (`textarea.closest('form')`), so several editors can live on one page. On submit it
+validates and either blocks the submit and jumps to the first error, or minifies the value so the
+server receives compact JSON.
+
+## Interactive example
+
+<Primary />
+
+## Supported schema constructs
+
+| Construct                                         | Behaviour in the UI                                                                                   |
+|---------------------------------------------------|-------------------------------------------------------------------------------------------------------|
+| `type` (also arrays like `["string", "null"]`)    | Input matching the type; with several types a switch in the type column                               |
+| `enum`, `const`                                   | Select; a value outside the list is shown as "(ungültig)"                                             |
+| `format: uri`, `email`                            | Matching `input` types; all formats are validated                                                     |
+| `properties`, `patternProperties`, `required`     | Required fields marked `*` and not removable; missing fields via "+ Eigenschaft hinzufügen"           |
+| `additionalProperties` / `unevaluatedProperties`  | `false` → no free keys, existing foreign keys are marked "nicht erlaubt"                              |
+| `items`, `prefixItems` (also draft-07 tuples)     | Add, move, duplicate and remove entries                                                               |
+| `$ref` / `$defs` / `definitions` (local)          | Resolved                                                                                              |
+| `allOf`                                           | Merged                                                                                                |
+| `if` / `then` / `else`                            | Evaluated **against the current value** – offered and required fields change immediately             |
+| `anyOf` / `oneOf`                                 | Matching variant detected automatically; switch in the type column                                    |
+| `default`, `examples`, `minimum`                  | Initial value for new entries resp. placeholder                                                       |
+| `title`, `description`                            | Tooltip on the key; `title` also in the "add property" select                                         |
+| `x-summary: ["type", "domain"]`                   | Fields used for the one-line summary of a collapsed object (optional)                                 |
+
+## Invalid intermediate states
+
+Input may be invalid while editing – `6x` in an `integer` field is kept as a string instead of being
+discarded. Invalid values are clearly marked:
+
+- the row gets a red left border and background, the control gets `aria-invalid`, and the message is
+  shown directly below the row,
+- collapsed nodes show the number of errors inside them,
+- the toolbar shows the total count, and the error list at the bottom jumps to the row on click,
+- for missing required fields the message offers "Fehlende Pflichtfelder ergänzen" (including fields
+  that only become required through `if`/`then`).
+
+Only submitting the surrounding form is blocked. With `allow-invalid` invalid content is submitted too.
+
+## Attributes
+
+| Attribute       | Default | Description                                               |
+|-----------------|---------|-----------------------------------------------------------|
+| `schema-src`    | –       | URL of a JSON Schema, loaded with `fetch`                 |
+| `indent`        | `2`     | Indentation of the JSON view and the textarea             |
+| `expand-depth`  | `1`     | Up to which level nodes are expanded initially            |
+| `allow-invalid` | –       | Submit the form even with invalid content                 |
+| `invalid`       | –       | Set by the component while the value is invalid           |
+
+The host also mirrors Bootstrap's `is-valid` / `is-invalid` classes so the element fits into a
+`.was-validated` form.
+
+## JavaScript API
+
+| Member                            | Description                                                 |
+|-----------------------------------|-------------------------------------------------------------|
+| `.value`                          | get/set – parsed value (a copy); set re-renders + validates |
+| `.schema`                         | get/set – schema object                                     |
+| `.mode`                           | `'tree'` \| `'json'`                                        |
+| `.validate()`                     | Force validation now, returns a `boolean`                   |
+| `.expandAll()` / `.collapseAll()` | Expand / collapse all nodes                                 |
+| `.reveal(pointer)`                | Expands down to the JSON Pointer and focuses the row        |
+
+## Events
+
+All events are dispatched on the `<json-tree-editor>` element itself (and bubble), so listeners are
+scoped per instance.
+
+| Event                       | Detail                                   | Fired when                          |
+|-----------------------------|------------------------------------------|-------------------------------------|
+| `json-tree-editor:change`   | `{ value }`                              | the value was changed by the user   |
+| `json-tree-editor:valid`    | `{ value }`                              | the value matches the schema        |
+| `json-tree-editor:invalid`  | `{ errors: { pointer, message }[] }`     | the value violates the schema       |
+
+## JSON view
+
+The "JSON" toggle shows the raw text. If `<json-editor>` is registered on the page it is used for this
+view (highlighting + validation against the same schema), otherwise a plain `<textarea>`. On a syntax
+error the component stays in the JSON view until it is fixed. These stories import
+`fucodo-json-editor` as well, so the highlighted variant is shown.
+
+## Theming
+
+Colours and metrics are CSS custom properties set on the host – they inherit through the shadow
+boundary:
+
+- Layout: `--json-tree-editor-max-height` (default `32rem`), `--json-tree-editor-font`,
+  `--json-tree-editor-mono`, `--json-tree-editor-bg`, `--json-tree-editor-border`,
+  `--json-tree-editor-radius`, `--json-tree-editor-indent`, `--json-tree-editor-row-height`
+- Text & status: `--json-tree-editor-fg`, `--json-tree-editor-muted`, `--json-tree-editor-key`,
+  `--json-tree-editor-ok`, `--json-tree-editor-error`
+- Focus: `--json-tree-editor-focus-color`, `--json-tree-editor-focus-shadow`
+
+Adding `class="form-control"` maps them onto the corresponding `--bs-*` Bootstrap variables.
+
+## Limitations
+
+- Only local `$ref` (`#/…`); external references are treated as "any".
+- `if`/`then`/`else` and `anyOf`/`oneOf` are merged for the UI (allOf semantics for
+  `properties`/`required`). Validation itself always runs through `@cfworker/json-schema` against the
+  full schema.
+- `dependentRequired`/`dependentSchemas` are validated but do not yet influence the offered fields.
+
+## Schema fixtures in Storybook
+
+`SchemaFromUrl` fetches `/schemas/person.schema.json` from the repository-wide `stories/public/`
+directory (configured as `staticDirs` in `.storybook/main.js`). All other stories use an inline
+`<script type="application/schema+json">` and need no network requests.
+
+## All stories
+
+<Stories includePrimary={false} />

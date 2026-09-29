@@ -1,0 +1,346 @@
+:host {
+  display: block;
+  font-family: var(--json-tree-editor-font, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+  font-size: 0.9rem;
+  --json-tree-editor-max-height: 32rem;
+  --json-tree-editor-bg: #fff;
+  --json-tree-editor-border: #ccc;
+  --json-tree-editor-radius: 4px;
+  --json-tree-editor-fg: #24292e;
+  --json-tree-editor-muted: color-mix(in srgb, var(--json-tree-editor-fg) 55%, var(--json-tree-editor-bg));
+  --json-tree-editor-error: #c0392b;
+  --json-tree-editor-ok: #2e7d32;
+  --json-tree-editor-focus-color: #86b7fe;
+  --json-tree-editor-focus-shadow: rgba(13, 110, 253, 0.25);
+  --json-tree-editor-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --json-tree-editor-key: #6f42c1;
+  --json-tree-editor-indent: 1.15rem;
+  --json-tree-editor-row-height: 2rem;
+}
+
+/* Bootstrap-Interop wie bei <json-editor class="form-control">. */
+:host(.form-control) {
+  font-family: var(--bs-body-font-family, var(--json-tree-editor-font));
+  font-size: var(--bs-body-font-size, 1rem);
+  --json-tree-editor-bg: var(--bs-body-bg, #fff);
+  --json-tree-editor-border: var(--bs-border-color, #ced4da);
+  --json-tree-editor-radius: var(--bs-border-radius, 0.375rem);
+  --json-tree-editor-fg: var(--bs-body-color, #212529);
+  --json-tree-editor-error: var(--bs-form-invalid-color, #dc3545);
+  --json-tree-editor-ok: var(--bs-form-valid-color, #198754);
+  --json-tree-editor-focus-shadow: var(--bs-focus-ring-color, rgba(13, 110, 253, 0.25));
+  border: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+  border-radius: 0 !important;
+}
+
+.editor {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--json-tree-editor-bg);
+  color: var(--json-tree-editor-fg);
+  border: 1px solid var(--json-tree-editor-border);
+  border-radius: var(--json-tree-editor-radius);
+  overflow: hidden;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.editor:focus-within {
+  border-color: var(--json-tree-editor-focus-color);
+  box-shadow: 0 0 0 0.25rem var(--json-tree-editor-focus-shadow);
+}
+:host([invalid]) .editor {
+  border-color: var(--json-tree-editor-error);
+}
+
+/* ---------------------------------------------------------------- toolbar */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.4rem;
+  border-bottom: 1px solid var(--json-tree-editor-border);
+  background-color: color-mix(in srgb, var(--json-tree-editor-fg) 4%, var(--json-tree-editor-bg));
+}
+button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font: inherit;
+  font-size: 0.8rem;
+  line-height: 1;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid transparent;
+  border-radius: calc(var(--json-tree-editor-radius) - 1px);
+  background: transparent;
+  color: var(--json-tree-editor-fg);
+  cursor: pointer;
+}
+button:hover {
+  background-color: color-mix(in srgb, var(--json-tree-editor-fg) 8%, transparent);
+}
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--json-tree-editor-focus-color);
+  outline-offset: -2px;
+}
+button svg { width: 0.9rem; height: 0.9rem; flex: none; }
+
+.mode {
+  display: inline-flex;
+  border: 1px solid var(--json-tree-editor-border);
+  border-radius: calc(var(--json-tree-editor-radius) - 1px);
+  overflow: hidden;
+  margin-right: 0.25rem;
+}
+.mode button { border-radius: 0; }
+.mode button[aria-pressed="true"] {
+  background-color: color-mix(in srgb, var(--json-tree-editor-focus-color) 30%, var(--json-tree-editor-bg));
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-left: auto;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+.status.status-ok { color: var(--json-tree-editor-ok); }
+.status.status-error { color: var(--json-tree-editor-error); }
+.status svg { width: 0.9rem; height: 0.9rem; }
+
+/* ------------------------------------------------------------------- tree */
+.body {
+  max-height: var(--json-tree-editor-max-height);
+  overflow: auto;
+}
+.body[hidden], .json-view[hidden], .notice[hidden] { display: none; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+col.c-key { width: 34%; }
+col.c-type { width: 8.5rem; }
+col.c-actions { width: 7.5rem; }
+
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  text-align: left;
+  font-weight: 500;
+  font-size: 0.75rem;
+  color: var(--json-tree-editor-muted);
+  padding: 0.35rem 0.5rem;
+  background: var(--json-tree-editor-bg);
+  border-bottom: 1px solid var(--json-tree-editor-border);
+}
+td {
+  height: var(--json-tree-editor-row-height);
+  padding: 0.15rem 0.5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--json-tree-editor-border) 55%, transparent);
+  vertical-align: middle;
+}
+tr.row:hover > td {
+  background-color: color-mix(in srgb, var(--json-tree-editor-fg) 3%, transparent);
+}
+
+.key {
+  padding-left: calc(var(--level, 0) * var(--json-tree-editor-indent) + 0.5rem);
+  font-family: var(--json-tree-editor-mono);
+  font-size: 0.8rem;
+  color: var(--json-tree-editor-key);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.key .index { color: var(--json-tree-editor-muted); }
+.key .req { color: var(--json-tree-editor-error); margin-left: 0.1rem; }
+.key .unknown {
+  font-family: inherit;
+  font-size: 0.7rem;
+  margin-left: 0.35rem;
+  color: var(--json-tree-editor-error);
+}
+.toggle, .toggle-spacer {
+  display: inline-flex;
+  width: 1.1rem;
+  height: 1.1rem;
+  padding: 0;
+  margin-right: 0.15rem;
+  justify-content: center;
+  vertical-align: middle;
+}
+.toggle svg { transition: transform 0.12s ease; }
+.toggle[aria-expanded="true"] svg { transform: rotate(90deg); }
+
+.value input:not([type="checkbox"]),
+.value select,
+.type select,
+.add select,
+.add input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 1.6rem;
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 0 0.4rem;
+  color: var(--json-tree-editor-fg);
+  background: var(--json-tree-editor-bg);
+  border: 1px solid var(--json-tree-editor-border);
+  border-radius: calc(var(--json-tree-editor-radius) - 1px);
+}
+.value input.mono { font-family: var(--json-tree-editor-mono); }
+.value input[type="checkbox"] { width: 1rem; height: 1rem; margin: 0; accent-color: var(--json-tree-editor-focus-color); }
+
+.summary {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  font-size: 0.8rem;
+  color: var(--json-tree-editor-muted);
+  cursor: pointer;
+}
+.summary .text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pill {
+  flex: none;
+  font-family: var(--json-tree-editor-mono);
+  font-size: 0.72rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--json-tree-editor-fg) 8%, transparent);
+  color: var(--json-tree-editor-muted);
+}
+.badge {
+  flex: none;
+  font-size: 0.72rem;
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  color: var(--json-tree-editor-error);
+  background: color-mix(in srgb, var(--json-tree-editor-error) 12%, transparent);
+}
+.badge:empty { display: none; }
+
+.type {
+  font-family: var(--json-tree-editor-mono);
+  font-size: 0.72rem;
+  color: var(--json-tree-editor-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.actions { text-align: right; white-space: nowrap; }
+.actions button { padding: 0.2rem; }
+
+/* Ungültige Zeilen: Markierung an Zeile, Feld und Schlüssel, Meldung direkt darunter. */
+tr.row.invalid > td { background-color: color-mix(in srgb, var(--json-tree-editor-error) 7%, transparent); }
+tr.row.invalid > td.key { box-shadow: inset 3px 0 0 var(--json-tree-editor-error); }
+tr.row.invalid .value input,
+tr.row.invalid .value select,
+tr.row.invalid .type select { border-color: var(--json-tree-editor-error); }
+tr.msg > td {
+  height: auto;
+  padding-top: 0;
+  padding-bottom: 0.3rem;
+  padding-left: calc(var(--level, 0) * var(--json-tree-editor-indent) + 1.8rem);
+  font-size: 0.78rem;
+  color: var(--json-tree-editor-error);
+  background-color: color-mix(in srgb, var(--json-tree-editor-error) 7%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--json-tree-editor-border) 55%, transparent);
+}
+tr.msg ul { margin: 0; padding: 0; list-style: none; }
+
+tr.add > td { border-bottom-style: dashed; }
+tr.add .key { color: inherit; font-family: inherit; }
+.add-inline { display: flex; gap: 0.3rem; align-items: center; }
+.add-inline input { flex: 1; }
+.add-hint { font-size: 0.75rem; color: var(--json-tree-editor-error); }
+.add-hint:empty { display: none; }
+
+.notice {
+  margin: 0;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.85rem;
+  color: var(--json-tree-editor-error);
+}
+
+/* ------------------------------------------------------------------- json */
+.json-view { padding: 0.4rem; }
+.json-view textarea {
+  width: 100%;
+  min-height: 16rem;
+  box-sizing: border-box;
+  font-family: var(--json-tree-editor-mono);
+  font-size: 0.8rem;
+  border: 1px solid var(--json-tree-editor-border);
+  border-radius: calc(var(--json-tree-editor-radius) - 1px);
+  padding: 0.5rem;
+  resize: vertical;
+}
+/* Ohne Schema/Fallback: die Original-textarea wird wieder sichtbar. */
+.fallback { padding: 0.4rem; }
+::slotted(textarea) {
+  width: 100%;
+  min-height: 12rem;
+  box-sizing: border-box;
+  font-family: var(--json-tree-editor-mono);
+}
+
+/* ----------------------------------------------------------------- errors */
+.errors {
+  margin: 0;
+  padding: 0.35rem 0.5rem;
+  list-style: none;
+  font-size: 0.8rem;
+  border-top: 1px solid var(--json-tree-editor-border);
+  max-height: 8rem;
+  overflow: auto;
+}
+.errors:empty { display: none; }
+.errors button {
+  width: 100%;
+  justify-content: flex-start;
+  font-size: 0.8rem;
+  padding: 0.2rem 0.3rem;
+  color: var(--json-tree-editor-error);
+  text-align: left;
+}
+.errors code { font-family: var(--json-tree-editor-mono); font-size: 0.75rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .toggle svg, .editor { transition: none; }
+}
+
+[hidden] { display: none !important; }
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0);
+  white-space: nowrap; border: 0;
+}
+tr.msg button {
+  margin-top: 0.2rem;
+  color: var(--json-tree-editor-error);
+  border-color: color-mix(in srgb, var(--json-tree-editor-error) 40%, transparent);
+}
+
+/* Schmale Container (z.B. Seitenleiste, Mobil): Typ- und Aktionsspalte verdichten. */
+.editor { container-type: inline-size; }
+@container (max-width: 40rem) {
+  col.c-key { width: 36%; }
+  col.c-type { width: 4.75rem; }
+  col.c-actions { width: 5.5rem; }
+  td { padding-left: 0.3rem; padding-right: 0.3rem; }
+  .key { padding-left: calc(var(--level, 0) * 0.7rem + 0.3rem); }
+  .actions button { padding: 0.15rem 0.05rem; }
+  .summary .pill { display: none; }
+  .toolbar button[data-action$="-all"] { font-size: 0; gap: 0; }
+}
