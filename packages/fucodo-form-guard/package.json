@@ -1,0 +1,33 @@
+{
+  "name": "fucodo.form-guard",
+  "version": "1.0.0",
+  "description": "Web component <fucodo-confirm-leave>: asks for confirmation before leaving a page with unsaved form changes.",
+  "type": "module",
+  "main": "index.js",
+  "module": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./dist": "./dist/index.js",
+    "./confirm-leave.js": "./confirm-leave.js"
+  },
+  "files": [
+    "index.js",
+    "confirm-leave.js",
+    "style.scss",
+    "dist"
+  ],
+  "sideEffects": [
+    "./index.js",
+    "./confirm-leave.js",
+    "./dist/index.js",
+    "*.scss"
+  ],
+  "dependencies": {
+    "fucodo.confirm": "*"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "fucodo GmbH - Kay Strobach",
+  "license": "MIT"
+}

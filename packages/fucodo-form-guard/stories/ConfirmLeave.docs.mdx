@@ -1,0 +1,99 @@
+import { Meta, ArgTypes, Source, Stories, Title, Primary } from '@storybook/addon-docs/blocks';
+import * as ConfirmLeaveStories from './ConfirmLeave.stories';
+
+<Meta of={ConfirmLeaveStories} />
+
+<Title>fucodo-form-guard — confirm before leaving with unsaved changes</Title>
+
+## Description
+
+`fucodo-confirm-leave` watches the forms on the page and asks for confirmation before the user
+leaves it with unsaved changes. It uses the shared `fucodo-confirm-dialog` from the
+`fucodo-confirm` package. Place one instance anywhere in the page.
+
+What is caught:
+
+- link clicks anywhere on the page (incl. dynamically added links)
+- form submits that are not whitelisted
+- scripted navigation (`location.href = …`, `location.reload()`, …) via the Navigation API, where the browser supports it
+- tab close / reload / address bar / cross-document back: browsers only allow their own native prompt here (`beforeunload`) – shown as fallback
+
+Dirty tracking:
+
+- every watched form gets a baseline of its field values; a form is dirty while any field differs from its baseline (reverting a change clears it)
+- forms and fields added later get their baseline when they appear, so prefilled values of dynamic rows don't count as changes
+- dirty forms get a `data-dirty` attribute (styling hook)
+
+Not covered: same-document navigation (hash links, `pushState` routers) and forms inside other components' shadow roots.
+
+Tag name: `fucodo-confirm-leave`
+
+> The stories log navigation instead of performing it and set `no-native-prompt`, so they stay inside the Storybook iframe.
+
+## Example markup
+
+<Source
+  language="html"
+  code={`<fucodo-confirm-leave forms="form[data-leave-guard]"></fucodo-confirm-leave>
+
+<form data-leave-guard method="post" data-leave-allow-submit="button[name=save]">
+  <input name="name" value="Kreisverband Dresden">
+  <input name="q" data-leave-ignore>
+  <button name="save">Speichern</button>
+  <button name="preview">Vorschau</button>
+</form>`}
+/>
+
+## Interactive story
+
+<Primary />
+
+## Attributes
+
+- `forms`: CSS selector of the forms to watch. Defaults to `form`.
+- `allow`: CSS selector of links/buttons that may always leave.
+- `allow-submit`: default whitelist selector for submit buttons of all forms.
+- `dirty`: force the dirty state (e.g. for state outside forms).
+- `disabled`: turn the guard off.
+- `no-native-prompt`: don't register the `beforeunload` fallback.
+- `dialog-title`, `message`, `confirm-label`, `cancel-label`, `close-label`, `variant`, `confirm-value`, `value-label`, `static-backdrop`: dialog texts and behaviour, see `fucodo-confirm`.
+
+<ArgTypes of={ConfirmLeaveStories.Default} />
+
+### Per form / element
+
+- `data-leave-allow-submit="button[name=save]"` on a form: whitelisted submit buttons.
+  Without any whitelist every submit counts as saving and is allowed; with a whitelist, a submit without submitter (e.g. `requestSubmit()`) asks.
+- `data-leave-allow` on a link or submit button: always allowed.
+- `data-leave-ignore` on a field (or a container of fields): not tracked.
+
+Even a whitelisted submit asks if *other* watched forms have unsaved changes.
+
+## Events
+
+Dispatched on the host, bubbling.
+
+- `fucodo-confirm-leave:dirtychange` – `detail: { dirty, forms }`
+- `fucodo-confirm-leave:open` – cancelable, `preventDefault()` skips the dialog and stays
+- `fucodo-confirm-leave:confirm` – cancelable, `preventDefault()` stays on the page
+- `fucodo-confirm-leave:cancel`
+
+`detail` of open/confirm/cancel: `{ kind: 'link' | 'submit' | 'navigate', target, url, forms, config }` – `config` may be modified in an `open` listener.
+
+## JavaScript API
+
+<Source
+  language="js"
+  code={`const guard = document.querySelector('fucodo-confirm-leave');
+
+guard.markClean(form);  // take current values as new baseline (e.g. after an AJAX save)
+guard.markClean();      // all forms, also removes the dirty attribute
+guard.markDirty();      // same as setting the dirty attribute
+guard.dirtyFields(form); // fields that differ from their baseline (all dirty forms without argument)
+guard.isDirty;          // boolean
+guard.dirtyForms;       // HTMLFormElement[]`}
+/>
+
+## All stories
+
+<Stories includePrimary={false} />
