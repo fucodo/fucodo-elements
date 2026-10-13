@@ -1,0 +1,34 @@
+{
+  "name": "fucodo.confirm",
+  "version": "1.0.0",
+  "description": "Web components <fucodo-confirm-action> and <fucodo-confirm-dialog>: Bootstrap-like confirmation dialog in front of links, buttons and submits.",
+  "type": "module",
+  "main": "index.js",
+  "module": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./dist": "./dist/index.js",
+    "./confirm-dialog.js": "./confirm-dialog.js",
+    "./confirm-action.js": "./confirm-action.js"
+  },
+  "files": [
+    "index.js",
+    "confirm-dialog.js",
+    "confirm-action.js",
+    "style.scss",
+    "host.scss",
+    "dist"
+  ],
+  "sideEffects": [
+    "./index.js",
+    "./confirm-dialog.js",
+    "./confirm-action.js",
+    "./dist/index.js",
+    "*.scss"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "fucodo GmbH - Kay Strobach",
+  "license": "MIT"
+}

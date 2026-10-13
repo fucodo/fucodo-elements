@@ -1,0 +1,100 @@
+import { Meta, Canvas, ArgTypes, Source, Stories, Title, Primary } from '@storybook/addon-docs/blocks';
+import * as ConfirmActionStories from './ConfirmAction.stories';
+
+<Meta of={ConfirmActionStories} />
+
+<Title>fucodo-confirm — confirm before acting</Title>
+
+## Description
+
+`fucodo-confirm-action` wraps any clickable element (link, button, submit, …), intercepts the
+click and asks for confirmation in a Bootstrap-like dialog. Only after confirmation is the
+original click replayed, so links navigate, forms submit and existing click handlers run as usual.
+
+The dialog itself is the standalone element `fucodo-confirm-dialog`, which is also used by
+`fucodo-confirm-leave` (package `fucodo-form-guard`).
+
+- Bottom sheet below 576px viewport width, centred modal above.
+- Buttons are split left/right and stacked full-width when the dialog is ≤ 480px wide.
+- Optional "type the value to confirm" check (GitHub style).
+
+Tag names: `fucodo-confirm-action`, `fucodo-confirm-dialog`
+
+## Example markup
+
+<Source
+  language="html"
+  code={`<fucodo-confirm-action
+    variant="danger"
+    dialog-title="Datensatz löschen"
+    message="Der Datensatz wird endgültig gelöscht."
+    confirm-label="Löschen">
+  <a class="btn btn-danger" href="/record/1/delete">Löschen</a>
+</fucodo-confirm-action>`}
+/>
+
+## Interactive story
+
+<Primary />
+
+## Attributes
+
+- `dialog-title`: Heading of the dialog.
+- `message`: Body text (plain text, line breaks preserved).
+- `confirm-label` / `cancel-label`: Button labels.
+- `close-label`: `aria-label` of the × button.
+- `variant`: `success` (default, green) | `danger` (red) | `neutral` (dark grey).
+- `confirm-value`: If set, the user must type exactly this value to enable "confirm".
+- `value-label`: Prompt above the input, `{value}` is replaced by the required value.
+- `trigger`: CSS selector restricting which inner elements are intercepted.
+- `static-backdrop`: Clicking the backdrop does not close the dialog.
+- `disabled`: Pass clicks through without asking.
+
+<ArgTypes of={ConfirmActionStories.Default} />
+
+### Per-trigger overrides
+
+Useful when wrapping a whole list or table: `data-confirm-title`, `data-confirm-message`,
+`data-confirm-label`, `data-confirm-cancel-label`, `data-confirm-variant`,
+`data-confirm-value`, `data-confirm-value-label`.
+
+### Slots
+
+- default: the wrapped element(s)
+- `body`: optional rich body content, replaces the plain message
+
+## Events
+
+Dispatched on the host, bubbling. `detail: { trigger, config }` – `config` may be modified in an `open` listener.
+
+- `fucodo-confirm-action:open` – cancelable, `preventDefault()` skips the dialog and drops the click
+- `fucodo-confirm-action:confirm` – cancelable, `preventDefault()` prevents replaying the original click
+- `fucodo-confirm-action:cancel`
+
+## JavaScript API
+
+<Source
+  language="js"
+  code={`import { ConfirmAction, ConfirmDialog } from 'fucodo.confirm';
+
+// like window.confirm, but async
+const ok = await ConfirmAction.confirm({ title, message, confirmValue, variant });
+
+// open an existing element manually
+const ok2 = await document.querySelector('fucodo-confirm-action').open();`}
+/>
+
+## Styling
+
+The dialog lives in Shadow DOM. It picks up Bootstrap CSS variables (`--bs-*`) when present and can
+be themed with `--fucodo-confirm-bg`, `--fucodo-confirm-color`, `--fucodo-confirm-border-color`,
+`--fucodo-confirm-radius`, `--fucodo-confirm-width`, `--fucodo-confirm-font`, `--fucodo-confirm-shadow`,
+`--fucodo-confirm-focus-ring`, `--fucodo-confirm-focus-border`, `--fucodo-confirm-success`,
+`--fucodo-confirm-danger`, `--fucodo-confirm-neutral` and `--fucodo-confirm-cancel`.
+
+All inner elements are exposed as CSS parts: `dialog`, `content`, `header`, `title`, `close`, `body`,
+`message`, `label`, `input`, `footer`, `cancel-button`, `confirm-button`.
+
+## All stories
+
+<Stories includePrimary={false} />

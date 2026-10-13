@@ -1,0 +1,181 @@
+:host { display: contents; }
+
+dialog {
+  --_bg: var(--fucodo-confirm-bg, var(--bs-body-bg, #fff));
+  --_color: var(--fucodo-confirm-color, var(--bs-body-color, #212529));
+  --_border: var(--fucodo-confirm-border-color, var(--bs-border-color, #dee2e6));
+  --_radius: var(--fucodo-confirm-radius, var(--bs-border-radius-lg, .5rem));
+  --_btn-radius: var(--bs-border-radius, .375rem);
+  --_focus-ring: var(--fucodo-confirm-focus-ring, 0 0 0 .25rem rgba(13, 110, 253, .25));
+
+  /* Mobile (default): bottom sheet, slides up from the bottom edge */
+  --_off: translateY(100%);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  max-height: calc(100dvh - 1rem);
+  margin: auto 0 0;
+  padding: 0;
+  border: 1px solid var(--bs-border-color-translucent, rgba(0, 0, 0, .175));
+  border-bottom: 0;
+  border-radius: var(--_radius) var(--_radius) 0 0;
+  overflow-y: auto;
+  background: var(--_bg);
+  color: var(--_color);
+  font-family: var(--fucodo-confirm-font, inherit);
+  font-size: 1rem;
+  line-height: 1.5;
+  box-shadow: var(--fucodo-confirm-shadow, none);
+
+  opacity: 0;
+  transform: var(--_off);
+  transition:
+    opacity .15s linear,
+    transform .3s ease-out,
+    overlay .3s allow-discrete,
+    display .3s allow-discrete;
+}
+/* Desktop: centred modal with Bootstrap's ".modal.fade" slide-in from above */
+@media (min-width: 576px) {
+  dialog {
+    --_off: translateY(-50px);
+    width: calc(100% - 3.5rem);
+    max-width: var(--fucodo-confirm-width, 500px);
+    max-height: calc(100dvh - 3.5rem);
+    margin: auto;
+    border-bottom: 1px solid var(--bs-border-color-translucent, rgba(0, 0, 0, .175));
+    border-radius: var(--_radius);
+  }
+}
+dialog[open] { opacity: 1; transform: none; }
+@starting-style {
+  dialog[open] { opacity: 0; transform: var(--_off); }
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 0);
+  transition: background .15s linear, overlay .3s allow-discrete, display .3s allow-discrete;
+}
+dialog[open]::backdrop { background: rgb(0 0 0 / .5); }
+@starting-style {
+  dialog[open]::backdrop { background: rgb(0 0 0 / 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog, dialog::backdrop { transition: none; }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--_border);
+}
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.btn-close {
+  box-sizing: content-box;
+  width: 1em;
+  height: 1em;
+  padding: .25em;
+  margin: -.5rem -.5rem -.5rem auto;
+  border: 0;
+  border-radius: var(--_btn-radius);
+  background: transparent no-repeat center / 1em auto;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
+  filter: var(--bs-btn-close-white-filter, none);
+  opacity: .5;
+  cursor: pointer;
+}
+.btn-close:hover { opacity: .75; }
+.btn-close:focus-visible { outline: 0; box-shadow: var(--_focus-ring); opacity: 1; }
+
+.body { padding: 1rem; }
+.message { margin: 0; white-space: pre-line; }
+.message:empty, .message[hidden] { display: none; }
+::slotted([slot="body"]) { margin: 0; }
+
+.value-check { margin-top: 1rem; }
+.value-check[hidden] { display: none; }
+.label { display: block; margin-bottom: .5rem; }
+.label code {
+  font-family: var(--bs-font-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace);
+  font-size: .875em;
+  font-weight: 600;
+  color: var(--bs-code-color, #d63384);
+  word-break: break-all;
+}
+.input {
+  display: block;
+  width: 100%;
+  padding: .375rem .75rem;
+  font: inherit;
+  color: var(--_color);
+  background: var(--_bg);
+  border: 1px solid var(--_border);
+  border-radius: var(--_btn-radius);
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+.input:focus {
+  outline: 0;
+  border-color: var(--fucodo-confirm-focus-border, #86b7fe);
+  box-shadow: var(--_focus-ring);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  padding: .75rem;
+  padding-bottom: max(.75rem, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--_border);
+}
+
+/* Narrow dialog: stack the buttons full-width */
+dialog { container: fucodo-confirm-dialog / inline-size; }
+@container fucodo-confirm-dialog (max-width: 480px) {
+  .footer { flex-direction: column; align-items: stretch; }
+  .footer .btn { display: block; width: 100%; }
+}
+
+.btn {
+  --_btn-bg: var(--bs-success, #198754);
+  --_btn-color: #fff;
+  display: inline-block;
+  padding: .375rem .75rem;
+  font: inherit;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--_btn-color);
+  background: var(--_btn-bg);
+  border: 1px solid var(--_btn-bg);
+  border-radius: var(--_btn-radius);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+.btn:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--_btn-bg) 85%, #000);
+  border-color: color-mix(in srgb, var(--_btn-bg) 80%, #000);
+}
+.btn:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 .25rem color-mix(in srgb, var(--_btn-bg) 50%, transparent);
+}
+.btn:disabled { opacity: .65; cursor: default; pointer-events: none; }
+
+/* confirm button variants */
+.btn[data-variant="success"] { --_btn-bg: var(--fucodo-confirm-success, var(--bs-success, #198754)); }
+.btn[data-variant="danger"]  { --_btn-bg: var(--fucodo-confirm-danger, var(--bs-danger, #dc3545)); }
+.btn[data-variant="neutral"] { --_btn-bg: var(--fucodo-confirm-neutral, var(--bs-dark, #212529)); }
+/* cancel button */
+.btn[data-variant="cancel"]  { --_btn-bg: var(--fucodo-confirm-cancel, var(--bs-secondary, #6c757d)); }
