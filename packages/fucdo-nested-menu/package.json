@@ -1,0 +1,7 @@
+{
+  "name": "fucdo-nested-menu",
+  "type": "module",
+  "version": "0.1.0",
+  "main": "index.js",
+  "description": "A dialog-based nested navigation menu."
+}

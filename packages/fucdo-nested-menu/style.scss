@@ -1,0 +1,95 @@
+:host {
+  font: 600 1rem/1.4 Arial, sans-serif;
+  color: #222;
+}
+
+dialog {
+  position: fixed;
+  inset: 5rem 0 0;
+  width: 100%;
+  max-width: none;
+  height: calc(100% - 5rem);
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: auto;
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 55%);
+}
+
+.panels {
+  display: flex;
+  min-height: 100%;
+}
+
+.panel {
+  box-sizing: border-box;
+  flex: 0 0 min(30rem, 40vw);
+  min-height: 100%;
+  padding: 5rem 2rem 2rem;
+  background: #fff;
+}
+
+.panel + .panel {
+  background: #eaf2fc;
+  color: #16345b;
+}
+
+.close {
+  position: absolute;
+  z-index: 1;
+  top: 1rem;
+  left: 24rem;
+  border: 0;
+  background: transparent;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.item,
+.back {
+  display: block;
+  width: 100%;
+  padding: .75rem .5rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.item:hover,
+.item:focus-visible {
+  background: #eaf2fc;
+  color: #2864b4;
+}
+
+.back {
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 700px) {
+  dialog {
+    inset: 0;
+    height: 100%;
+  }
+
+  .panel {
+    flex-basis: 100%;
+  }
+
+  .panel:not(:last-child) {
+    display: none;
+  }
+
+  .close {
+    left: auto;
+    right: 1rem;
+  }
+}
