@@ -575,7 +575,8 @@
         .toggle::after { content: ''; border: .3em solid transparent; border-bottom: 0; border-top-color: currentColor; }
         .item > .action { border-start-start-radius: .375rem; border-end-start-radius: .375rem; }
         .item > .action:last-child, .item > .toggle { border-start-end-radius: .375rem; border-end-end-radius: .375rem; }
-        .action:hover, .toggle:hover { filter: brightness(.9); }
+        .action:not(:disabled):hover, .toggle:hover { filter: brightness(.9); }
+        button:disabled { opacity: .55; cursor: not-allowed; }
         a:focus-visible, button:focus-visible { outline: 3px solid var(--button-focus-color, #80b7ff); outline-offset: 2px; z-index: 2; }
         .popup {
             position: absolute; inset-block-start: calc(100% + .25rem); inset-inline-end: 0;
@@ -584,7 +585,8 @@
             color: var(--button-menu-color, #212529); border: 1px solid #ccc; border-radius: .375rem;
             box-shadow: 0 .25rem .75rem #0002;
         }
-        .popup a { display: block; padding: .5rem .75rem; color: inherit; text-decoration: none; overflow-wrap: anywhere; }
+        .popup a, .popup button { display: block; width: 100%; padding: .5rem .75rem; color: inherit; text-align: start; text-decoration: none; overflow-wrap: anywhere; }
+        .popup button { background: transparent; border: 0; }
         .popup a:hover, .popup a:focus-visible { background: var(--button-menu-hover, #eee); }
         @media (max-width: 480px) { .popup { inset-inline-start: 0; inset-inline-end: auto; } }
     `;
@@ -611,15 +613,24 @@
     }
     _readList() {
       const list = [...this.children].find((element) => element.matches("ul:not([slot])"));
-      this._items = [...list?.children ?? []].filter((element) => element.matches("li")).flatMap((item) => {
-        const link = item.querySelector(":scope > a");
-        if (!link) return [];
-        return [{ link, children: [...item.querySelectorAll(":scope > ul > li > a")] }];
-      });
+      this._items = [...list?.children ?? []].filter((element) => element.matches("li")).map((item) => ({
+        ...this._entry(item),
+        children: [...item.querySelectorAll(":scope > ul > li")].map((child) => this._entry(child))
+      }));
       this._open = -1;
     }
-    _link(source, className) {
-      const link = source.cloneNode(true);
+    _entry(item) {
+      const link = item.querySelector(":scope > a");
+      const labelSource = (link ?? item).cloneNode(true);
+      labelSource.querySelectorAll("ul").forEach((list) => list.remove());
+      return { link, label: labelSource.textContent.trim() };
+    }
+    _link(item, className) {
+      if (!item.link?.getAttribute("href")?.trim()) {
+        return b2`<button type="button" disabled class=${className}
+                part=${className === "action" ? "button" : "menu-link"}>${item.label}</button>`;
+      }
+      const link = item.link.cloneNode(true);
       link.removeAttribute("id");
       link.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
       link.classList.add(className);
@@ -674,10 +685,10 @@
       }}>
                 ${this._items.map((item, index) => b2`
                     <div class="item" part="item">
-                        ${this._link(item.link, "action")}
+                        ${this._link(item, "action")}
                         ${item.children.length ? b2`
                             <button type="button" class="toggle" part="toggle" id="toggle-${index}"
-                                aria-label=${`More options for ${item.link.textContent.trim()}`}
+                                aria-label=${`More options for ${item.label}`}
                                 aria-expanded=${this._open === index}
                                 aria-controls="menu-${index}"
                                 @click=${() => this._open === index ? this._close() : this._show(index)}

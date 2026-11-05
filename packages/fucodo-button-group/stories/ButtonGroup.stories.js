@@ -27,6 +27,22 @@ export default {
 };
 
 export const Mixed = {};
+export const DisabledItems = {
+    render: () => html`
+        <fucodo-button-group label="Available actions">
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li>Coming soon</li>
+                <li><a>Unavailable</a></li>
+                <li><span>Downloads</span><ul>
+                    <li>PDF coming soon</li>
+                    <li><a href="#csv">Download CSV</a></li>
+                    <li><a href="">Archive unavailable</a></li>
+                </ul></li>
+            </ul>
+        </fucodo-button-group>
+    `,
+};
 export const StandardLinks = {
     render: () => html`
         <fucodo-button-group label="Navigation">
