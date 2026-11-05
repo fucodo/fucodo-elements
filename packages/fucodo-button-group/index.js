@@ -35,11 +35,15 @@ export class FucodoButtonGroup extends LitElement {
     }
 
     _readList() {
-        const list = [...this.children].find(element => element.matches('ul:not([slot])'));
-        this._items = [...(list?.children ?? [])].filter(element => element.matches('li')).map(item => ({
-            ...this._entry(item),
-            children: [...item.querySelectorAll(':scope > ul > li')].map(child => this._entry(child)),
-        }));
+        const lists = [...this.children].filter(element => element.matches('ul:not([slot])'));
+        this._items = lists.flatMap(list => {
+            const entries = [...list.children].filter(element => element.matches('li'));
+            if (!entries.length) return [];
+            return [{
+                ...this._entry(entries[0]),
+                children: entries.slice(1).map(item => this._entry(item)),
+            }];
+        });
         this._open = -1;
     }
 
