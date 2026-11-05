@@ -20,6 +20,14 @@ export default {
                 <li><a href="#csv">Download CSV</a></li>
             </ul>
             <ul>
+                <li>Share</li>
+                <li><a href="#email">Email</a></li>
+                <li><a href="#copy">Copy link</a></li>
+            </ul>
+            <ul>
+                <li>Coming soon</li>
+            </ul>
+            <ul>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </fucodo-button-group>
