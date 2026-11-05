@@ -1,0 +1,38 @@
+:host { display: block; container: button-group / inline-size; --button-color: #0d6efd; --button-text-color: white; }
+slot { display: none; }
+.group { display: flex; flex-wrap: wrap; gap: var(--button-group-gap, .5rem); align-items: stretch; }
+.item { display: inline-flex; position: relative; max-width: 100%; }
+.item:has(.popup) { z-index: 1; }
+a, button { box-sizing: border-box; font: inherit; }
+.action, .toggle {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: .5rem 1rem; min-height: 2.75rem;
+    border: 1px solid var(--button-color); border-radius: 0;
+    background: var(--button-color); color: var(--button-text-color);
+    text-decoration: none; cursor: pointer; overflow-wrap: anywhere;
+}
+.action { min-width: 0; }
+.toggle { flex-shrink: 0; padding-inline: .75rem; border-inline-start-color: currentColor; }
+.toggle::after { content: ''; border: .3em solid transparent; border-bottom: 0; border-top-color: currentColor; }
+.item > .action { border-start-start-radius: .375rem; border-end-start-radius: .375rem; }
+.item > .action:last-child, .item > .toggle { border-start-end-radius: .375rem; border-end-end-radius: .375rem; }
+.action:not(:disabled):hover, .toggle:hover { filter: brightness(.9); }
+button:disabled { opacity: .55; cursor: not-allowed; }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--button-focus-color, #80b7ff); outline-offset: 2px; z-index: 2; }
+.popup {
+    position: absolute; inset-block-start: calc(100% + .25rem); inset-inline-end: 0;
+    width: max-content; min-width: 100%; max-width: min(20rem, calc(100vw - 2rem));
+    margin: 0; padding: .25rem; list-style: none; background: var(--button-menu-background, white);
+    color: var(--button-menu-color, #212529); border: 1px solid #ccc; border-radius: .375rem;
+    box-shadow: 0 .25rem .75rem #0002;
+}
+.popup a, .popup button { display: block; width: 100%; padding: .5rem .75rem; color: inherit; text-align: start; text-decoration: none; overflow-wrap: anywhere; }
+.popup button { background: transparent; border: 0; }
+.popup a:hover, .popup a:focus-visible { background: var(--button-menu-hover, #eee); }
+@container button-group (max-width: 480px) {
+    .group { display: block; }
+    .item { width: 100%; }
+    .item + .item { margin-block-start: var(--button-group-gap, .5rem); }
+    .action { flex: 1; }
+    .popup { inset-inline-start: 0; inset-inline-end: auto; }
+}

@@ -23,14 +23,6 @@
     }
   };
   var r = (t3) => new n("string" == typeof t3 ? t3 : t3 + "", void 0, s);
-  var i = (t3, ...e4) => {
-    const o5 = 1 === t3.length ? t3[0] : e4.reduce((e5, s4, o6) => e5 + ((t4) => {
-      if (true === t4._$cssResult$) return t4.cssText;
-      if ("number" == typeof t4) return t4;
-      throw Error("Value passed to 'css' function must be a 'css' function result: " + t4 + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
-    })(s4) + t3[o6 + 1], t3[0]);
-    return new n(o5, t3, s);
-  };
   var S = (s4, o5) => {
     if (e) s4.adoptedStyleSheets = o5.map((t3) => t3 instanceof CSSStyleSheet ? t3 : t3.styleSheet);
     else for (const e4 of o5) {
@@ -549,6 +541,152 @@
   o4?.({ LitElement: i4 });
   (s3.litElementVersions ??= []).push("4.2.2");
 
+  // packages/fucodo-button-group/style.scss
+  var style_default = `:host {
+  display: block;
+  container: button-group/inline-size;
+  --button-color: #0d6efd;
+  --button-text-color: white;
+}
+
+slot {
+  display: none;
+}
+
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--button-group-gap, 0.5rem);
+  align-items: stretch;
+}
+
+.item {
+  display: inline-flex;
+  position: relative;
+  max-width: 100%;
+}
+
+.item:has(.popup) {
+  z-index: 1;
+}
+
+a, button {
+  box-sizing: border-box;
+  font: inherit;
+}
+
+.action, .toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  min-height: 2.75rem;
+  border: 1px solid var(--button-color);
+  border-radius: 0;
+  background: var(--button-color);
+  color: var(--button-text-color);
+  text-decoration: none;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+.action {
+  min-width: 0;
+}
+
+.toggle {
+  flex-shrink: 0;
+  padding-inline: 0.75rem;
+  border-inline-start-color: currentColor;
+}
+
+.toggle::after {
+  content: "";
+  border: 0.3em solid transparent;
+  border-bottom: 0;
+  border-top-color: currentColor;
+}
+
+.item > .action {
+  border-start-start-radius: 0.375rem;
+  border-end-start-radius: 0.375rem;
+}
+
+.item > .action:last-child, .item > .toggle {
+  border-start-end-radius: 0.375rem;
+  border-end-end-radius: 0.375rem;
+}
+
+.action:not(:disabled):hover, .toggle:hover {
+  filter: brightness(0.9);
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+a:focus-visible, button:focus-visible {
+  outline: 3px solid var(--button-focus-color, #80b7ff);
+  outline-offset: 2px;
+  z-index: 2;
+}
+
+.popup {
+  position: absolute;
+  inset-block-start: calc(100% + 0.25rem);
+  inset-inline-end: 0;
+  width: max-content;
+  min-width: 100%;
+  max-width: min(20rem, 100vw - 2rem);
+  margin: 0;
+  padding: 0.25rem;
+  list-style: none;
+  background: var(--button-menu-background, white);
+  color: var(--button-menu-color, #212529);
+  border: 1px solid #ccc;
+  border-radius: 0.375rem;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1333333333);
+}
+
+.popup a, .popup button {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  color: inherit;
+  text-align: start;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.popup button {
+  background: transparent;
+  border: 0;
+}
+
+.popup a:hover, .popup a:focus-visible {
+  background: var(--button-menu-hover, #eee);
+}
+
+@container button-group (max-width: 480px) {
+  .group {
+    display: block;
+  }
+  .item {
+    width: 100%;
+  }
+  .item + .item {
+    margin-block-start: var(--button-group-gap, 0.5rem);
+  }
+  .action {
+    flex: 1;
+  }
+  .popup {
+    inset-inline-start: 0;
+    inset-inline-end: auto;
+  }
+}`;
+
   // packages/fucodo-button-group/index.js
   var FucodoButtonGroup = class extends i4 {
     static properties = {
@@ -556,46 +694,7 @@
       _items: { state: true },
       _open: { state: true }
     };
-    static styles = i`
-        :host { display: block; container: button-group / inline-size; --button-color: #0d6efd; --button-text-color: white; }
-        slot { display: none; }
-        .group { display: flex; flex-wrap: wrap; gap: var(--button-group-gap, .5rem); align-items: stretch; }
-        .item { display: inline-flex; position: relative; max-width: 100%; }
-        .item:has(.popup) { z-index: 1; }
-        a, button { box-sizing: border-box; font: inherit; }
-        .action, .toggle {
-            display: inline-flex; align-items: center; justify-content: center;
-            padding: .5rem 1rem; min-height: 2.75rem;
-            border: 1px solid var(--button-color); border-radius: 0;
-            background: var(--button-color); color: var(--button-text-color);
-            text-decoration: none; cursor: pointer; overflow-wrap: anywhere;
-        }
-        .action { min-width: 0; }
-        .toggle { flex-shrink: 0; padding-inline: .75rem; border-inline-start-color: currentColor; }
-        .toggle::after { content: ''; border: .3em solid transparent; border-bottom: 0; border-top-color: currentColor; }
-        .item > .action { border-start-start-radius: .375rem; border-end-start-radius: .375rem; }
-        .item > .action:last-child, .item > .toggle { border-start-end-radius: .375rem; border-end-end-radius: .375rem; }
-        .action:not(:disabled):hover, .toggle:hover { filter: brightness(.9); }
-        button:disabled { opacity: .55; cursor: not-allowed; }
-        a:focus-visible, button:focus-visible { outline: 3px solid var(--button-focus-color, #80b7ff); outline-offset: 2px; z-index: 2; }
-        .popup {
-            position: absolute; inset-block-start: calc(100% + .25rem); inset-inline-end: 0;
-            width: max-content; min-width: 100%; max-width: min(20rem, calc(100vw - 2rem));
-            margin: 0; padding: .25rem; list-style: none; background: var(--button-menu-background, white);
-            color: var(--button-menu-color, #212529); border: 1px solid #ccc; border-radius: .375rem;
-            box-shadow: 0 .25rem .75rem #0002;
-        }
-        .popup a, .popup button { display: block; width: 100%; padding: .5rem .75rem; color: inherit; text-align: start; text-decoration: none; overflow-wrap: anywhere; }
-        .popup button { background: transparent; border: 0; }
-        .popup a:hover, .popup a:focus-visible { background: var(--button-menu-hover, #eee); }
-        @container button-group (max-width: 480px) {
-            .group { display: block; }
-            .item { width: 100%; }
-            .item + .item { margin-block-start: var(--button-group-gap, .5rem); }
-            .action { flex: 1; }
-            .popup { inset-inline-start: 0; inset-inline-end: auto; }
-        }
-    `;
+    static styles = r(style_default);
     constructor() {
       super();
       this.label = "Actions";
