@@ -14,6 +14,7 @@ a, button { box-sizing: border-box; font: inherit; }
 .action { min-width: 0; }
 .toggle { flex-shrink: 0; padding-inline: .75rem; border-inline-start-color: currentColor; }
 .toggle::after { content: ''; border: .3em solid transparent; border-bottom: 0; border-top-color: currentColor; }
+.toggle.dropdown { gap: .75rem; padding-inline: 1rem; border-inline-start-color: var(--button-color); }
 .item > .action { border-start-start-radius: .375rem; border-end-start-radius: .375rem; }
 .item > .action:last-child, .item > .toggle { border-start-end-radius: .375rem; border-end-end-radius: .375rem; }
 .action:not(:disabled):hover, .toggle:hover { filter: brightness(.9); }

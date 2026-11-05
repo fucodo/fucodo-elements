@@ -27,6 +27,21 @@ export default {
 };
 
 export const Mixed = {};
+export const Dropdown = {
+    render: () => html`
+        <fucodo-button-group label="Document actions">
+            <ul>
+                <li><span>Downloads</span></li>
+                <li><a href="#pdf">Download PDF</a></li>
+                <li><a href="#csv">Download CSV</a></li>
+            </ul>
+            <ul>
+                <li><a href="#share">Share</a></li>
+                <li><a href="#email">Email</a></li>
+            </ul>
+        </fucodo-button-group>
+    `,
+};
 export const DisabledItems = {
     render: () => html`
         <fucodo-button-group label="Available actions">

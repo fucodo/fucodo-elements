@@ -118,16 +118,19 @@ export class FucodoButtonGroup extends LitElement {
                     await Promise.resolve();
                     if (!this.renderRoot.activeElement) this._close();
                 }}>
-                ${this._items.map((item, index) => html`
+                ${this._items.map((item, index) => {
+                    const dropdown = item.children.length > 0 && !item.link?.getAttribute('href')?.trim();
+                    return html`
                     <div class="item" part="item">
-                        ${this._link(item, 'action')}
+                        ${dropdown ? '' : this._link(item, 'action')}
                         ${item.children.length ? html`
-                            <button type="button" class="toggle" part="toggle" id="toggle-${index}"
-                                aria-label=${`More options for ${item.label}`}
+                            <button type="button" class=${dropdown ? 'action toggle dropdown' : 'toggle'}
+                                part=${dropdown ? 'button toggle' : 'toggle'} id="toggle-${index}"
+                                aria-label=${dropdown ? item.label : `More options for ${item.label}`}
                                 aria-expanded=${this._open === index}
                                 aria-controls="menu-${index}"
                                 @click=${() => this._open === index ? this._close() : this._show(index)}
-                                @keydown=${event => this._toggleKey(event, index)}></button>
+                                @keydown=${event => this._toggleKey(event, index)}>${dropdown ? item.label : ''}</button>
                             ${this._open === index ? html`
                                 <ul class="popup" part="menu" id="menu-${index}" aria-labelledby="toggle-${index}"
                                     @keydown=${this._menuKey} @click=${() => this._close(true)}>
@@ -136,7 +139,7 @@ export class FucodoButtonGroup extends LitElement {
                             ` : html`<ul id="menu-${index}" hidden></ul>`}
                         ` : ''}
                     </div>
-                `)}
+                `; })}
             </div>
         `;
     }

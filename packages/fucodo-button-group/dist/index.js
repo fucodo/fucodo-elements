@@ -607,6 +607,12 @@ a, button {
   border-top-color: currentColor;
 }
 
+.toggle.dropdown {
+  gap: 0.75rem;
+  padding-inline: 1rem;
+  border-inline-start-color: var(--button-color);
+}
+
 .item > .action {
   border-start-start-radius: 0.375rem;
   border-end-start-radius: 0.375rem;
@@ -792,16 +798,19 @@ a:focus-visible, button:focus-visible {
         await Promise.resolve();
         if (!this.renderRoot.activeElement) this._close();
       }}>
-                ${this._items.map((item, index) => b2`
+                ${this._items.map((item, index) => {
+        const dropdown = item.children.length > 0 && !item.link?.getAttribute("href")?.trim();
+        return b2`
                     <div class="item" part="item">
-                        ${this._link(item, "action")}
+                        ${dropdown ? "" : this._link(item, "action")}
                         ${item.children.length ? b2`
-                            <button type="button" class="toggle" part="toggle" id="toggle-${index}"
-                                aria-label=${`More options for ${item.label}`}
+                            <button type="button" class=${dropdown ? "action toggle dropdown" : "toggle"}
+                                part=${dropdown ? "button toggle" : "toggle"} id="toggle-${index}"
+                                aria-label=${dropdown ? item.label : `More options for ${item.label}`}
                                 aria-expanded=${this._open === index}
                                 aria-controls="menu-${index}"
                                 @click=${() => this._open === index ? this._close() : this._show(index)}
-                                @keydown=${(event) => this._toggleKey(event, index)}></button>
+                                @keydown=${(event) => this._toggleKey(event, index)}>${dropdown ? item.label : ""}</button>
                             ${this._open === index ? b2`
                                 <ul class="popup" part="menu" id="menu-${index}" aria-labelledby="toggle-${index}"
                                     @keydown=${this._menuKey} @click=${() => this._close(true)}>
@@ -810,7 +819,8 @@ a:focus-visible, button:focus-visible {
                             ` : b2`<ul id="menu-${index}" hidden></ul>`}
                         ` : ""}
                     </div>
-                `)}
+                `;
+      })}
             </div>
         `;
     }
