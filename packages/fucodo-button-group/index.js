@@ -8,7 +8,7 @@ export class FucodoButtonGroup extends LitElement {
     };
 
     static styles = css`
-        :host { display: block; --button-color: #0d6efd; --button-text-color: white; }
+        :host { display: block; container: button-group / inline-size; --button-color: #0d6efd; --button-text-color: white; }
         slot { display: none; }
         .group { display: flex; flex-wrap: wrap; gap: var(--button-group-gap, .5rem); align-items: stretch; }
         .item { display: inline-flex; position: relative; max-width: 100%; }
@@ -39,7 +39,13 @@ export class FucodoButtonGroup extends LitElement {
         .popup a, .popup button { display: block; width: 100%; padding: .5rem .75rem; color: inherit; text-align: start; text-decoration: none; overflow-wrap: anywhere; }
         .popup button { background: transparent; border: 0; }
         .popup a:hover, .popup a:focus-visible { background: var(--button-menu-hover, #eee); }
-        @media (max-width: 480px) { .popup { inset-inline-start: 0; inset-inline-end: auto; } }
+        @container button-group (max-width: 480px) {
+            .group { display: block; }
+            .item { width: 100%; }
+            .item + .item { margin-block-start: var(--button-group-gap, .5rem); }
+            .action { flex: 1; }
+            .popup { inset-inline-start: 0; inset-inline-end: auto; }
+        }
     `;
 
     constructor() {
