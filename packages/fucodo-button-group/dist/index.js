@@ -573,15 +573,17 @@ slot {
 a, button {
   box-sizing: border-box;
   font: inherit;
+  font-family: var(--button-font-family, inherit);
 }
 
 .action, .toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 1rem;
-  min-height: 2.75rem;
-  border: 1px solid var(--button-color);
+  padding: var(--button-padding-block, 0.5rem) var(--button-padding-inline, 1rem);
+  min-height: var(--button-min-height, 2.75rem);
+  font-size: var(--button-font-size, inherit);
+  border: 1px solid var(--button-border-color, var(--button-color));
   border-radius: 0;
   background: var(--button-color);
   color: var(--button-text-color);
@@ -596,7 +598,7 @@ a, button {
 
 .toggle {
   flex-shrink: 0;
-  padding-inline: 0.75rem;
+  padding-inline: var(--button-toggle-padding-inline, 0.75rem);
   border-inline-start-color: currentColor;
 }
 
@@ -609,18 +611,18 @@ a, button {
 
 .toggle.dropdown {
   gap: 0.75rem;
-  padding-inline: 1rem;
-  border-inline-start-color: var(--button-color);
+  padding-inline: var(--button-padding-inline, 1rem);
+  border-inline-start-color: var(--button-border-color, var(--button-color));
 }
 
 .item > .action {
-  border-start-start-radius: 0.375rem;
-  border-end-start-radius: 0.375rem;
+  border-start-start-radius: var(--button-radius, 0.375rem);
+  border-end-start-radius: var(--button-radius, 0.375rem);
 }
 
 .item > .action:last-child, .item > .toggle {
-  border-start-end-radius: 0.375rem;
-  border-end-end-radius: 0.375rem;
+  border-start-end-radius: var(--button-radius, 0.375rem);
+  border-end-end-radius: var(--button-radius, 0.375rem);
 }
 
 .action:not(:disabled):hover, .toggle:hover {
