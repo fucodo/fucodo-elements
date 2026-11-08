@@ -724,14 +724,14 @@ a:focus-visible, button:focus-visible {
     }
     _readList() {
       const lists = [...this.children].filter((element) => element.matches("ul:not([slot])"));
-      this._items = lists.flatMap((list) => {
-        const entries = [...list.children].filter((element) => element.matches("li"));
-        if (!entries.length) return [];
-        return [{
-          ...this._entry(entries[0]),
-          children: entries.slice(1).map((item) => this._entry(item))
-        }];
-      });
+      this._items = lists.flatMap((list) => [...list.children].filter((element) => element.matches("li")).map((item) => {
+        const submenu = item.querySelector(":scope > ul");
+        return {
+          ...this._entry(item),
+          submenu,
+          children: [...submenu?.children ?? []].filter((element) => element.matches("li")).map((child) => this._entry(child))
+        };
+      }));
       this._open = -1;
     }
     _entry(item) {
@@ -741,7 +741,7 @@ a:focus-visible, button:focus-visible {
       return { link, label: labelSource.textContent.trim() };
     }
     _link(item, className) {
-      if (!item.link?.getAttribute("href")?.trim()) {
+      if (!item.link) {
         return b2`<button type="button" disabled class=${className}
                 part=${className === "action" ? "button" : "menu-link"}>${item.label}</button>`;
       }
@@ -799,11 +799,11 @@ a:focus-visible, button:focus-visible {
         if (!this.renderRoot.activeElement) this._close();
       }}>
                 ${this._items.map((item, index) => {
-        const dropdown = item.children.length > 0 && !item.link?.getAttribute("href")?.trim();
+        const dropdown = item.submenu && !item.link;
         return b2`
                     <div class="item" part="item">
                         ${dropdown ? "" : this._link(item, "action")}
-                        ${item.children.length ? b2`
+                        ${item.submenu ? b2`
                             <button type="button" class=${dropdown ? "action toggle dropdown" : "toggle"}
                                 part=${dropdown ? "button toggle" : "toggle"} id="toggle-${index}"
                                 aria-label=${dropdown ? item.label : `More options for ${item.label}`}

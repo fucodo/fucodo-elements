@@ -13,21 +13,21 @@ export default {
         <fucodo-button-group label=${label}>
             <ul>
                 <li><a href="#overview">Overview</a></li>
-            </ul>
-            <ul>
-                <li><a href="#download">Download</a></li>
-                <li><a href="#pdf" download>Download PDF</a></li>
-                <li><a href="#csv">Download CSV</a></li>
-            </ul>
-            <ul>
-                <li>Share</li>
-                <li><a href="#email">Email</a></li>
-                <li><a href="#copy">Copy link</a></li>
-            </ul>
-            <ul>
+                <li>
+                    <a href="#download">Download</a>
+                    <ul>
+                        <li><a href="#pdf" download>Download PDF</a></li>
+                        <li><a href="#csv">Download CSV</a></li>
+                    </ul>
+                </li>
+                <li>
+                    Share
+                    <ul>
+                        <li><a href="#email">Email</a></li>
+                        <li><a href="#copy">Copy link</a></li>
+                    </ul>
+                </li>
                 <li>Coming soon</li>
-            </ul>
-            <ul>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </fucodo-button-group>
@@ -39,13 +39,19 @@ export const Dropdown = {
     render: () => html`
         <fucodo-button-group label="Document actions">
             <ul>
-                <li><span>Downloads</span></li>
-                <li><a href="#pdf">Download PDF</a></li>
-                <li><a href="#csv">Download CSV</a></li>
-            </ul>
-            <ul>
-                <li><a href="#share">Share</a></li>
-                <li><a href="#email">Email</a></li>
+                <li>
+                    <span>Downloads</span>
+                    <ul>
+                        <li><a href="#pdf">Download PDF</a></li>
+                        <li><a href="#csv">Download CSV</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#share">Share</a>
+                    <ul>
+                        <li><a href="#email">Email</a></li>
+                    </ul>
+                </li>
             </ul>
         </fucodo-button-group>
     `,
@@ -55,18 +61,16 @@ export const DisabledItems = {
         <fucodo-button-group label="Available actions">
             <ul>
                 <li><a href="#overview">Overview</a></li>
-            </ul>
-            <ul>
                 <li>Coming soon</li>
-            </ul>
-            <ul>
-                <li><a>Unavailable</a></li>
-            </ul>
-            <ul>
-                <li><span>Downloads</span></li>
-                <li>PDF coming soon</li>
-                <li><a href="#csv">Download CSV</a></li>
-                <li><a href="">Archive unavailable</a></li>
+                <li><span>Unavailable</span></li>
+                <li>
+                    <span>Downloads</span>
+                    <ul>
+                        <li>PDF coming soon</li>
+                        <li><a href="#csv">Download CSV</a></li>
+                        <li><span>Archive unavailable</span></li>
+                    </ul>
+                </li>
             </ul>
         </fucodo-button-group>
     `,
@@ -76,11 +80,7 @@ export const StandardLinks = {
         <fucodo-button-group label="Navigation">
             <ul>
                 <li><a href="#home">Home</a></li>
-            </ul>
-            <ul>
                 <li><a href="#about">About</a></li>
-            </ul>
-            <ul>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </fucodo-button-group>
@@ -90,14 +90,20 @@ export const MultipleSplitButtons = {
     render: () => html`
         <fucodo-button-group label="Document actions">
             <ul>
-                <li><a href="#download">Download</a></li>
-                <li><a href="#pdf">PDF</a></li>
-                <li><a href="#csv">CSV</a></li>
-            </ul>
-            <ul>
-                <li><a href="#share">Share</a></li>
-                <li><a href="#email">Email</a></li>
-                <li><a href="#copy">Copy link</a></li>
+                <li>
+                    <a href="#download">Download</a>
+                    <ul>
+                        <li><a href="#pdf">PDF</a></li>
+                        <li><a href="#csv">CSV</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#share">Share</a>
+                    <ul>
+                        <li><a href="#email">Email</a></li>
+                        <li><a href="#copy">Copy link</a></li>
+                    </ul>
+                </li>
             </ul>
         </fucodo-button-group>
     `,
@@ -107,12 +113,12 @@ export const NarrowContainer = {
         <fucodo-button-group label=${args.label}>
             <ul>
                 <li><a href="#overview">Overview</a></li>
-            </ul>
-            <ul>
-                <li><a href="#documents">Documents</a></li>
-                <li><a href="#report">Annual report</a></li>
-            </ul>
-            <ul>
+                <li>
+                    <a href="#documents">Documents</a>
+                    <ul>
+                        <li><a href="#report">Annual report</a></li>
+                    </ul>
+                </li>
                 <li><a href="#contact">Contact us</a></li>
             </ul>
         </fucodo-button-group>
