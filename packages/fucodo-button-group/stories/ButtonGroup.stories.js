@@ -72,6 +72,13 @@ export default {
 };
 
 export const Mixed = {};
+export const SingleButton = {
+    render: args => buttonGroup(args, 'Single action', html`
+            <ul>
+                <li><a href="#save">Save</a></li>
+            </ul>
+    `),
+};
 export const Dropdown = {
     render: args => buttonGroup(args, 'Document actions', html`
             <ul>
