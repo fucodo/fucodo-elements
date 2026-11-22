@@ -19,7 +19,7 @@ const cssVariables = {
     '--button-icon-gap': { value: '.5em', control: 'text', category: 'Icons' },
     '--button-color': { value: '#0d6efd', control: 'color', category: 'Button colors' },
     '--button-text-color': { value: 'white', control: 'color', category: 'Button colors' },
-    '--button-border-color': { value: '#0d6efd', control: 'color', category: 'Button colors' },
+    '--button-border-color': { value: '', control: 'color', category: 'Button colors' },
     '--button-focus-color': { value: '#80b7ff', control: 'color', category: 'Button colors' },
     '--button-font-family': { value: 'Arial, sans-serif', control: 'text', category: 'Typography' },
     '--button-font-size': { value: '1rem', control: 'text', category: 'Typography' },
@@ -217,4 +217,20 @@ export const BootstrapFontIcons = {
     render: args => html`<div style="--button-icon-font-family: bootstrap-icons">
         ${iconExamples(args, fontIcon('arrow-right'), fontIcon('download'))}
     </div>`,
+};
+
+export const BackgroundColors = {
+    render: args => buttonGroup(args, args.label, html`
+        <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li style="background-color: #287a42">
+                <a href="#download">Download</a>
+                <ul><li><a href="#pdf">Download PDF</a></li></ul>
+            </li>
+            <li style="background-color: #654398">
+                Share
+                <ul><li><a href="#email">Email</a></li></ul>
+            </li>
+        </ul>
+    `),
 };

@@ -1,4 +1,5 @@
 import { LitElement, html, unsafeCSS } from 'lit';
+import { styleMap } from 'lit/directives/style-map.js';
 import style from './style.scss';
 
 export class FucodoButtonGroup extends LitElement {
@@ -42,6 +43,7 @@ export class FucodoButtonGroup extends LitElement {
                 const submenu = item.querySelector(':scope > ul');
                 return {
                     ...this._entry(item),
+                    backgroundColor: item.style.backgroundColor,
                     submenu,
                     children: [...(submenu?.children ?? [])]
                         .filter(element => element.matches('li'))
@@ -125,7 +127,7 @@ export class FucodoButtonGroup extends LitElement {
                 ${this._items.map((item, index) => {
                     const dropdown = item.submenu && !item.link;
                     return html`
-                    <div class="item" part="item">
+                    <div class="item" part="item" style=${styleMap({ '--button-color': item.backgroundColor || undefined })}>
                         ${dropdown ? '' : this._link(item, 'action')}
                         ${item.submenu ? html`
                             <button type="button" class=${dropdown ? 'action toggle dropdown' : 'toggle'}
