@@ -2,7 +2,21 @@ import '../dist/index.js';
 import { html } from 'lit';
 import { styleMap } from 'lit/directives/style-map.js';
 
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import glyphs from 'bootstrap-icons/font/bootstrap-icons.json';
+import arrowUrl from 'bootstrap-icons/icons/arrow-right.svg?url';
+import downloadUrl from 'bootstrap-icons/icons/download.svg?url';
+import arrowSvg from 'bootstrap-icons/icons/arrow-right.svg?raw';
+import downloadSvg from 'bootstrap-icons/icons/download.svg?raw';
+import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
+
+// Static SVG markup from the installed Bootstrap Icons package.
+const arrowIcon = unsafeSVG(arrowSvg.replace('<svg ', '<svg aria-hidden="true" '));
+const downloadIcon = unsafeSVG(downloadSvg.replace('<svg ', '<svg aria-hidden="true" '));
+
 const cssVariables = {
+    '--button-icon-size': { value: '1em', control: 'text', category: 'Icons' },
+    '--button-icon-gap': { value: '.5em', control: 'text', category: 'Icons' },
     '--button-color': { value: '#0d6efd', control: 'color', category: 'Button colors' },
     '--button-text-color': { value: 'white', control: 'color', category: 'Button colors' },
     '--button-border-color': { value: '#0d6efd', control: 'color', category: 'Button colors' },
@@ -158,5 +172,49 @@ export const NarrowContainer = {
                 <li><a href="#contact">Contact us</a></li>
             </ul>
         `)}
+    </div>`,
+};
+
+const iconExamples = (args, arrow, download) => buttonGroup(args, 'Document actions', html`
+        <ul>
+            <li><a href="#next">${arrow} Next</a></li>
+            <li>
+                <a href="#download">${download} Download</a>
+                <ul>
+                    <li><a href="#pdf">${download} Download PDF</a></li>
+                    <li><a href="#csv">Download CSV</a></li>
+                </ul>
+            </li>
+            <li>
+                <span>${download} Exports</span>
+                <ul>
+                    <li><a href="#csv">Export CSV</a></li>
+                    <li><a href="#pdf">${download} Export PDF</a></li>
+                </ul>
+            </li>
+            <li><span>${arrow} Coming soon</span></li>
+        </ul>
+    `);
+
+export const Icons = {
+    name: 'Icons Inline SVG',
+    parameters: { docs: { description: { story: 'Inline SVG uses currentColor and follows the button or menu text color.' } } },
+    render: args => iconExamples(args, arrowIcon, downloadIcon),
+};
+
+export const ImageIcons = {
+    name: 'Icons Image Tag',
+    parameters: { docs: { description: { story: 'The same icons loaded through img use the colors from the SVG file. Empty alt text marks them as decorative beside the button label.' } } },
+    render: args => iconExamples(args, html`<img src=${arrowUrl} alt="">`, html`<img src=${downloadUrl} width="100" height="100" alt="">`),
+};
+
+// Page-level .bi-* selectors cannot reach labels cloned into the shadow root.
+const fontIcon = name => html`<span data-font-icon aria-hidden="true">${String.fromCodePoint(glyphs[name])}</span>`;
+
+export const BootstrapFontIcons = {
+    name: 'Icons Bootstrap Font',
+    parameters: { docs: { description: { story: 'Load the Bootstrap Icons font on the page and set --button-icon-font-family to bootstrap-icons. Put the glyph in a span with data-font-icon and aria-hidden="true". The glyph inherits the label color.' } } },
+    render: args => html`<div style="--button-icon-font-family: bootstrap-icons">
+        ${iconExamples(args, fontIcon('arrow-right'), fontIcon('download'))}
     </div>`,
 };

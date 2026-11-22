@@ -15,8 +15,36 @@ a, button { box-sizing: border-box; font: inherit; font-family: var(--button-fon
 }
 .action { min-width: 0; }
 .toggle { flex-shrink: 0; padding-inline: var(--button-toggle-padding-inline, .75rem); border-inline-start-color: currentColor; }
+/* Align icons before the text, including span-wrapped labels. */
+:is(.action, .menu-link, .action span, .menu-link span):has(> :is(svg, img, [data-font-icon])) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--button-icon-gap, .5em);
+}
+:is(.action, .menu-link) :is(svg, img, [data-font-icon]) {
+    flex-shrink: 0;
+    order: -1;
+}
+:is(.action, .menu-link) :is(svg, img) {
+    width: var(--button-icon-size, 1em);
+    height: var(--button-icon-size, 1em);
+    max-width: var(--button-icon-size, 1em);
+    max-height: var(--button-icon-size, 1em);
+    object-fit: contain;
+}
+[data-font-icon] {
+    display: inline-grid;
+    place-items: center;
+    font-family: var(--button-icon-font-family, inherit);
+    font-size: var(--button-icon-size, 1em);
+    line-height: 1;
+}
+:is(.action, .menu-link) [data-font-icon] { width: 1em; height: 1em; }
 .toggle::after { content: ''; border: .3em solid transparent; border-bottom: 0; border-top-color: currentColor; }
 .toggle.dropdown { gap: .75rem; padding-inline: var(--button-padding-inline, 1rem); border-inline-start-color: var(--button-border-color, var(--button-color)); }
+.item > .action:has(svg, img, [data-font-icon]) {
+    justify-content: flex-start;
+}
 .item > .action { border-start-start-radius: var(--button-radius, .375rem); border-end-start-radius: var(--button-radius, .375rem); }
 .item > .action:last-child, .item > .toggle { border-start-end-radius: var(--button-radius, .375rem); border-end-end-radius: var(--button-radius, .375rem); }
 .action:not(:disabled):hover, .toggle:hover { filter: brightness(.9); }
@@ -30,6 +58,9 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--button-focus-co
     box-shadow: 0 .25rem .75rem #0002;
 }
 .popup a, .popup button { display: block; width: 100%; padding: .5rem .75rem; color: inherit; text-align: start; text-decoration: none; overflow-wrap: anywhere; }
+.popup:has(.menu-link :is(svg, img, [data-font-icon])) .menu-link:not(:has(svg, img, [data-font-icon])) {
+    padding-inline-start: calc(.75rem + var(--button-icon-size, 1em) + var(--button-icon-gap, .5em));
+}
 .popup button { background: transparent; border: 0; }
 .popup a:hover, .popup a:focus-visible { background: var(--button-menu-hover, #eee); }
 @container button-group (max-width: 480px) {

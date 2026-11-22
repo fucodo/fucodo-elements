@@ -602,6 +602,39 @@ a, button {
   border-inline-start-color: currentColor;
 }
 
+/* Align icons before the text, including span-wrapped labels. */
+:is(.action, .menu-link, .action span, .menu-link span):has(> :is(svg, img, [data-font-icon])) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--button-icon-gap, 0.5em);
+}
+
+:is(.action, .menu-link) :is(svg, img, [data-font-icon]) {
+  flex-shrink: 0;
+  order: -1;
+}
+
+:is(.action, .menu-link) :is(svg, img) {
+  width: var(--button-icon-size, 1em);
+  height: var(--button-icon-size, 1em);
+  max-width: var(--button-icon-size, 1em);
+  max-height: var(--button-icon-size, 1em);
+  object-fit: contain;
+}
+
+[data-font-icon] {
+  display: inline-grid;
+  place-items: center;
+  font-family: var(--button-icon-font-family, inherit);
+  font-size: var(--button-icon-size, 1em);
+  line-height: 1;
+}
+
+:is(.action, .menu-link) [data-font-icon] {
+  width: 1em;
+  height: 1em;
+}
+
 .toggle::after {
   content: "";
   border: 0.3em solid transparent;
@@ -613,6 +646,10 @@ a, button {
   gap: 0.75rem;
   padding-inline: var(--button-padding-inline, 1rem);
   border-inline-start-color: var(--button-border-color, var(--button-color));
+}
+
+.item > .action:has(svg, img, [data-font-icon]) {
+  justify-content: flex-start;
 }
 
 .item > .action {
@@ -665,6 +702,10 @@ a:focus-visible, button:focus-visible {
   text-align: start;
   text-decoration: none;
   overflow-wrap: anywhere;
+}
+
+.popup:has(.menu-link :is(svg, img, [data-font-icon])) .menu-link:not(:has(svg, img, [data-font-icon])) {
+  padding-inline-start: calc(0.75rem + var(--button-icon-size, 1em) + var(--button-icon-gap, 0.5em));
 }
 
 .popup button {
@@ -740,12 +781,12 @@ a:focus-visible, button:focus-visible {
       const link = item.querySelector(":scope > a");
       const labelSource = (link ?? item).cloneNode(true);
       labelSource.querySelectorAll("ul").forEach((list) => list.remove());
-      return { link, label: labelSource.textContent.trim() };
+      return { link, label: labelSource.textContent.trim(), labelNodes: [...labelSource.childNodes] };
     }
     _link(item, className) {
       if (!item.link) {
         return b2`<button type="button" disabled class=${className}
-                part=${className === "action" ? "button" : "menu-link"}>${item.label}</button>`;
+                part=${className === "action" ? "button" : "menu-link"}>${item.labelNodes}</button>`;
       }
       const link = item.link.cloneNode(true);
       link.removeAttribute("id");
@@ -812,7 +853,7 @@ a:focus-visible, button:focus-visible {
                                 aria-expanded=${this._open === index}
                                 aria-controls="menu-${index}"
                                 @click=${() => this._open === index ? this._close() : this._show(index)}
-                                @keydown=${(event) => this._toggleKey(event, index)}>${dropdown ? item.label : ""}</button>
+                                @keydown=${(event) => this._toggleKey(event, index)}>${dropdown ? item.labelNodes : ""}</button>
                             ${this._open === index ? b2`
                                 <ul class="popup" part="menu" id="menu-${index}" aria-labelledby="toggle-${index}"
                                     @keydown=${this._menuKey} @click=${() => this._close(true)}>

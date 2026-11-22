@@ -55,13 +55,13 @@ export class FucodoButtonGroup extends LitElement {
         const link = item.querySelector(':scope > a');
         const labelSource = (link ?? item).cloneNode(true);
         labelSource.querySelectorAll('ul').forEach(list => list.remove());
-        return { link, label: labelSource.textContent.trim() };
+        return { link, label: labelSource.textContent.trim(), labelNodes: [...labelSource.childNodes] };
     }
 
     _link(item, className) {
         if (!item.link) {
             return html`<button type="button" disabled class=${className}
-                part=${className === 'action' ? 'button' : 'menu-link'}>${item.label}</button>`;
+                part=${className === 'action' ? 'button' : 'menu-link'}>${item.labelNodes}</button>`;
         }
         // Clone DOM nodes rather than interpolating HTML; retain native link attributes and markup.
         const link = item.link.cloneNode(true);
@@ -134,7 +134,7 @@ export class FucodoButtonGroup extends LitElement {
                                 aria-expanded=${this._open === index}
                                 aria-controls="menu-${index}"
                                 @click=${() => this._open === index ? this._close() : this._show(index)}
-                                @keydown=${event => this._toggleKey(event, index)}>${dropdown ? item.label : ''}</button>
+                                @keydown=${event => this._toggleKey(event, index)}>${dropdown ? item.labelNodes : ''}</button>
                             ${this._open === index ? html`
                                 <ul class="popup" part="menu" id="menu-${index}" aria-labelledby="toggle-${index}"
                                     @keydown=${this._menuKey} @click=${() => this._close(true)}>
